@@ -34,7 +34,6 @@ import com.shakiv.husain.instagramui.ui.IconsInstagram
 @Preview
 @Composable
 fun PreviewPostItem() {
-
     val post = PostItem(
         id = "jhdgdr8734h3j4j3",
         post = "Top things to know in Android Platform and Quality at Google I/O '23",
@@ -51,8 +50,7 @@ fun FeedListItem(
 ) {
 
     Card(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = modifier,
         colors = CardDefaults
             .cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {
