@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">InstagramUI</string>
+    <string name="empty_screen_title">Empty Coming Soon</string>
 </resources>

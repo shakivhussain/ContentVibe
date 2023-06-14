@@ -8,10 +8,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.shakiv.husain.instagramui.data.LocalPostProvider.allStory
 import com.shakiv.husain.instagramui.data.PostItem
 import com.shakiv.husain.instagramui.data.StoryItem
@@ -19,15 +19,17 @@ import com.shakiv.husain.instagramui.ui.components.FeedListItem
 import com.shakiv.husain.instagramui.ui.components.StoryListItem
 
 @Composable
-fun HomeFeed(postList: List<PostItem>, modifier: Modifier = Modifier) {
-    val postLazyListState = rememberLazyListState()
-    val storyLazyListState = rememberLazyListState()
-
+fun HomeFeed(
+    postList: List<PostItem>,
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    postLazyListState: LazyListState,
+    storyLazyListState: LazyListState,
+) {
 
     Box(Modifier.fillMaxSize()) {
         PostList(postList = postList, postLazyListState = postLazyListState, storyLazyListState)
     }
-
 }
 
 @Composable
