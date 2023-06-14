@@ -22,8 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.data.PostItem
@@ -50,7 +48,7 @@ fun FeedListItem(
 ) {
 
     Card(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 16.dp),
         colors = CardDefaults
             .cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {
@@ -61,15 +59,11 @@ fun FeedListItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = postItem.user.profile),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.FillWidth
-                )
+
+                ProfileImage(profilePath = postItem.user.profile)
+
                 Spacer(modifier = Modifier.width(12.dp))
+
                 Column(
                     modifier = Modifier.weight(1F),
                     verticalArrangement = Arrangement.Center

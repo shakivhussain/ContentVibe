@@ -6,5 +6,8 @@ import com.shakiv.husain.instagramui.data.LocalPostProvider.allUserPost
 
 @Composable
 fun InstagramApp() {
+
+
+
     HomeFeed(postList = allUserPost)
 }

@@ -731,4 +731,15 @@ object LocalPostProvider {
         ),
     )
 
+
+
+    val allStory = listOf<StoryItem>(
+
+    StoryItem("Shakiv Husain", storyImage = IconsInstagram.ProfilePic ),
+    StoryItem("Shakiv Husain", storyImage = IconsInstagram.ProfilePic ),
+    StoryItem("Shakiv Husain", storyImage = IconsInstagram.ProfilePic ),
+    StoryItem("Shakiv Husain", storyImage = IconsInstagram.ProfilePic ),
+    StoryItem("Shakiv Husain", storyImage = IconsInstagram.ProfilePic ),
+    )
+
 }
