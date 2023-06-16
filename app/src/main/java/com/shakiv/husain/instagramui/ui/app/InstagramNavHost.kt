@@ -1,22 +1,20 @@
-package com.shakiv.husain.instagramui
+package com.shakiv.husain.instagramui.ui.app
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.shakiv.husain.instagramui.data.LocalPostProvider
 import com.shakiv.husain.instagramui.ui.components.EmptyComingSoon
+import com.shakiv.husain.instagramui.ui.home.HomeFeed
 
 @Composable
 fun InstagramNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    postLazyListState: LazyListState,
-    storyLazyListState: LazyListState,
+
 ) {
     NavHost(
         navController = navController,
@@ -26,10 +24,6 @@ fun InstagramNavHost(
 
         composable(route = HomeDestination.route) {
             HomeFeed(
-                postList = LocalPostProvider.allUserPost,
-                navController = navController,
-                postLazyListState = postLazyListState,
-                storyLazyListState = storyLazyListState,
                 onItemClick = {
                     navController.navigateToSingleTopTo(ProfileDestination.route)
                 }
@@ -48,7 +42,7 @@ fun InstagramNavHost(
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())
         }
 
-        composable(route = EmptyComingSoon.route){
+        composable(route = EmptyComingSoon.route) {
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())
         }
 

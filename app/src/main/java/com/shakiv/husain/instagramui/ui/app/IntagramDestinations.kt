@@ -1,7 +1,7 @@
-package com.shakiv.husain.instagramui
+package com.shakiv.husain.instagramui.ui.app
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.shakiv.husain.instagramui.ui.IconsInstagram
+import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 interface BaseDestination {
     val route: String
