@@ -12,11 +12,11 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ProfileImage(profilePath: Int) {
+fun ProfileImage(profilePath: Int, modifier: Modifier= Modifier) {
     Image(
         painter = painterResource(id = profilePath),
         contentDescription = null,
-        modifier = Modifier
+        modifier = modifier
             .size(40.dp)
             .clip(CircleShape),
         contentScale = ContentScale.FillWidth
