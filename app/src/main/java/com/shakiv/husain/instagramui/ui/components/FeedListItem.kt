@@ -1,6 +1,7 @@
 package com.shakiv.husain.instagramui.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,24 +32,30 @@ import com.shakiv.husain.instagramui.ui.IconsInstagram
 
 @Preview
 @Composable
-fun PreviewPostItem() {
+fun PreviewPostItem(
+) {
     val post = PostItem(
         id = "jhdgdr8734h3j4j3",
         post = "Top things to know in Android Platform and Quality at Google I/O '23",
         isLiked = true,
         user = User("Shakiv Husain", "Developer", profile = IconsInstagram.ProfilePic)
     )
-    FeedListItem(postItem = post)
+    FeedListItem(postItem = post) {
+
+    }
 }
 
 @Composable
 fun FeedListItem(
     postItem: PostItem,
     modifier: Modifier = Modifier,
+    onItemClick: (PostItem) -> Unit
 ) {
 
     Card(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .clickable { onItemClick(postItem) },
         colors = CardDefaults
             .cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {

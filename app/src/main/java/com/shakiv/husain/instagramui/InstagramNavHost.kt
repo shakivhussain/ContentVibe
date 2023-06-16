@@ -21,29 +21,37 @@ fun InstagramNavHost(
     NavHost(
         navController = navController,
         modifier = modifier,
-        startDestination = Home.route
+        startDestination = HomeDestination.route
     ) {
 
-        composable(route = Home.route) {
+        composable(route = HomeDestination.route) {
             HomeFeed(
                 postList = LocalPostProvider.allUserPost,
                 navController = navController,
                 postLazyListState = postLazyListState,
                 storyLazyListState = storyLazyListState,
+                onItemClick = {
+                    navController.navigateToSingleTopTo(ProfileDestination.route)
+                }
             )
         }
 
-        composable(route = Search.route) {
+        composable(route = SearchDestination.route) {
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())
         }
 
-        composable(route = Reels.route) {
+        composable(route = ReelsDestination.route) {
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())
         }
 
-        composable(route = Profile.route) {
+        composable(route = ProfileDestination.route) {
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())
         }
+
+        composable(route = EmptyComingSoon.route){
+            EmptyComingSoon(modifier = Modifier.fillMaxWidth())
+        }
+
     }
 }
 

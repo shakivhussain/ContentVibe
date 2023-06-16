@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.shakiv.husain.instagramui.Home
+import com.shakiv.husain.instagramui.HomeDestination
 import com.shakiv.husain.instagramui.InstagramNavHost
-import com.shakiv.husain.instagramui.InstagramScreens
+import com.shakiv.husain.instagramui.bottomTabRowScreens
 import com.shakiv.husain.instagramui.navigateToSingleTopTo
 import com.shakiv.husain.instagramui.ui.components.BottomNavigationTabRow
 
@@ -27,13 +27,13 @@ fun InstagramApp() {
 fun InstagramAppContent() {
 
     val navController: NavHostController = rememberNavController()
-    val screens = InstagramScreens
+    val screens = bottomTabRowScreens
     val postLazyListState = rememberLazyListState()
     val storyLazyListState = rememberLazyListState()
 
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
-    val currentScreen = screens.find { it.route == currentDestination?.route } ?: Home
+    val currentScreen = screens.find { it.route == currentDestination?.route } ?: HomeDestination
 
     Scaffold(
         modifier = Modifier,

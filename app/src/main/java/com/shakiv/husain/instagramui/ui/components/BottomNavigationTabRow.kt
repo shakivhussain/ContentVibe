@@ -6,24 +6,24 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.shakiv.husain.instagramui.InstagramDestination
+import com.shakiv.husain.instagramui.BaseDestination
 
 @Composable
 fun BottomNavigationTabRow(
-    instagramScreens: List<InstagramDestination>,
-    currentScreen: InstagramDestination,
-    onTabSelected : (InstagramDestination) -> Unit
+    instagramScreens: List<BaseDestination>,
+    currentScreen: BaseDestination,
+    onTabSelected : (BaseDestination) -> Unit
 ) {
 
     NavigationBar(modifier = Modifier.fillMaxWidth()) {
-        instagramScreens.forEach { instagramDestination: InstagramDestination ->
+        instagramScreens.forEach { baseDestination: BaseDestination ->
             NavigationBarItem(
-                selected = currentScreen.route == instagramDestination.route,
+                selected = currentScreen.route == baseDestination.route,
                 onClick = {
-                    onTabSelected(instagramDestination)
+                    onTabSelected(baseDestination)
                 },
                 icon = {
-                    Icon(imageVector = instagramDestination.selectedIcon, contentDescription = null)
+                    Icon(imageVector = baseDestination.icon, contentDescription = null)
                 }
             )
         }

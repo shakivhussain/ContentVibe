@@ -25,18 +25,23 @@ fun HomeFeed(
     navController: NavHostController,
     postLazyListState: LazyListState,
     storyLazyListState: LazyListState,
+    onItemClick: (PostItem) -> Unit
 ) {
 
     Box(Modifier.fillMaxSize()) {
-        PostList(postList = postList, postLazyListState = postLazyListState, storyLazyListState)
+        PostList(postList = postList, postLazyListState = postLazyListState, storyLazyListState){
+            onItemClick(it)
+        }
     }
 }
 
 @Composable
-fun PostList(postList: List<PostItem>,
-             postLazyListState: LazyListState,
-             storyLazyListState : LazyListState
-             ) {
+fun PostList(
+    postList: List<PostItem>,
+    postLazyListState: LazyListState,
+    storyLazyListState: LazyListState,
+    onItemClick: (PostItem) -> Unit
+) {
     LazyColumn(
         modifier = Modifier,
         contentPadding = PaddingValues(vertical = 0.dp, horizontal = 0.dp),
@@ -47,7 +52,9 @@ fun PostList(postList: List<PostItem>,
             StoryList(allStory, storyLazyListState)
         }
         items(postList) { post ->
-            FeedListItem(postItem = post)
+            FeedListItem(postItem = post) { postItem ->
+                onItemClick(postItem)
+            }
         }
     }
 
@@ -55,7 +62,8 @@ fun PostList(postList: List<PostItem>,
 
 @Composable
 fun StoryList(storyList: List<StoryItem>, storyLazyListState: LazyListState) {
-    LazyRow(modifier = Modifier,
+    LazyRow(
+        modifier = Modifier,
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         state = storyLazyListState

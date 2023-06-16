@@ -3,11 +3,9 @@ package com.shakiv.husain.instagramui
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.shakiv.husain.instagramui.ui.IconsInstagram
 
-interface InstagramDestination {
+interface BaseDestination {
     val route: String
-    val selectedIcon: ImageVector
-    val unSelectedIcon: ImageVector
-    val iconText: String
+    val icon: ImageVector
 }
 
 object InstagramRoutes {
@@ -15,53 +13,47 @@ object InstagramRoutes {
     const val SEARCH = "Search"
     const val REELS = "Reels"
     const val PROFILE = "Profile"
+    const val COMING_SOON = "ComingSoon"
 }
 
-object Home : InstagramDestination {
+object HomeDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.HOME
-    override val selectedIcon: ImageVector
+    override val icon: ImageVector
         get() = IconsInstagram.HOME
-    override val unSelectedIcon: ImageVector
-        get() = IconsInstagram.HOME
-    override val iconText: String
-        get() = InstagramRoutes.HOME
+
 }
 
 
-object Search : InstagramDestination {
+object SearchDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.SEARCH
-    override val selectedIcon: ImageVector
+    override val icon: ImageVector
         get() = IconsInstagram.SEARCH
-    override val unSelectedIcon: ImageVector
-        get() = IconsInstagram.SEARCH
-    override val iconText: String
-        get() = InstagramRoutes.SEARCH
 
 }
 
-object Reels : InstagramDestination {
+object ReelsDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.REELS
-    override val selectedIcon: ImageVector
+    override val icon: ImageVector
         get() = IconsInstagram.REELS
-    override val unSelectedIcon: ImageVector
-        get() = IconsInstagram.REELS
-    override val iconText: String
-        get() = InstagramRoutes.REELS
-
 }
 
-object Profile : InstagramDestination {
+object ProfileDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.PROFILE
-    override val selectedIcon: ImageVector
+    override val icon: ImageVector
         get() = IconsInstagram.PROFILE
-    override val unSelectedIcon: ImageVector
-        get() = IconsInstagram.PROFILE
-    override val iconText: String
-        get() = InstagramRoutes.PROFILE
 }
 
-val InstagramScreens: List<InstagramDestination> = listOf(Home, Search, Reels, Profile)
+
+object EmptyComingSoon : BaseDestination {
+    override val route: String
+        get() = InstagramRoutes.COMING_SOON
+    override val icon: ImageVector
+        get() = TODO("Not yet implemented")
+}
+
+val bottomTabRowScreens: List<BaseDestination> =
+    listOf(HomeDestination, SearchDestination, ReelsDestination, ProfileDestination)
