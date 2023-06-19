@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,7 +53,8 @@ fun HomeFeed(
     Box(
         Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)) {
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         PostList(
             postList = postList.value, storyList = storyList.value,
             postLazyListState = postLazyListState,
@@ -107,7 +109,7 @@ fun AppHeader() {
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = 12.dp)
     ) {
 
         Text(
@@ -121,13 +123,13 @@ fun AppHeader() {
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(28.dp),
-            imageVector = IconsInstagram.HEART,
+            painter = painterResource(id = IconsInstagram.LIKE),
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
         )
         Image(
             modifier = Modifier.size(28.dp),
-            imageVector = IconsInstagram.EMAIL,
+            painter = painterResource(id = IconsInstagram.CHAT),
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
         )

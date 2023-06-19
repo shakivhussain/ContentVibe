@@ -1,11 +1,10 @@
 package com.shakiv.husain.instagramui.ui.app
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 interface BaseDestination {
     val route: String
-    val icon: ImageVector
+    val icon: Int
 }
 
 object InstagramRoutes {
@@ -14,12 +13,13 @@ object InstagramRoutes {
     const val REELS = "Reels"
     const val PROFILE = "Profile"
     const val COMING_SOON = "ComingSoon"
+    const val ADD_POST = "AddPost"
 }
 
 object HomeDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.HOME
-    override val icon: ImageVector
+    override val icon: Int
         get() = IconsInstagram.HOME
 
 }
@@ -28,22 +28,29 @@ object HomeDestination : BaseDestination {
 object SearchDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.SEARCH
-    override val icon: ImageVector
+    override val icon: Int
         get() = IconsInstagram.SEARCH
 
+}
+
+object AddPostDestination : BaseDestination {
+    override val route: String
+        get() = InstagramRoutes.ADD_POST
+    override val icon: Int
+        get() = IconsInstagram.ADD_POST
 }
 
 object ReelsDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.REELS
-    override val icon: ImageVector
+    override val icon: Int
         get() = IconsInstagram.REELS
 }
 
 object ProfileDestination : BaseDestination {
     override val route: String
         get() = InstagramRoutes.PROFILE
-    override val icon: ImageVector
+    override val icon: Int
         get() = IconsInstagram.PROFILE
 }
 
@@ -51,9 +58,12 @@ object ProfileDestination : BaseDestination {
 object EmptyComingSoon : BaseDestination {
     override val route: String
         get() = InstagramRoutes.COMING_SOON
-    override val icon: ImageVector
+    override val icon: Int
         get() = TODO("Not yet implemented")
 }
 
+
 val bottomTabRowScreens: List<BaseDestination> =
-    listOf(HomeDestination, SearchDestination, ReelsDestination, ProfileDestination)
+    listOf(
+        HomeDestination, SearchDestination, AddPostDestination, ReelsDestination, ProfileDestination
+    )

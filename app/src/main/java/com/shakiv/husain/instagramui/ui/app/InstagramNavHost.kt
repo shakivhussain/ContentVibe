@@ -46,6 +46,11 @@ fun InstagramNavHost(
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())
         }
 
+
+        composable(route = AddPostDestination.route) {
+            EmptyComingSoon(modifier = Modifier.fillMaxWidth())
+        }
+
     }
 }
 

@@ -6,6 +6,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import com.shakiv.husain.instagramui.ui.app.BaseDestination
 
 @Composable
@@ -23,7 +24,7 @@ fun BottomNavigationTabRow(
                     onTabSelected(baseDestination)
                 },
                 icon = {
-                    Icon(imageVector = baseDestination.icon, contentDescription = null)
+                    Icon(painter = painterResource(id = baseDestination.icon), contentDescription = null)
                 }
             )
         }
