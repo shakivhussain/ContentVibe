@@ -23,13 +23,6 @@ object LocalPostProvider {
         return allUserPost
     }
 
-
-    fun clearPosts(){
-        allUserPost.removeAt(0)
-    }
-
-
-
     fun allStory(): List<StoryItem> {
         val allStory = mutableListOf<StoryItem>()
         for (index in 0 until 100) {

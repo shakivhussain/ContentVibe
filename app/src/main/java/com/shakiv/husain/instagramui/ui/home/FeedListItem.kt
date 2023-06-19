@@ -42,7 +42,6 @@ fun PreviewPostItem(
         user = User("Shakiv Husain", "Developer", profile = IconsInstagram.ProfilePic)
     )
     FeedListItem(postItem = post) {
-
     }
 }
 
@@ -102,8 +101,6 @@ fun FeedListItem(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(2.dp)
             )
-
-
         }
     }
 }
