@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.data.LocalPostProvider
-import com.shakiv.husain.instagramui.data.PostItem
+import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.ui.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
