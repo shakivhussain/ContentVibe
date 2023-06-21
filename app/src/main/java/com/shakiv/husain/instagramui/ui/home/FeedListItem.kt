@@ -25,10 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.shakiv.husain.instagramui.data.PostItem
-import com.shakiv.husain.instagramui.data.User
-import com.shakiv.husain.instagramui.utils.IconsInstagram
+import com.shakiv.husain.instagramui.data.LocalPostProvider
+import com.shakiv.husain.instagramui.data.post.PostItem
+import com.shakiv.husain.instagramui.data.post.User
+import com.shakiv.husain.instagramui.ui.components.PostActions
 import com.shakiv.husain.instagramui.ui.components.ProfileImage
+import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 
 @Preview
@@ -39,17 +41,17 @@ fun PreviewPostItem(
         id = "jhdgdr8734h3j4j3",
         post = "Top things to know in Android Platform and Quality at Google I/O '23",
         isLiked = true,
-        user = User("Shakiv Husain", "Developer", profile = IconsInstagram.ProfilePic)
+        user = User("Shakiv Husain", "Developer", profile = IconsInstagram.ProfilePic),
+        postActions = com.shakiv.husain.instagramui.data.post.PostActions(false,false)
     )
-    FeedListItem(postItem = post) {
-    }
+    FeedListItem(postItem = post, onItemClick = {})
 }
 
 @Composable
 fun FeedListItem(
     postItem: PostItem,
     modifier: Modifier = Modifier,
-    onItemClick: (PostItem) -> Unit
+    onItemClick: (PostItem) -> Unit,
 ) {
 
     Card(
@@ -101,6 +103,33 @@ fun FeedListItem(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(2.dp)
             )
+
+
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp))
+
+
+
+
+            val onLikeClick = {
+
+            }
+
+            val onCommentClicked = {
+
+            }
+
+            PostActions(
+                isLiked =postItem.postActions.isLiked ,
+                modifier = Modifier.padding(),
+                onLikeClicked = onLikeClick,
+                onCommentClicked = onCommentClicked
+            ) {
+
+
+            }
+
         }
     }
 }

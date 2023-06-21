@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">InstagramUI</string>
     <string name="empty_screen_title">Empty Coming Soon</string>
+    <string name="load_error">Can\'t update latest posts</string>
 </resources>
