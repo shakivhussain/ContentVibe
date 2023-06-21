@@ -23,8 +23,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,22 +32,42 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.shakiv.husain.instagramui.data.LocalPostProvider
-import com.shakiv.husain.instagramui.data.post.PostItem
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
+import com.shakiv.husain.instagramui.data.post.HomeUiState
+import com.shakiv.husain.instagramui.data.post.HomeViewModel
+import com.shakiv.husain.instagramui.data.post.PostFeed
+import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.ui.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 @Composable
 fun HomeFeed(
     onItemClick: (PostItem) -> Unit,
+    homeViewModel: HomeViewModel,
 ) {
 
-    val postList = remember { mutableStateOf(LocalPostProvider.allUserPost()) }
-    val storyList = remember { mutableStateOf(LocalPostProvider.allStory()) }
+    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+
+    val postFeed = when(uiState){
+        is HomeUiState.NoPosts ->{
+            PostFeed(emptyList(), emptyList())
+        }
+        is HomeUiState.HasPosts ->{
+            (uiState as HomeUiState.HasPosts).postFeed
+        }
+    }
+
+    HomeFeed(postFeed, onItemClick = onItemClick)
+
+}
+
+@Composable
+fun HomeFeed(postFeed: PostFeed, onItemClick: (PostItem) -> Unit) {
 
     val postLazyListState = rememberLazyListState()
     val storyLazyListState = rememberLazyListState()
+
 
     Box(
         Modifier
@@ -56,14 +75,18 @@ fun HomeFeed(
             .background(MaterialTheme.colorScheme.background)
     ) {
         PostList(
-            postList = postList.value, storyList = storyList.value,
+            postList = postFeed.postItemList, storyList = postFeed.storyList,
             postLazyListState = postLazyListState,
-            storyLazyListState
-        ) {
-            onItemClick(it)
-        }
+            storyLazyListState,
+            onItemClick = onItemClick
+
+        )
     }
+
 }
+
+
+
 
 @Composable
 fun PostList(

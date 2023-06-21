@@ -12,7 +12,7 @@ class FeedPostRepository : PostRepository {
 
     override suspend fun getPostFeed(): Resource<PostFeed> {
         return withContext(Dispatchers.IO){
-            delay(1_000)
+            delay(2_000)
             if (shouldRandomlyFail()){
                 Resource.Error(IllegalStateException())
             }else{

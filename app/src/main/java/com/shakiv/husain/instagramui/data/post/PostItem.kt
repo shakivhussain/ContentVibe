@@ -1,10 +1,11 @@
 package com.shakiv.husain.instagramui.data.post
 
-
+import com.shakiv.husain.instagramui.data.StoryItem
 
 
 data class PostFeed(
-    var postItem: List<PostItem>
+    var postItemList: List<PostItem>,
+    var storyList: List<StoryItem>
 )
 
 data class PostItem(

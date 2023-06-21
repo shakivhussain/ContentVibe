@@ -18,9 +18,11 @@ object LocalPostProvider {
 
 
     fun getFeed(): PostFeed {
+        allUserPost()
 
         return PostFeed(
-            postItem = allUserPost
+            postItemList = allUserPost,
+            storyList = allStory()
         )
 
     }
