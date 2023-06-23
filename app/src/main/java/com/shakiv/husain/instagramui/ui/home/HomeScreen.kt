@@ -68,7 +68,6 @@ fun HomeFeed(postFeed: PostFeed, onItemClick: (PostItem) -> Unit) {
     val postLazyListState = rememberLazyListState()
     val storyLazyListState = rememberLazyListState()
 
-
     Box(
         Modifier
             .fillMaxSize()
