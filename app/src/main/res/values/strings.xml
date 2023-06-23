@@ -2,4 +2,5 @@
     <string name="app_name">InstagramUI</string>
     <string name="empty_screen_title">Empty Coming Soon</string>
     <string name="load_error">Can\'t update latest posts</string>
+    <string name="placeholder_desc">Life is like a box of chocolates. You never know what you\'re gonna get. If you want something done, ask a busy person to do it." - Laura Ingalls Wilder </string>
 </resources>
