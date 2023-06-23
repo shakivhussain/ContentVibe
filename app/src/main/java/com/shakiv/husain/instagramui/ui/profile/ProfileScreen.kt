@@ -9,14 +9,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.R
+import com.shakiv.husain.instagramui.ui.components.EmptyComingSoon
 import com.shakiv.husain.instagramui.ui.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.ImageUtils
 
@@ -39,7 +47,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
     ProfileScreen(
         title = "Shakiv Husain",
         onNotificationClick = {},
-        onMoreOptionClick = {}
+        onMoreOptionClick = {},
     )
 }
 
@@ -52,7 +60,6 @@ fun ProfileScreen(
 ) {
 
     Surface() {
-
         Column(modifier = Modifier.padding()) {
 
             TopBar(
@@ -119,6 +126,11 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+
+            val buttonColor = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.outline
+            )
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -131,14 +143,22 @@ fun ProfileScreen(
                     Text(text = "Follow")
                 }
 
-                Button(modifier = Modifier.weight(1f),onClick = { /*TODO*/ }) {
-                    Text(text = "Follow")
+                Button(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp), onClick = { /*TODO*/ },
+                    colors = buttonColor
+                ) {
+                    Text(text = "Message")
                 }
 
                 Button(
-                    modifier = Modifier.weight(.5f),
+                    modifier = Modifier
+                        .weight(.5f)
+                        .padding(start = 8.dp),
+                    colors = buttonColor,
                     onClick = { /*TODO*/ }) {
-                    ImageUtils.setImage(imageId = R.drawable.ic_notifications)
+                    ImageUtils.setImage(imageId = R.drawable.ic_add_person)
                 }
 
             }
@@ -150,6 +170,8 @@ fun ProfileScreen(
             )
 
 
+            ProfilePager()
+
 
         }
 
@@ -157,6 +179,96 @@ fun ProfileScreen(
 
 
 }
+
+@Composable
+fun ProfilePager() {
+
+    var selectedIndex by remember {
+        mutableStateOf(ProfileTabs.POSTS.ordinal)
+    }
+
+    val tabList = remember {
+        ProfileTabs.values().map { it.tabName }
+    }
+
+    Column {
+
+        TabRow(
+            selectedTabIndex = selectedIndex,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ) {
+            tabList.forEachIndexed { index, title ->
+                Tab(
+                    selected = index == selectedIndex,
+                    onClick = {
+                        when (title) {
+                            ProfileTabs.POSTS.tabName -> {
+                                selectedIndex = ProfileTabs.POSTS.ordinal
+                            }
+
+                            ProfileTabs.REELS.tabName -> {
+                                selectedIndex = ProfileTabs.REELS.ordinal
+                            }
+
+                            ProfileTabs.PROFILE.tabName -> {
+                                selectedIndex = ProfileTabs.PROFILE.ordinal
+                            }
+                        }
+                    },
+                    text = {
+                        Text(text = title)
+                    }
+                )
+            }
+        }
+
+        Surface {
+
+            when (selectedIndex) {
+
+                ProfileTabs.POSTS.ordinal -> {
+                    UserPostScreen()
+                }
+
+                ProfileTabs.REELS.ordinal -> {
+                    UserReelsScreen()
+                }
+
+                ProfileTabs.PROFILE.ordinal -> {
+                    TabProfileScreen()
+                }
+
+            }
+
+
+        }
+
+    }
+
+
+}
+
+@Composable fun TabProfileScreen() {
+    EmptyComingSoon(subTitle = "TabProfileScreen")
+}
+
+@Composable fun UserReelsScreen() {
+    EmptyComingSoon(subTitle = "UserReelsScreen")
+}
+
+@Composable
+fun UserPostScreen() {
+    EmptyComingSoon(subTitle = "UserPostScreen")
+}
+
+
+private enum class ProfileTabs(val tabName: String) {
+    POSTS("Posts"),
+    REELS("Reels"),
+    PROFILE("Profile"),
+
+}
+
 
 @Composable
 fun TitleSubtitle(title: String, subtitle: String) {

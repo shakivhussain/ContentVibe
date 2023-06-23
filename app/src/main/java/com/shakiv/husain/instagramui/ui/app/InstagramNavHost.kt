@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.ui.app
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,6 +13,7 @@ import com.shakiv.husain.instagramui.data.AppContainer
 import com.shakiv.husain.instagramui.data.post.HomeViewModel
 import com.shakiv.husain.instagramui.ui.components.EmptyComingSoon
 import com.shakiv.husain.instagramui.ui.home.HomeFeed
+import com.shakiv.husain.instagramui.ui.profile.ProfileScreen
 
 @Composable
 fun InstagramNavHost(
@@ -50,7 +52,7 @@ fun InstagramNavHost(
         }
 
         composable(route = ProfileDestination.route) {
-            EmptyComingSoon(modifier = Modifier.fillMaxWidth())
+            ProfileScreen(modifier = Modifier.fillMaxSize())
         }
 
         composable(route = EmptyComingSoon.route) {
