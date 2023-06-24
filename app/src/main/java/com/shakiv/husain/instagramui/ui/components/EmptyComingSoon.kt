@@ -17,7 +17,8 @@ import com.shakiv.husain.instagramui.R
 
 @Composable
 fun EmptyComingSoon(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    subTitle : String =stringResource(id = R.string.empty_screen_title)
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -33,7 +34,7 @@ fun EmptyComingSoon(
         )
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),
-            text = stringResource(id = R.string.empty_screen_title),
+            text = subTitle,
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.outline
