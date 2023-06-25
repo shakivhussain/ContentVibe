@@ -252,11 +252,11 @@ fun ProfilePager() {
 }
 
 @Composable fun TabProfileScreen() {
-    EmptyComingSoon(subTitle = "TabProfileScreen")
+    EmptyComingSoon(subTitle = "")
 }
 
 @Composable fun UserReelsScreen() {
-    EmptyComingSoon(subTitle = "UserReelsScreen")
+    EmptyComingSoon(subTitle = "")
 }
 
 @Composable
@@ -275,7 +275,6 @@ fun UserPostScreen() {
         }
     }
 
-//    EmptyComingSoon(subTitle = "UserPostScreen")
 }
 
 
