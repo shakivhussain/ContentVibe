@@ -1,6 +1,5 @@
 package com.shakiv.husain.instagramui.ui.app
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -52,7 +51,7 @@ fun InstagramNavHost(
         }
 
         composable(route = ProfileDestination.route) {
-            ProfileScreen(modifier = Modifier.fillMaxSize())
+            ProfileScreen()
         }
 
         composable(route = EmptyComingSoon.route) {
