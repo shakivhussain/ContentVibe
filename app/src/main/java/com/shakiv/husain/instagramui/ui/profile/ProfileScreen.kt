@@ -68,7 +68,13 @@ fun ProfileScreen(
 ) {
     Surface() {
         Column(modifier = Modifier.fillMaxSize()) {
-            ProfileHeader(onNotificationClick, onMoreOptionClick, title)
+            TopBar(
+                modifier = Modifier,
+                title = title,
+                onNotificationClick = onNotificationClick,
+                onMoreOptionClick = onMoreOptionClick
+            )
+
             ProfilePager()
         }
     }
@@ -76,25 +82,13 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileHeader(
-    onNotificationClick: () -> Unit, onMoreOptionClick: () -> Unit, title: String) {
+    onNotificationClick: () -> Unit, onMoreOptionClick: () -> Unit, title: String
+) {
 
-    TopBar(
-        modifier = Modifier,
-        title = title,
-        onNotificationClick = onNotificationClick,
-        onMoreOptionClick = onMoreOptionClick
-    )
-
-
-    Spacer(
-        modifier = Modifier
-            .height(8.dp)
-            .fillMaxWidth()
-    )
 
     Row(
         modifier = Modifier
-            .padding(horizontal = 16.dp),
+            .padding(vertical = 10.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         ProfileImage(
@@ -186,7 +180,6 @@ fun ProfileHeader(
     )
 
 
-
 }
 
 @Composable
@@ -201,52 +194,71 @@ fun ProfilePager() {
     }
 
 
-    Column(modifier = Modifier) {
+    LazyColumn(
+        modifier = Modifier,
+        contentPadding = PaddingValues(vertical = 0.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
 
-        TabRow(
-            selectedTabIndex = selectedIndex,
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        ) {
-            tabList.forEachIndexed { index, title ->
-                Tab(
-                    selected = index == selectedIndex,
-                    onClick = {
-                        when (title) {
-                            ProfileTabs.POSTS.tabName -> {
-                                selectedIndex = ProfileTabs.POSTS.ordinal
-                            }
 
-                            ProfileTabs.REELS.tabName -> {
-                                selectedIndex = ProfileTabs.REELS.ordinal
-                            }
+        item {
+            ProfileHeader({}, {}, "Shakiv")
+        }
 
-                            ProfileTabs.PROFILE.tabName -> {
-                                selectedIndex = ProfileTabs.PROFILE.ordinal
+
+        item {
+            TabRow(
+                selectedTabIndex = selectedIndex,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ) {
+                tabList.forEachIndexed { index, title ->
+                    Tab(
+                        selected = index == selectedIndex,
+                        onClick = {
+                            when (title) {
+                                ProfileTabs.POSTS.tabName -> {
+                                    selectedIndex = ProfileTabs.POSTS.ordinal
+                                }
+
+                                ProfileTabs.REELS.tabName -> {
+                                    selectedIndex = ProfileTabs.REELS.ordinal
+                                }
+
+                                ProfileTabs.PROFILE.tabName -> {
+                                    selectedIndex = ProfileTabs.PROFILE.ordinal
+                                }
                             }
+                        },
+                        text = {
+                            Text(text = title)
                         }
-                    },
-                    text = {
-                        Text(text = title)
-                    }
-                )
-            }
-        }
-
-        Surface {
-            when (selectedIndex) {
-                ProfileTabs.POSTS.ordinal -> {
-                    UserPostScreen()
-                }
-
-                ProfileTabs.REELS.ordinal -> {
-                    UserReelsScreen()
-                }
-
-                ProfileTabs.PROFILE.ordinal -> {
-                    TabProfileScreen()
+                    )
                 }
             }
         }
+
+        val userPosts = when (selectedIndex) {
+            ProfileTabs.POSTS.ordinal -> {
+                allUserPost()
+            }
+
+            ProfileTabs.REELS.ordinal -> {
+                emptyList()
+            }
+
+            ProfileTabs.PROFILE.ordinal -> {
+                allUserPost()
+            }
+
+            else -> {
+                allUserPost()
+            }
+        }
+
+        items(userPosts) {
+            FeedListItem(postItem = it, onItemClick = {})
+        }
+
 
     }
 
