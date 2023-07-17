@@ -10,7 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.shakiv.husain.instagramui.R
+import com.shakiv.husain.instagramui.utils.IconsInstagram
+import com.shakiv.husain.instagramui.utils.IconsInstagram.IcBookmark
+import com.shakiv.husain.instagramui.utils.IconsInstagram.IcChat
+import com.shakiv.husain.instagramui.utils.IconsInstagram.IcLike
 import com.shakiv.husain.instagramui.utils.ImageUtils
 
 
@@ -33,46 +36,62 @@ fun PostActions(
     onShareClicked: () -> Unit,
 ) {
 
-
     val modifier = Modifier.padding(4.dp)
 
+
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-
-        val likeIcon = if (isLiked) R.drawable.ic_message else R.drawable.ic_message
-
-
-        IconButton(
-            onClick = {
-                onLikeClicked()
-                      },
-            modifier = Modifier
-                .padding(0.dp),
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
         ) {
-            ImageUtils.setImage(imageId = likeIcon)
-        }
 
+            val likeIcon = if (isLiked) IcLike else IcLike
+
+            IconButton(
+                onClick = {
+                    onLikeClicked()
+                },
+                modifier = Modifier
+                    .padding(0.dp),
+            ) {
+                ImageUtils.setImage(imageId = likeIcon)
+            }
+
+
+            IconButton(
+                onClick = { onCommentClicked() },
+                modifier = Modifier
+                    .padding(0.dp),
+            ) {
+
+                ImageUtils.setImage(imageId = IcChat)
+            }
+
+
+            IconButton(
+                onClick = { onShareClicked() },
+                modifier = Modifier
+                    .padding(0.dp),
+            ) {
+                ImageUtils.setImage(imageId = IconsInstagram.IcSharePost)
+            }
+        }
 
         IconButton(
             onClick = { onCommentClicked() },
             modifier = Modifier
-                .padding(0.dp),
+                .padding(end = 0.dp),
         ) {
-            ImageUtils.setImage(imageId = R.drawable.ic_chat)
+
+            ImageUtils.setImage(imageId = IcBookmark)
         }
 
-
-        IconButton(
-            onClick = { onShareClicked() },
-            modifier = Modifier
-                .padding(0.dp),
-        ) {
-            ImageUtils.setImage(imageId = R.drawable.ic_account)
-        }
     }
+
 
 }

@@ -2,20 +2,16 @@ package com.shakiv.husain.instagramui.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.rounded.AddCircle
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Star
 import com.shakiv.husain.instagramui.R
 
 object IconsInstagram {
 
     val ProfilePic = R.drawable.profile_pic
+    val IcSharePost = R.drawable.ic_share
+    val IcChat = R.drawable.ic_chat
+    val IcLike = R.drawable.ic_message
+    val IcBookmark = R.drawable.ic_bookmark
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

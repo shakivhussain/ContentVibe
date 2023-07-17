@@ -37,8 +37,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.post.HomeUiState
 import com.shakiv.husain.instagramui.data.post.HomeViewModel
+import com.shakiv.husain.instagramui.data.post.PostActions
 import com.shakiv.husain.instagramui.data.post.PostFeed
 import com.shakiv.husain.instagramui.data.post.PostItem
+import com.shakiv.husain.instagramui.data.post.User
 import com.shakiv.husain.instagramui.ui.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
@@ -202,6 +204,20 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewStoryListItem() {
-    val storyItem = StoryItem("Shakiv Husain", storyImage = IconsInstagram.ProfilePic)
-    StoryListItem(storyItem)
+    val user = User("$1 Shakiv Husain", "Professional", profile = IconsInstagram.ProfilePic)
+
+    val postAction = PostActions(
+        isLiked = 1 % 2 == 0,
+        isDislike = 2 % 2 != 0,
+    )
+
+
+    val storyItem = PostItem("Shakiv Husain",
+        user = user,
+        postActions = postAction
+    )
+
+    FeedListItem(storyItem,){
+
+    }
 }
