@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.ui.profile
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,11 +47,11 @@ import com.shakiv.husain.instagramui.utils.ImageUtils
 @Preview()
 @Composable
 fun PreviewProfile() {
-    ProfileScreen(Modifier)
+    ProfileScreen()
 }
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen() {
     ProfileScreen(
         title = "Shakiv Husain",
         onNotificationClick = {},
@@ -65,10 +66,8 @@ fun ProfileScreen(
     onNotificationClick: () -> Unit,
     onMoreOptionClick: () -> Unit,
 ) {
-
     Surface() {
         Column(modifier = Modifier.fillMaxSize()) {
-
             TopBar(
                 modifier = Modifier,
                 title = title,
@@ -76,117 +75,114 @@ fun ProfileScreen(
                 onMoreOptionClick = onMoreOptionClick
             )
 
-
-            Spacer(
-                modifier = Modifier
-                    .height(8.dp)
-                    .fillMaxWidth()
-            )
-
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                ProfileImage(
-                    profilePath = R.drawable.profile_pic,
-                    modifier = Modifier.size(70.dp)
-                )
-
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    TitleSubtitle(title = "13.K", subtitle = "Posts")
-                    TitleSubtitle(title = "13.K", subtitle = "Posts")
-                    TitleSubtitle(title = "13.K", subtitle = "Posts")
-
-                }
-
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .height(8.dp)
-                    .fillMaxWidth()
-            )
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                text = "Shakiv Husain",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                text = stringResource(id = R.string.placeholder_desc),
-                maxLines = 6,
-                overflow = TextOverflow.Ellipsis
-            )
-
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            val buttonColor = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.outline
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Button(modifier = Modifier.weight(1f), onClick = { /*TODO*/ }) {
-                    Text(text = "Follow")
-                }
-
-                Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp), onClick = { /*TODO*/ },
-                    colors = buttonColor
-                ) {
-                    Text(text = "Message")
-                }
-
-                Button(
-                    modifier = Modifier
-                        .weight(.5f)
-                        .padding(start = 8.dp),
-                    colors = buttonColor,
-                    onClick = { /*TODO*/ }) {
-                    ImageUtils.setImage(imageId = R.drawable.ic_add_person)
-                }
-
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .height(8.dp)
-                    .fillMaxWidth()
-            )
-
-
             ProfilePager()
+        }
+    }
+}
 
+@Composable
+fun ProfileHeader(
+    onNotificationClick: () -> Unit, onMoreOptionClick: () -> Unit, title: String
+) {
+
+
+    Row(
+        modifier = Modifier
+            .padding(vertical = 10.dp, horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        ProfileImage(
+            profilePath = R.drawable.profile_pic,
+            modifier = Modifier.size(70.dp)
+        )
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            TitleSubtitle(title = "13.K", subtitle = "Posts")
+            TitleSubtitle(title = "13.K", subtitle = "Posts")
+            TitleSubtitle(title = "13.K", subtitle = "Posts")
 
         }
 
     }
 
+    Spacer(
+        modifier = Modifier
+            .height(8.dp)
+            .fillMaxWidth()
+    )
+
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        text = "Shakiv Husain",
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
+
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        text = stringResource(id = R.string.placeholder_desc),
+        maxLines = 6,
+        overflow = TextOverflow.Ellipsis
+    )
+
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+
+    val buttonColor = ButtonDefaults.buttonColors(
+        containerColor = MaterialTheme.colorScheme.outline
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        Button(modifier = Modifier.weight(1f), onClick = { /*TODO*/ }) {
+            Text(text = "Follow")
+        }
+
+        Button(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp), onClick = { /*TODO*/ },
+            colors = buttonColor
+        ) {
+            Text(text = "Message")
+        }
+
+        Button(
+            modifier = Modifier
+                .weight(.5f)
+                .padding(start = 8.dp),
+            colors = buttonColor,
+            onClick = { /*TODO*/ }) {
+            ImageUtils.setImage(imageId = R.drawable.ic_add_person)
+        }
+
+    }
+
+    Spacer(
+        modifier = Modifier
+            .height(8.dp)
+            .fillMaxWidth()
+    )
+
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfilePager() {
 
@@ -199,52 +195,71 @@ fun ProfilePager() {
     }
 
 
-    Column(modifier = Modifier) {
+    LazyColumn(
+        modifier = Modifier,
+        contentPadding = PaddingValues(vertical = 0.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
 
-        TabRow(
-            selectedTabIndex = selectedIndex,
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        ) {
-            tabList.forEachIndexed { index, title ->
-                Tab(
-                    selected = index == selectedIndex,
-                    onClick = {
-                        when (title) {
-                            ProfileTabs.POSTS.tabName -> {
-                                selectedIndex = ProfileTabs.POSTS.ordinal
-                            }
 
-                            ProfileTabs.REELS.tabName -> {
-                                selectedIndex = ProfileTabs.REELS.ordinal
-                            }
+        item {
+            ProfileHeader({}, {}, "Shakiv")
+        }
 
-                            ProfileTabs.PROFILE.tabName -> {
-                                selectedIndex = ProfileTabs.PROFILE.ordinal
+
+        stickyHeader {
+            TabRow(
+                selectedTabIndex = selectedIndex,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ) {
+                tabList.forEachIndexed { index, title ->
+                    Tab(
+                        selected = index == selectedIndex,
+                        onClick = {
+                            when (title) {
+                                ProfileTabs.POSTS.tabName -> {
+                                    selectedIndex = ProfileTabs.POSTS.ordinal
+                                }
+
+                                ProfileTabs.REELS.tabName -> {
+                                    selectedIndex = ProfileTabs.REELS.ordinal
+                                }
+
+                                ProfileTabs.PROFILE.tabName -> {
+                                    selectedIndex = ProfileTabs.PROFILE.ordinal
+                                }
                             }
+                        },
+                        text = {
+                            Text(text = title)
                         }
-                    },
-                    text = {
-                        Text(text = title)
-                    }
-                )
-            }
-        }
-
-        Surface {
-            when (selectedIndex) {
-                ProfileTabs.POSTS.ordinal -> {
-                    UserPostScreen()
-                }
-
-                ProfileTabs.REELS.ordinal -> {
-                    UserReelsScreen()
-                }
-
-                ProfileTabs.PROFILE.ordinal -> {
-                    TabProfileScreen()
+                    )
                 }
             }
         }
+
+        val userPosts = when (selectedIndex) {
+            ProfileTabs.POSTS.ordinal -> {
+                allUserPost()
+            }
+
+            ProfileTabs.REELS.ordinal -> {
+                emptyList()
+            }
+
+            ProfileTabs.PROFILE.ordinal -> {
+                allUserPost()
+            }
+
+            else -> {
+                allUserPost()
+            }
+        }
+
+        items(userPosts) {
+            FeedListItem(postItem = it, onItemClick = {})
+        }
+
 
     }
 
@@ -252,13 +267,14 @@ fun ProfilePager() {
 }
 
 @Composable fun TabProfileScreen() {
-    EmptyComingSoon(subTitle = "TabProfileScreen")
+    EmptyComingSoon(subTitle = "")
 }
 
 @Composable fun UserReelsScreen() {
-    EmptyComingSoon(subTitle = "UserReelsScreen")
+    EmptyComingSoon(subTitle = "")
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserPostScreen() {
 
@@ -268,6 +284,9 @@ fun UserPostScreen() {
         contentPadding = PaddingValues(vertical = 16.dp, horizontal = 0.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+//        stickyHeader {
+//            Text(text = "Shakiv", modifier = Modifier.fillMaxWidth(1F).height(100.dp))
+//        }
         items(allUserPost()) {
 
             FeedListItem(postItem = it, onItemClick = {})
@@ -275,7 +294,6 @@ fun UserPostScreen() {
         }
     }
 
-//    EmptyComingSoon(subTitle = "UserPostScreen")
 }
 
 

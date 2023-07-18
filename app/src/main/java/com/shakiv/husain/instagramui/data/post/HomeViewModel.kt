@@ -8,6 +8,7 @@ import com.shakiv.husain.instagramui.data.Resource
 import com.shakiv.husain.instagramui.utils.ErrorMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -57,7 +58,7 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
         )
     )
 
-    val uiState = viewModelState.map(HomeViewModelState::toUiState).stateIn(
+    val uiState: StateFlow<HomeUiState> = viewModelState.map(HomeViewModelState::toUiState).stateIn(
             viewModelScope, SharingStarted.Eagerly, viewModelState.value.toUiState()
         )
 
@@ -77,8 +78,6 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
                 when (result) {
                     is Resource.Success -> {
                         it.copy(
-
-
                             postFeed = result.data, isLoading = false
                         )
 
@@ -101,7 +100,6 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
     companion object {
         fun provideFactory(postRepository: PostRepository): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
-
 
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return HomeViewModel(postRepository) as T

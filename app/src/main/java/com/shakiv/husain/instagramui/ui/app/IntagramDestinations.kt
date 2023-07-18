@@ -1,5 +1,7 @@
 package com.shakiv.husain.instagramui.ui.app
 
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 interface BaseDestination {
@@ -45,6 +47,17 @@ object ReelsDestination : BaseDestination {
         get() = InstagramRoutes.REELS
     override val icon: Int
         get() = IconsInstagram.REELS
+
+
+    val userType = "user_type"
+    val routeWithArgs = "$route/{$userType}"
+
+    val arguments = listOf(
+        navArgument(userType) {
+            type = NavType.StringType
+        }
+    )
+
 }
 
 object ProfileDestination : BaseDestination {
@@ -62,8 +75,6 @@ object EmptyComingSoon : BaseDestination {
         get() = TODO("Not yet implemented")
 
 }
-
-
 
 
 val bottomTabRowScreens: List<BaseDestination> =

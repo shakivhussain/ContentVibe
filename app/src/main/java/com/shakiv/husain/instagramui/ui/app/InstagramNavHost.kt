@@ -1,6 +1,6 @@
 package com.shakiv.husain.instagramui.ui.app
 
-import androidx.compose.foundation.layout.fillMaxSize
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.shakiv.husain.instagramui.data.AppContainer
 import com.shakiv.husain.instagramui.data.post.HomeViewModel
+import com.shakiv.husain.instagramui.ui.app.ReelsDestination.routeWithArgs
 import com.shakiv.husain.instagramui.ui.components.EmptyComingSoon
 import com.shakiv.husain.instagramui.ui.home.HomeFeed
 import com.shakiv.husain.instagramui.ui.profile.ProfileScreen
@@ -52,7 +53,7 @@ fun InstagramNavHost(
         }
 
         composable(route = ProfileDestination.route) {
-            ProfileScreen(modifier = Modifier.fillMaxSize())
+            ProfileScreen()
         }
 
         composable(route = EmptyComingSoon.route) {
@@ -76,3 +77,8 @@ fun NavHostController.navigateToSingleTopTo(route: String) =
         launchSingleTop = true
         restoreState = true
     }
+
+
+fun NavHostController.navigateToReelsScreen(type:String){
+    this.navigateToSingleTopTo("${ReelsDestination.route}/$type")
+}

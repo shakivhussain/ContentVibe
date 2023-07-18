@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,8 +37,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.post.HomeUiState
 import com.shakiv.husain.instagramui.data.post.HomeViewModel
+import com.shakiv.husain.instagramui.data.post.PostActions
 import com.shakiv.husain.instagramui.data.post.PostFeed
 import com.shakiv.husain.instagramui.data.post.PostItem
+import com.shakiv.husain.instagramui.data.post.User
 import com.shakiv.husain.instagramui.ui.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
@@ -49,11 +52,12 @@ fun HomeFeed(
 
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
-    val postFeed = when(uiState){
-        is HomeUiState.NoPosts ->{
+    val postFeed = when (uiState) {
+        is HomeUiState.NoPosts -> {
             PostFeed(emptyList(), emptyList())
         }
-        is HomeUiState.HasPosts ->{
+
+        is HomeUiState.HasPosts -> {
             (uiState as HomeUiState.HasPosts).postFeed
         }
     }
@@ -85,8 +89,6 @@ fun HomeFeed(postFeed: PostFeed, onItemClick: (PostItem) -> Unit) {
 }
 
 
-
-
 @Composable
 fun PostList(
     postList: List<PostItem>,
@@ -95,31 +97,32 @@ fun PostList(
     storyLazyListState: LazyListState,
     onItemClick: (PostItem) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier,
-        contentPadding = PaddingValues(vertical = 0.dp, horizontal = 0.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        state = postLazyListState
-    ) {
 
+    Column(modifier = Modifier.fillMaxSize()) {
 
-        item {
-            AppHeader()
-        }
+        AppHeader()
 
-        item {
-            StoryList(storyList = storyList, storyLazyListState)
-            Spacer(modifier = Modifier.height(8.dp))
-            Divider(
-                Modifier.fillMaxWidth(), thickness = .5.dp
-            )
-        }
-        items(postList) { post ->
-            FeedListItem(postItem = post) { postItem ->
-                onItemClick(postItem)
+        LazyColumn(
+            modifier = Modifier,
+            contentPadding = PaddingValues(vertical = 0.dp, horizontal = 0.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            state = postLazyListState
+        ) {
+            item {
+                StoryList(storyList = storyList, storyLazyListState)
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider(
+                    Modifier.fillMaxWidth(), thickness = .5.dp
+                )
+            }
+            items(postList) { post ->
+                FeedListItem(postItem = post) { postItem ->
+                    onItemClick(postItem)
+                }
             }
         }
     }
+
 
 }
 
@@ -131,7 +134,7 @@ fun AppHeader() {
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
 
         Text(
@@ -141,20 +144,26 @@ fun AppHeader() {
 
         Spacer(modifier = Modifier.weight(1F))
 
-        Image(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(28.dp),
-            painter = painterResource(id = IconsInstagram.LIKE),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
-        )
-        Image(
-            modifier = Modifier.size(28.dp),
-            painter = painterResource(id = IconsInstagram.CHAT),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
-        )
+        IconButton( onClick = { /*TODO*/ }) {
+            Image(
+                modifier = Modifier,
+                painter = painterResource(id = IconsInstagram.LIKE),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
+            )
+        }
+
+
+        IconButton( onClick = { /*TODO*/ }) {
+            Image(
+
+                painter = painterResource(id = IconsInstagram.CHAT),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
+            )
+
+        }
+
     }
 }
 
@@ -195,6 +204,20 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewStoryListItem() {
-    val storyItem = StoryItem("Shakiv Husain", storyImage = IconsInstagram.ProfilePic)
-    StoryListItem(storyItem)
+    val user = User("$1 Shakiv Husain", "Professional", profile = IconsInstagram.ProfilePic)
+
+    val postAction = PostActions(
+        isLiked = 1 % 2 == 0,
+        isDislike = 2 % 2 != 0,
+    )
+
+
+    val storyItem = PostItem("Shakiv Husain",
+        user = user,
+        postActions = postAction
+    )
+
+    FeedListItem(storyItem,){
+
+    }
 }
