@@ -182,6 +182,7 @@ fun ProfileHeader(
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfilePager() {
 
@@ -206,7 +207,7 @@ fun ProfilePager() {
         }
 
 
-        item {
+        stickyHeader {
             TabRow(
                 selectedTabIndex = selectedIndex,
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,

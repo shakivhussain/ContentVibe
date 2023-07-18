@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.data.LocalPostProvider
@@ -31,6 +32,7 @@ import com.shakiv.husain.instagramui.data.post.User
 import com.shakiv.husain.instagramui.ui.components.PostActions
 import com.shakiv.husain.instagramui.ui.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
+import com.shakiv.husain.instagramui.utils.ImageUtils
 
 
 @Preview
@@ -103,6 +105,18 @@ fun FeedListItem(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(2.dp)
             )
+
+
+            if (true){
+
+
+                ImageUtils.setImage(
+                    imageId = IconsInstagram.IcMyProfile,
+                    modifier= Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.Crop
+                )
+
+            }
 
 
             Spacer(modifier = Modifier
