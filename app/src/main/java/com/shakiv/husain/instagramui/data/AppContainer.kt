@@ -15,6 +15,4 @@ class AppContainerImp(private val applicationContext: Context) : AppContainer {
     override val postRepository: PostRepository by lazy {
         FeedPostRepository()
     }
-
-
 }
