@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "796128398888",
+    "project_id": "makeitsocompose",
+    "storage_bucket": "makeitsocompose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796128398888:android:1dab162abc19c29928af1d",
+        "android_client_info": {
+          "package_name": "com.example.makeitso"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796128398888-43ph20gvicrdc9uigid0tho3rdsfciiq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.makeitso",
+            "certificate_hash": "e31bd680c99f720c32d5ed68a34cca4773ed8093"
+          }
+        },
+        {
+          "client_id": "796128398888-1jc0pfk6k259u1p864e1li1knbbk7bld.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDElXQI4dkgnOq6ES7DO1nNgyy1JrIc9oY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796128398888-1jc0pfk6k259u1p864e1li1knbbk7bld.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
