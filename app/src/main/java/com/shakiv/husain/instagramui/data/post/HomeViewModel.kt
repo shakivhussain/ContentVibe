@@ -7,6 +7,7 @@ import com.shakiv.husain.instagramui.R
 import com.shakiv.husain.instagramui.data.Resource
 import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.utils.ErrorMessage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -52,6 +53,7 @@ private data class HomeViewModelState(
 }
 
 
+@HiltViewModel
 class HomeViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
 
 
@@ -100,15 +102,15 @@ class HomeViewModel @Inject constructor(private val postRepository: PostReposito
         }
     }
 
-    companion object {
-        fun provideFactory(postRepository: PostRepository): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return HomeViewModel(postRepository) as T
-                }
-
-            }
-    }
+//    companion object {
+//        fun provideFactory(postRepository: PostRepository): ViewModelProvider.Factory =
+//            object : ViewModelProvider.Factory {
+//
+//                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//                    return HomeViewModel(postRepository) as T
+//                }
+//
+//            }
+//    }
 
 }

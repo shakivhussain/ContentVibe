@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.post.HomeUiState
@@ -47,7 +48,7 @@ import com.shakiv.husain.instagramui.utils.IconsInstagram
 @Composable
 fun HomeFeed(
     onItemClick: (PostItem) -> Unit,
-    homeViewModel: HomeViewModel,
+    homeViewModel: HomeViewModel= hiltViewModel(),
 ) {
 
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()

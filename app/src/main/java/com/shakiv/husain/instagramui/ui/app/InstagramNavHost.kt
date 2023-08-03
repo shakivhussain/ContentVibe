@@ -30,17 +30,12 @@ fun InstagramNavHost(
     ) {
 
         composable(route = HomeDestination.route) {
-            val homeViewModel: HomeViewModel = viewModel(
-                factory = HomeViewModel.provideFactory(
-                    appContainer.postRepository
-                )
-            )
 
             HomeFeed(
                 onItemClick = {
                     navController.navigateToSingleTopTo(ProfileDestination.route)
                 },
-                homeViewModel,
+
                 )
         }
 

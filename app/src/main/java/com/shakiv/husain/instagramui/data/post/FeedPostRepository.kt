@@ -5,8 +5,9 @@ import com.shakiv.husain.instagramui.data.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FeedPostRepository : PostRepository {
+class FeedPostRepository @Inject constructor() : PostRepository {
 
     private var requestCount = 0
 
