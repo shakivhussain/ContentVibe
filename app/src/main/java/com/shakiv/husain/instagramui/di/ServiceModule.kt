@@ -1,7 +1,7 @@
 package com.shakiv.husain.instagramui.di
 
 import com.shakiv.husain.instagramui.data.post.FeedPostRepository
-import com.shakiv.husain.instagramui.data.post.PostRepository
+import com.shakiv.husain.instagramui.domain.service.PostRepository
 import com.shakiv.husain.instagramui.data.remote.imp.AccountServiceImp
 import com.shakiv.husain.instagramui.data.remote.imp.StorageServiceImp
 import com.shakiv.husain.instagramui.domain.service.AccountService

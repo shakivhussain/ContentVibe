@@ -1,7 +1,7 @@
-package com.shakiv.husain.instagramui.data.post
+package com.shakiv.husain.instagramui.domain.service
 
 import com.shakiv.husain.instagramui.data.Resource
-import javax.inject.Inject
+import com.shakiv.husain.instagramui.data.post.PostFeed
 
 
 interface  PostRepository {

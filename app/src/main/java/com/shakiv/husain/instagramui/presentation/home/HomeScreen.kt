@@ -36,8 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
-import com.shakiv.husain.instagramui.data.post.HomeUiState
-import com.shakiv.husain.instagramui.data.post.HomeViewModel
 import com.shakiv.husain.instagramui.data.post.PostActions
 import com.shakiv.husain.instagramui.data.post.PostFeed
 import com.shakiv.husain.instagramui.data.post.PostItem
@@ -48,7 +46,7 @@ import com.shakiv.husain.instagramui.utils.IconsInstagram
 @Composable
 fun HomeFeed(
     onItemClick: (PostItem) -> Unit,
-    homeViewModel: HomeViewModel= hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()

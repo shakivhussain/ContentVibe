@@ -1,17 +1,13 @@
 package com.shakiv.husain.instagramui.presentation.app
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.shakiv.husain.instagramui.data.AppContainer
-import com.shakiv.husain.instagramui.data.post.HomeViewModel
-import com.shakiv.husain.instagramui.presentation.app.ReelsDestination.routeWithArgs
 import com.shakiv.husain.instagramui.presentation.components.EmptyComingSoon
 import com.shakiv.husain.instagramui.presentation.home.HomeFeed
 import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen

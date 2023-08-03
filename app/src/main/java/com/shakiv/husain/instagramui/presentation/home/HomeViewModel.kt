@@ -1,16 +1,14 @@
-package com.shakiv.husain.instagramui.data.post
+package com.shakiv.husain.instagramui.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shakiv.husain.instagramui.R
-import com.shakiv.husain.instagramui.data.LocalPostProvider
 import com.shakiv.husain.instagramui.data.Resource
 import com.shakiv.husain.instagramui.domain.service.AccountService
+import com.shakiv.husain.instagramui.domain.service.PostRepository
 import com.shakiv.husain.instagramui.domain.service.StorageService
 import com.shakiv.husain.instagramui.utils.ErrorMessage
-import com.shakiv.husain.instagramui.utils.IconsInstagram
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,43 +19,12 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
-
-sealed interface HomeUiState {
-
-
-    val isLoading: Boolean
-    val errorMessage: List<ErrorMessage>
-
-    data class NoPosts(
-        override val isLoading: Boolean, override val errorMessage: List<ErrorMessage>
-    ) : HomeUiState
-
-    data class HasPosts(
-        val postFeed: PostFeed, override val isLoading: Boolean,
-        override val errorMessage: List<ErrorMessage>
-    ) : HomeUiState
-}
-
-
-private data class HomeViewModelState(
-    val postFeed: PostFeed? = null,
-    val isLoading: Boolean = false,
-    val errorMessage: List<ErrorMessage> = emptyList(),
-) {
-    fun toUiState(): HomeUiState = if (postFeed == null) {
-        HomeUiState.NoPosts(
-            isLoading = isLoading, errorMessage = errorMessage
-        )
-    } else {
-        HomeUiState.HasPosts(
-            postFeed = postFeed, isLoading = isLoading, errorMessage = errorMessage
-        )
-    }
-}
-
-
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val postRepository: PostRepository, accountService: AccountService, storageService: StorageService) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val postRepository: PostRepository,
+    private val accountService: AccountService,
+    private val storageService: StorageService
+) : ViewModel() {
 
 
     private val viewModelState = MutableStateFlow(
@@ -71,10 +38,11 @@ class HomeViewModel @Inject constructor(private val postRepository: PostReposito
         )
 
     init {
-        refreshPost()
+        refreshData()
     }
 
-    private fun refreshPost() {
+
+    private fun refreshData() {
 
         viewModelState.update {
             it.copy(isLoading = true)
@@ -103,17 +71,8 @@ class HomeViewModel @Inject constructor(private val postRepository: PostReposito
                 }
             }
         }
-    }
 
-//    companion object {
-//        fun provideFactory(postRepository: PostRepository): ViewModelProvider.Factory =
-//            object : ViewModelProvider.Factory {
-//
-//                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//                    return HomeViewModel(postRepository) as T
-//                }
-//
-//            }
-//    }
+
+    }
 
 }
