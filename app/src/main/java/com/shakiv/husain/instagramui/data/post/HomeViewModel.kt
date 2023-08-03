@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.shakiv.husain.instagramui.R
 import com.shakiv.husain.instagramui.data.Resource
+import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.utils.ErrorMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
 
 sealed interface HomeUiState {
@@ -49,7 +51,8 @@ private data class HomeViewModelState(
     }
 }
 
-class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
+
+class HomeViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
 
 
     private val viewModelState = MutableStateFlow(
