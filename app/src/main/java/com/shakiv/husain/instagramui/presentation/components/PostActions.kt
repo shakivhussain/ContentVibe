@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.components
+package com.shakiv.husain.instagramui.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

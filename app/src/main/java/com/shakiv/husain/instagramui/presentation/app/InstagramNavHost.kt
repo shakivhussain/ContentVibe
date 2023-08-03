@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.app
+package com.shakiv.husain.instagramui.presentation.app
 
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,10 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.shakiv.husain.instagramui.data.AppContainer
 import com.shakiv.husain.instagramui.data.post.HomeViewModel
-import com.shakiv.husain.instagramui.ui.app.ReelsDestination.routeWithArgs
-import com.shakiv.husain.instagramui.ui.components.EmptyComingSoon
-import com.shakiv.husain.instagramui.ui.home.HomeFeed
-import com.shakiv.husain.instagramui.ui.profile.ProfileScreen
+import com.shakiv.husain.instagramui.presentation.app.ReelsDestination.routeWithArgs
+import com.shakiv.husain.instagramui.presentation.components.EmptyComingSoon
+import com.shakiv.husain.instagramui.presentation.home.HomeFeed
+import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen
 
 @Composable
 fun InstagramNavHost(

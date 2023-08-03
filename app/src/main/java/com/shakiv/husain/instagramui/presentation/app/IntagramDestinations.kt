@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.app
+package com.shakiv.husain.instagramui.presentation.app
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument

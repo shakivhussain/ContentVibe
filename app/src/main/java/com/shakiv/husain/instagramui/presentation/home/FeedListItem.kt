@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.home
+package com.shakiv.husain.instagramui.presentation.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.data.LocalPostProvider
 import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.data.post.User
-import com.shakiv.husain.instagramui.ui.components.PostActions
-import com.shakiv.husain.instagramui.ui.components.ProfileImage
+import com.shakiv.husain.instagramui.presentation.components.PostActions
+import com.shakiv.husain.instagramui.presentation.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
 

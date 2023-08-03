@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.components
+package com.shakiv.husain.instagramui.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
@@ -7,7 +7,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.shakiv.husain.instagramui.ui.app.BaseDestination
+import com.shakiv.husain.instagramui.presentation.app.BaseDestination
 
 @Composable
 fun BottomNavigationTabRow(
