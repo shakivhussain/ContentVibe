@@ -18,7 +18,8 @@ data class PostItem(
 
 
 data class User(
-    val name: String = "",
+    var id : String="",
+    var name: String = "",
     val about: String = "",
     val profile: Int = 0
 )

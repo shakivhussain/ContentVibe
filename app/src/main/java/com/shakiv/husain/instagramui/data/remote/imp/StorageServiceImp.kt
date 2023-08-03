@@ -30,7 +30,9 @@ class StorageServiceImp @Inject constructor(
 
     override suspend fun save(postItem: PostItem): String =
         trace(SAVE_POST_TRACE) {
-            val postItem = postItem.user.copy(name = auth.currentUserId)
+            postItem.also {
+                it.user.id = auth.currentUserId
+            }
             firestore.collection(POST_COLLECTION).add(postItem).await().id
         }
 

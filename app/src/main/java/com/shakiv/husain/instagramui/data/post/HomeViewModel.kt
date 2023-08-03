@@ -1,13 +1,16 @@
 package com.shakiv.husain.instagramui.data.post
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.shakiv.husain.instagramui.R
+import com.shakiv.husain.instagramui.data.LocalPostProvider
 import com.shakiv.husain.instagramui.data.Resource
 import com.shakiv.husain.instagramui.domain.service.AccountService
+import com.shakiv.husain.instagramui.domain.service.StorageService
 import com.shakiv.husain.instagramui.utils.ErrorMessage
+import com.shakiv.husain.instagramui.utils.IconsInstagram
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -54,7 +57,7 @@ private data class HomeViewModelState(
 
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val postRepository: PostRepository, accountService: AccountService, storageService: StorageService) : ViewModel() {
 
 
     private val viewModelState = MutableStateFlow(
