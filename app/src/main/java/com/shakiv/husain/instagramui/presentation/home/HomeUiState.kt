@@ -1,6 +1,8 @@
 package com.shakiv.husain.instagramui.presentation.home
 
+import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.post.PostFeed
+import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.utils.ErrorMessage
 
 sealed interface HomeUiState {
@@ -13,7 +15,11 @@ sealed interface HomeUiState {
     ) : HomeUiState
 
     data class HasPosts(
-        val postFeed: PostFeed, override val isLoading: Boolean,
+        val postFeed: List<PostItem>,
+        override val isLoading: Boolean,
         override val errorMessage: List<ErrorMessage>
     ) : HomeUiState
+
+
+
 }

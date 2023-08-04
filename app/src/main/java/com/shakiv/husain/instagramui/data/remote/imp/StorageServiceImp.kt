@@ -1,11 +1,13 @@
 package com.shakiv.husain.instagramui.data.remote.imp
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.dataObjects
 import com.google.firebase.perf.ktx.trace
 import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.domain.service.StorageService
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
@@ -15,12 +17,14 @@ class StorageServiceImp @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: AccountService
 ) : StorageService {
-    override val posts: Flow<List<PostItem>>
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val
+            posts: Flow<List<PostItem>>
         get() =
-            auth.currentUser.flatMapLatest { user ->
-                firestore.collection(POST_COLLECTION).whereEqualTo(USER_ID_FIELD, user.id)
+//            auth.currentUser.flatMapLatest { user ->
+                firestore.collection(POST_COLLECTION).whereEqualTo(USER_ID_FIELD,auth.currentUserId)
                     .dataObjects()
-            }
+//            }
 
 
     override suspend fun getPost(postId: String): PostItem? =
@@ -31,8 +35,9 @@ class StorageServiceImp @Inject constructor(
     override suspend fun save(postItem: PostItem): String =
         trace(SAVE_POST_TRACE) {
             postItem.also {
-                it.user.id = auth.currentUserId
+                it.userId = auth.currentUserId
             }
+
             firestore.collection(POST_COLLECTION).add(postItem).await().id
         }
 
@@ -44,7 +49,7 @@ class StorageServiceImp @Inject constructor(
         }
 
     override suspend fun delete(postId: String) {
-        firestore.collection(POST_COLLECTION).document().delete().await()
+        firestore.collection(POST_COLLECTION).document(postId).delete().await()
     }
 
     companion object {
