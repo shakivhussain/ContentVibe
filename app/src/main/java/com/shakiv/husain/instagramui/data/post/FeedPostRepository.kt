@@ -2,11 +2,13 @@ package com.shakiv.husain.instagramui.data.post
 
 import com.shakiv.husain.instagramui.data.LocalPostProvider
 import com.shakiv.husain.instagramui.data.Resource
+import com.shakiv.husain.instagramui.domain.service.PostRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FeedPostRepository : PostRepository {
+class FeedPostRepository @Inject constructor() : PostRepository {
 
     private var requestCount = 0
 
@@ -23,4 +25,6 @@ class FeedPostRepository : PostRepository {
 
 
     private fun shouldRandomlyFail(): Boolean = ++ requestCount % 5 == 0
+
+
 }

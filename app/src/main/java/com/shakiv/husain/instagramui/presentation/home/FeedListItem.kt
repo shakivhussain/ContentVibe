@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.home
+package com.shakiv.husain.instagramui.presentation.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.data.LocalPostProvider
 import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.data.post.User
-import com.shakiv.husain.instagramui.ui.components.PostActions
-import com.shakiv.husain.instagramui.ui.components.ProfileImage
+import com.shakiv.husain.instagramui.presentation.components.PostActions
+import com.shakiv.husain.instagramui.presentation.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
 
@@ -71,7 +71,7 @@ fun FeedListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                ProfileImage(profilePath = postItem.user.profile)
+                ProfileImage(profilePath = postItem.user?.profile?:0)
 
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -79,8 +79,8 @@ fun FeedListItem(
                     modifier = Modifier.weight(1F),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(text = postItem.user.name, style = MaterialTheme.typography.titleMedium)
-                    Text(text = postItem.user.about, style = MaterialTheme.typography.bodySmall)
+                    Text(text = postItem.user?.name.orEmpty(), style = MaterialTheme.typography.titleMedium)
+                    Text(text = postItem.user?.about.orEmpty(), style = MaterialTheme.typography.bodySmall)
                 }
 
                 IconButton(
@@ -135,7 +135,7 @@ fun FeedListItem(
             }
 
             PostActions(
-                isLiked =postItem.postActions.isLiked ,
+                isLiked =postItem.postActions?.isLiked?:true ,
                 modifier = Modifier.padding(),
                 onLikeClicked = onLikeClick,
                 onCommentClicked = onCommentClicked

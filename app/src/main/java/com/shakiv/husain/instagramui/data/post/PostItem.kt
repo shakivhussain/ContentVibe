@@ -11,16 +11,19 @@ data class PostFeed(
 data class PostItem(
     val id: String = "",
     val post: String = "",
-    val user: User,
+    val user: User?=null,
+    var userId : String= "",
     var isLiked: Boolean = false,
-    val postActions: PostActions
+    val postActions: PostActions?=null
 )
 
 
 data class User(
-    val name: String = "",
+    var id : String="",
+    var name: String = "",
     val about: String = "",
-    val profile: Int = 0
+    val profile: Int = 0,
+
 )
 
 

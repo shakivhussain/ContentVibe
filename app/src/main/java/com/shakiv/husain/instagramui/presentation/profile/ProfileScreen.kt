@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.profile
+package com.shakiv.husain.instagramui.presentation.profile
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -38,9 +38,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.R
 import com.shakiv.husain.instagramui.data.LocalPostProvider.allUserPost
-import com.shakiv.husain.instagramui.ui.components.EmptyComingSoon
-import com.shakiv.husain.instagramui.ui.components.ProfileImage
-import com.shakiv.husain.instagramui.ui.home.FeedListItem
+import com.shakiv.husain.instagramui.presentation.components.EmptyComingSoon
+import com.shakiv.husain.instagramui.presentation.components.ProfileImage
+import com.shakiv.husain.instagramui.presentation.home.FeedListItem
 import com.shakiv.husain.instagramui.utils.ImageUtils
 
 

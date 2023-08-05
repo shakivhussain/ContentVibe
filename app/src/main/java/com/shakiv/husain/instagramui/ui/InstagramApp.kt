@@ -16,12 +16,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shakiv.husain.instagramui.data.AppContainer
-import com.shakiv.husain.instagramui.ui.app.AddPostDestination
-import com.shakiv.husain.instagramui.ui.app.HomeDestination
-import com.shakiv.husain.instagramui.ui.app.InstagramNavHost
-import com.shakiv.husain.instagramui.ui.app.bottomTabRowScreens
-import com.shakiv.husain.instagramui.ui.app.navigateToSingleTopTo
-import com.shakiv.husain.instagramui.ui.components.BottomNavigationTabRow
+import com.shakiv.husain.instagramui.presentation.app.AddPostDestination
+import com.shakiv.husain.instagramui.presentation.app.HomeDestination
+import com.shakiv.husain.instagramui.presentation.app.InstagramNavHost
+import com.shakiv.husain.instagramui.presentation.app.bottomTabRowScreens
+import com.shakiv.husain.instagramui.presentation.app.navigateToSingleTopTo
+import com.shakiv.husain.instagramui.presentation.components.BottomNavigationTabRow
 
 @Composable
 fun InstagramApp(appContainer: AppContainer) {

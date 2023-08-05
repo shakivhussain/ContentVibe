@@ -1,5 +1,6 @@
-package com.shakiv.husain.instagramui.ui.home
+package com.shakiv.husain.instagramui.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,41 +34,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
-import com.shakiv.husain.instagramui.data.post.HomeUiState
-import com.shakiv.husain.instagramui.data.post.HomeViewModel
 import com.shakiv.husain.instagramui.data.post.PostActions
-import com.shakiv.husain.instagramui.data.post.PostFeed
 import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.data.post.User
-import com.shakiv.husain.instagramui.ui.components.ProfileImage
+import com.shakiv.husain.instagramui.presentation.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 @Composable
 fun HomeFeed(
     onItemClick: (PostItem) -> Unit,
-    homeViewModel: HomeViewModel,
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
-    val postFeed = when (uiState) {
-        is HomeUiState.NoPosts -> {
-            PostFeed(emptyList(), emptyList())
-        }
-
-        is HomeUiState.HasPosts -> {
-            (uiState as HomeUiState.HasPosts).postFeed
-        }
-    }
-
-    HomeFeed(postFeed, onItemClick = onItemClick)
+    HomeFeed(uiState = uiState, onItemClick = onItemClick, )
 
 }
 
 @Composable
-fun HomeFeed(postFeed: PostFeed, onItemClick: (PostItem) -> Unit) {
+fun HomeFeed(uiState: HomeViewModelState, onItemClick: (PostItem) -> Unit) {
 
     val postLazyListState = rememberLazyListState()
     val storyLazyListState = rememberLazyListState()
@@ -78,7 +67,8 @@ fun HomeFeed(postFeed: PostFeed, onItemClick: (PostItem) -> Unit) {
             .background(MaterialTheme.colorScheme.background)
     ) {
         PostList(
-            postList = postFeed.postItemList, storyList = postFeed.storyList,
+            postList = uiState.posts,
+            storyList = uiState.stories,
             postLazyListState = postLazyListState,
             storyLazyListState,
             onItemClick = onItemClick

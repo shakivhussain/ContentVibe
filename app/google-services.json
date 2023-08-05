@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "796128398888",
-    "project_id": "makeitsocompose",
-    "storage_bucket": "makeitsocompose.appspot.com"
+    "project_number": "938397326976",
+    "project_id": "contentvibe-f9adc",
+    "storage_bucket": "contentvibe-f9adc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:796128398888:android:1dab162abc19c29928af1d",
+        "mobilesdk_app_id": "1:938397326976:android:5bc57ea32a170d2ef25065",
         "android_client_info": {
-          "package_name": "com.example.makeitso"
+          "package_name": "com.shakiv.husain.instagramui"
         }
       },
       "oauth_client": [
         {
-          "client_id": "796128398888-43ph20gvicrdc9uigid0tho3rdsfciiq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.makeitso",
-            "certificate_hash": "e31bd680c99f720c32d5ed68a34cca4773ed8093"
-          }
-        },
-        {
-          "client_id": "796128398888-1jc0pfk6k259u1p864e1li1knbbk7bld.apps.googleusercontent.com",
+          "client_id": "938397326976-ib86mpgtafjfen40rk6cmmbais2fpcv3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDElXQI4dkgnOq6ES7DO1nNgyy1JrIc9oY"
+          "current_key": "AIzaSyANweulXK05y04yCOF_8UfrrI8sTXowTeM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "796128398888-1jc0pfk6k259u1p864e1li1knbbk7bld.apps.googleusercontent.com",
+              "client_id": "938397326976-ib86mpgtafjfen40rk6cmmbais2fpcv3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
