@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.presentation.app
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +12,7 @@ import com.shakiv.husain.instagramui.data.AppContainer
 import com.shakiv.husain.instagramui.presentation.components.EmptyComingSoon
 import com.shakiv.husain.instagramui.presentation.home.HomeFeed
 import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen
+import com.shakiv.husain.instagramui.presentation.write_post.WritePostScreen
 
 @Composable
 fun InstagramNavHost(
@@ -53,7 +55,9 @@ fun InstagramNavHost(
 
 
         composable(route = AddPostDestination.route) {
-            EmptyComingSoon(modifier = Modifier.fillMaxWidth())
+            WritePostScreen(){
+                navController.popBackStack()
+            }
         }
 
     }
