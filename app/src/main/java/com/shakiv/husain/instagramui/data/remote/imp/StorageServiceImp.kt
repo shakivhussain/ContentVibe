@@ -23,7 +23,7 @@ class StorageServiceImp @Inject constructor(
             posts: Flow<List<PostItem>>
         get() =
 //            auth.currentUser.flatMapLatest { user ->
-                firestore.collection(POST_COLLECTION).whereEqualTo(USER_ID_FIELD,auth.currentUserId)
+                firestore.collection(POST_COLLECTION).whereEqualTo(USER_ID_FIELD,"IoEsEzuoAZdzBeq6pQdUKzxOoeI3")
                     .dataObjects()
 //            }
 

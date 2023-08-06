@@ -13,6 +13,7 @@ object IconsInstagram {
     val IcLike = R.drawable.ic_message
     val IcBookmark = R.drawable.ic_bookmark
     val IcMyProfile = R.drawable.profile_pic
+    val IcBack = R.drawable.ic_back
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

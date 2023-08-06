@@ -190,7 +190,6 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
     }
 }
 
-
 @Preview
 @Composable
 fun PreviewStoryListItem() {
