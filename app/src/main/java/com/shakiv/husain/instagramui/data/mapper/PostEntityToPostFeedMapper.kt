@@ -10,7 +10,9 @@ fun PostEntity.toPost(): Post {
     return Post(
         id = id,
         post = post,
+        date = date,
         isLiked = postActions?.isLiked,
+        likes = postActions?.likes ?: 0,
         usedId = user?.userId ?: "",
         userName = user?.userName ?: "",
         userAbout = user?.userAbout ?: "",
@@ -24,6 +26,7 @@ fun Post.toPostEntity(): PostEntity {
         id = id ?: "",
         post = post ?: "",
         isLiked = isLiked ?: false,
+
         user = UserEntity(
             userId = usedId ?: "",
             userName = userName ?: "",
@@ -31,7 +34,9 @@ fun Post.toPostEntity(): PostEntity {
             userProfile = userProfile ?: ""
         ),
         postActions = PostActions(
-            isLiked = isLiked ?: false, isDislike = false
+            isLiked = isLiked ?: false,
+            isDislike = false,
+            likes = likes
         )
     )
 }

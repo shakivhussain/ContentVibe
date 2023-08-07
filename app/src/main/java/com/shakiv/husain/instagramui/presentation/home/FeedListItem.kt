@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -71,6 +72,9 @@ fun FeedListItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
+
+                Log.d("TAGFeedListItem", "FeedListItem: $post")
 
                 ProfileImage(profilePath = 0) // TODO : Change it to the Actual Path
 

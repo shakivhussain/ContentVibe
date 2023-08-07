@@ -21,7 +21,7 @@ class StorageServiceImp @Inject constructor(
             posts: Flow<List<PostEntity>>
         get() =
 //            auth.currentUser.flatMapLatest { user ->
-                firestore.collection(POST_COLLECTION).whereEqualTo(USER_ID_FIELD,"IoEsEzuoAZdzBeq6pQdUKzxOoeI3")
+                firestore.collection("stage_post")
                     .dataObjects()
 //            }
 
@@ -50,7 +50,7 @@ class StorageServiceImp @Inject constructor(
                 it.user?.userId = auth.currentUserId
             }
 
-            firestore.collection("testPosts").add(postEntity).await().id
+            firestore.collection("stage_post").add(postEntity).await().id
         }
 
 

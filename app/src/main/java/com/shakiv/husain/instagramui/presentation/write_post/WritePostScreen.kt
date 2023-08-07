@@ -79,6 +79,7 @@ fun WritePostScreen(
                     TextButton(
                         onClick = {
                             writePostViewModel.writePost()
+                            isEnabled=!isEnabled
                             popBackStack()
                         },
                         modifier = Modifier,

@@ -41,12 +41,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         refreshPosts()
-
     }
 
     private fun refreshPosts() {
-
-
         viewModelScope.launch(Dispatchers.IO) {
 
             storageService.stories.collectLatest { stories: List<StoryItem> ->
@@ -56,7 +53,6 @@ class HomeViewModel @Inject constructor(
                         stories = stories
                     )
                 }
-
             }
 
         }
@@ -67,7 +63,12 @@ class HomeViewModel @Inject constructor(
                 storageService.posts.collectLatest { posts ->
                     viewModelState.update {
                         it.copy(
-                            posts = posts.map { postEntity ->  postEntity.toPost() }
+                            posts = posts
+                                .map { postEntity ->
+                                    postEntity.toPost()
+                                }.sortedByDescending { post ->
+                                    post.date
+                                }
                         )
                     }
                 }

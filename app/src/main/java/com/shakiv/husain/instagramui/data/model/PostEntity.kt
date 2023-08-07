@@ -11,12 +11,14 @@ data class PostFeed(
 data class PostEntity(
     val id: String = "",
     val post: String = "",
-    val user: UserEntity?=null,
+    val date: String = "",
+    val user: UserEntity? = null,
     var isLiked: Boolean = false,
-    val postActions: PostActions?=null
+    val postActions: PostActions? = null
 )
 
 data class PostActions(
     val isLiked: Boolean = false,
-    val isDislike: Boolean = false
+    val isDislike: Boolean = false,
+    val likes: Int = 0,
 )
