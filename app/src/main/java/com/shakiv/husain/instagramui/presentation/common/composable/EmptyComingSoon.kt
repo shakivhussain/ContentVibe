@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.presentation.components
+package com.shakiv.husain.instagramui.presentation.common.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

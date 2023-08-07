@@ -50,7 +50,7 @@ class StorageServiceImp @Inject constructor(
                 it.user?.userId = auth.currentUserId
             }
 
-            firestore.collection(POST_COLLECTION).add(postEntity).await().id
+            firestore.collection("testPosts").add(postEntity).await().id
         }
 
 

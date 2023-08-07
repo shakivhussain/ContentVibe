@@ -30,8 +30,8 @@ import com.shakiv.husain.instagramui.data.mapper.toPost
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.model.Post
-import com.shakiv.husain.instagramui.presentation.components.PostActions
-import com.shakiv.husain.instagramui.presentation.components.ProfileImage
+import com.shakiv.husain.instagramui.presentation.common.composable.PostActions
+import com.shakiv.husain.instagramui.presentation.common.composable.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
 

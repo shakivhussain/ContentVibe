@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.R
 import com.shakiv.husain.instagramui.data.LocalPostProvider.allUserPost
 import com.shakiv.husain.instagramui.data.mapper.toPost
-import com.shakiv.husain.instagramui.presentation.components.EmptyComingSoon
-import com.shakiv.husain.instagramui.presentation.components.ProfileImage
+import com.shakiv.husain.instagramui.presentation.common.composable.EmptyComingSoon
+import com.shakiv.husain.instagramui.presentation.common.composable.ProfileImage
 import com.shakiv.husain.instagramui.presentation.home.FeedListItem
 import com.shakiv.husain.instagramui.utils.ImageUtils
 

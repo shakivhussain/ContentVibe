@@ -41,7 +41,7 @@ import com.shakiv.husain.instagramui.data.model.PostActions
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.model.Post
-import com.shakiv.husain.instagramui.presentation.components.ProfileImage
+import com.shakiv.husain.instagramui.presentation.common.composable.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 @Composable

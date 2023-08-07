@@ -21,7 +21,7 @@ import com.shakiv.husain.instagramui.presentation.app.HomeDestination
 import com.shakiv.husain.instagramui.presentation.app.InstagramNavHost
 import com.shakiv.husain.instagramui.presentation.app.bottomTabRowScreens
 import com.shakiv.husain.instagramui.presentation.app.navigateToSingleTopTo
-import com.shakiv.husain.instagramui.presentation.components.BottomNavigationTabRow
+import com.shakiv.husain.instagramui.presentation.common.composable.BottomNavigationTabRow
 
 @Composable
 fun InstagramApp(appContainer: AppContainer) {

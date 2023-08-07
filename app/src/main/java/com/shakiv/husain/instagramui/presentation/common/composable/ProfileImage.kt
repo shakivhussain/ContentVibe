@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.presentation.components
+package com.shakiv.husain.instagramui.presentation.common.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
@@ -9,12 +9,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 
 @Composable
 fun ProfileImage(profilePath: Int, modifier: Modifier= Modifier) {
     Image(
-        painter = painterResource(id = profilePath),
+        painter = painterResource(id = IconsInstagram.ProfilePic),
         contentDescription = null,
         modifier = modifier
             .size(40.dp)
