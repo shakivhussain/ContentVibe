@@ -107,6 +107,7 @@ fun PostList(
                 )
             }
             items(postList) { post ->
+
                 FeedListItem(post = post) { postItem ->
                     onItemClick(postItem)
                 }
