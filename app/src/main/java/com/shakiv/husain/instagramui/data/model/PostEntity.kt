@@ -1,31 +1,20 @@
-package com.shakiv.husain.instagramui.data.post
+package com.shakiv.husain.instagramui.data.model
 
 import com.shakiv.husain.instagramui.data.StoryItem
 
 
 data class PostFeed(
-    var postItemList: List<PostItem>,
+    var postEntityList: List<PostEntity>,
     var storyList: List<StoryItem>
 )
 
-data class PostItem(
+data class PostEntity(
     val id: String = "",
     val post: String = "",
-    val user: User?=null,
-    var userId : String= "",
+    val user: UserEntity?=null,
     var isLiked: Boolean = false,
     val postActions: PostActions?=null
 )
-
-
-data class User(
-    var id : String="",
-    var name: String = "",
-    val about: String = "",
-    val profile: Int = 0,
-
-)
-
 
 data class PostActions(
     val isLiked: Boolean = false,

@@ -22,3 +22,4 @@ fun ProfileImage(profilePath: Int, modifier: Modifier= Modifier) {
         contentScale = ContentScale.FillWidth
     )
 }
+

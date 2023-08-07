@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.R
 import com.shakiv.husain.instagramui.data.LocalPostProvider.allUserPost
+import com.shakiv.husain.instagramui.data.mapper.toPost
 import com.shakiv.husain.instagramui.presentation.components.EmptyComingSoon
 import com.shakiv.husain.instagramui.presentation.components.ProfileImage
 import com.shakiv.husain.instagramui.presentation.home.FeedListItem
@@ -257,7 +258,7 @@ fun ProfilePager() {
         }
 
         items(userPosts) {
-            FeedListItem(postItem = it, onItemClick = {})
+            FeedListItem(post = it.toPost(), onItemClick = {})
         }
 
 
@@ -289,7 +290,7 @@ fun UserPostScreen() {
 //        }
         items(allUserPost()) {
 
-            FeedListItem(postItem = it, onItemClick = {})
+            FeedListItem(post = it.toPost(), onItemClick = {})
 
         }
     }

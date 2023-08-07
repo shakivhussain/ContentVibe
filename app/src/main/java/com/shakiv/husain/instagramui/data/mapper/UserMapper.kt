@@ -1,12 +1,12 @@
 package com.shakiv.husain.instagramui.data.mapper
 
-import com.shakiv.husain.instagramui.data.remote.dto.UserDto
+import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.model.User
 
 
-fun UserDto.toUser(): User{
+fun UserEntity.toUser(): User{
     return User(
-        id = id,
+        id = userId,
         isAnonymous = isAnonymous
     )
 }

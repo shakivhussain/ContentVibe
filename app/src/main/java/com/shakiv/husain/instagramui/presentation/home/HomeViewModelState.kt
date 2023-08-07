@@ -1,11 +1,11 @@
 package com.shakiv.husain.instagramui.presentation.home
 
 import com.shakiv.husain.instagramui.data.StoryItem
-import com.shakiv.husain.instagramui.data.post.PostItem
+import com.shakiv.husain.instagramui.domain.model.Post
 import com.shakiv.husain.instagramui.utils.ErrorMessage
 
 data class HomeViewModelState(
-    val posts: List<PostItem> = emptyList(),
+    val posts: List<Post> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: List<ErrorMessage> = emptyList(),
     val stories: List<StoryItem> = emptyList()

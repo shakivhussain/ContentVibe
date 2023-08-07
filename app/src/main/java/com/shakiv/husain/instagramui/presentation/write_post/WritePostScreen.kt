@@ -1,8 +1,6 @@
 package com.shakiv.husain.instagramui.presentation.write_post
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.util.Log
-import android.widget.ImageButton
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +33,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shakiv.husain.instagramui.data.post.PostItem
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
 

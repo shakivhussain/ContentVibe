@@ -1,18 +1,18 @@
 package com.shakiv.husain.instagramui.domain.service
 
 import com.shakiv.husain.instagramui.data.StoryItem
-import com.shakiv.husain.instagramui.data.post.PostItem
+import com.shakiv.husain.instagramui.data.model.PostEntity
 import kotlinx.coroutines.flow.Flow
 
 interface StorageService {
 
-    val posts: Flow<List<PostItem>>
+    val posts: Flow<List<PostEntity>>
     val stories : Flow<List<StoryItem>>
 
     suspend fun saveStory(storyItem: StoryItem):String
-    suspend fun getPost(postId: String): PostItem?
-    suspend fun save(postItem: PostItem):String
-    suspend fun update(postItem: PostItem)
+    suspend fun getPost(postId: String): PostEntity?
+    suspend fun save(postEntity: PostEntity):String
+    suspend fun update(postEntity: PostEntity)
     suspend fun delete(postId: String)
 
 }

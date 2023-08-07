@@ -1,6 +1,5 @@
 package com.shakiv.husain.instagramui.presentation.home
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,15 +36,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
-import com.shakiv.husain.instagramui.data.post.PostActions
-import com.shakiv.husain.instagramui.data.post.PostItem
-import com.shakiv.husain.instagramui.data.post.User
+import com.shakiv.husain.instagramui.data.mapper.toPost
+import com.shakiv.husain.instagramui.data.model.PostActions
+import com.shakiv.husain.instagramui.data.model.PostEntity
+import com.shakiv.husain.instagramui.data.model.UserEntity
+import com.shakiv.husain.instagramui.domain.model.Post
 import com.shakiv.husain.instagramui.presentation.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 
 @Composable
 fun HomeFeed(
-    onItemClick: (PostItem) -> Unit,
+    onItemClick: (Post) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
@@ -56,7 +57,7 @@ fun HomeFeed(
 }
 
 @Composable
-fun HomeFeed(uiState: HomeViewModelState, onItemClick: (PostItem) -> Unit) {
+fun HomeFeed(uiState: HomeViewModelState, onItemClick: (Post) -> Unit) {
 
     val postLazyListState = rememberLazyListState()
     val storyLazyListState = rememberLazyListState()
@@ -81,11 +82,11 @@ fun HomeFeed(uiState: HomeViewModelState, onItemClick: (PostItem) -> Unit) {
 
 @Composable
 fun PostList(
-    postList: List<PostItem>,
+    postList: List<Post>,
     storyList: List<StoryItem>,
     postLazyListState: LazyListState,
     storyLazyListState: LazyListState,
-    onItemClick: (PostItem) -> Unit
+    onItemClick: (Post) -> Unit
 ) {
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -106,7 +107,7 @@ fun PostList(
                 )
             }
             items(postList) { post ->
-                FeedListItem(postItem = post) { postItem ->
+                FeedListItem(post = post) { postItem ->
                     onItemClick(postItem)
                 }
             }
@@ -193,20 +194,19 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewStoryListItem() {
-    val user = User("$1 Shakiv Husain", "Professional", profile = IconsInstagram.ProfilePic)
+    val user = UserEntity("$1 Shakiv Husain", isAnonymous = true, "Professional", userProfile = "IconsInstagram.ProfilePic")
 
     val postAction = PostActions(
         isLiked = 1 % 2 == 0,
         isDislike = 2 % 2 != 0,
     )
 
-
-    val storyItem = PostItem("Shakiv Husain",
+    val post = PostEntity("Shakiv Husain",
         user = user,
         postActions = postAction
     )
 
-    FeedListItem(storyItem,){
+    FeedListItem(post.toPost(),){
 
     }
 }

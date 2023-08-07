@@ -26,9 +26,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.shakiv.husain.instagramui.data.LocalPostProvider
-import com.shakiv.husain.instagramui.data.post.PostItem
-import com.shakiv.husain.instagramui.data.post.User
+import com.shakiv.husain.instagramui.data.mapper.toPost
+import com.shakiv.husain.instagramui.data.model.PostEntity
+import com.shakiv.husain.instagramui.data.model.UserEntity
+import com.shakiv.husain.instagramui.domain.model.Post
 import com.shakiv.husain.instagramui.presentation.components.PostActions
 import com.shakiv.husain.instagramui.presentation.components.ProfileImage
 import com.shakiv.husain.instagramui.utils.IconsInstagram
@@ -39,27 +40,27 @@ import com.shakiv.husain.instagramui.utils.ImageUtils
 @Composable
 fun PreviewPostItem(
 ) {
-    val post = PostItem(
+    val post = PostEntity(
         id = "jhdgdr8734h3j4j3",
         post = "Top things to know in Android Platform and Quality at Google I/O '23",
         isLiked = true,
-        user = User("Shakiv Husain", "Developer", profile = IconsInstagram.ProfilePic),
-        postActions = com.shakiv.husain.instagramui.data.post.PostActions(false,false)
+        user = UserEntity("Shakiv Husain", isAnonymous = true, "Developer", userProfile = "IconsInstagram.ProfilePic"),
+        postActions = com.shakiv.husain.instagramui.data.model.PostActions(false,false)
     )
-    FeedListItem(postItem = post, onItemClick = {})
+    FeedListItem(post = post.toPost(), onItemClick = {})
 }
 
 @Composable
 fun FeedListItem(
-    postItem: PostItem,
+    post: Post,
     modifier: Modifier = Modifier,
-    onItemClick: (PostItem) -> Unit,
+    onItemClick: (Post) -> Unit,
 ) {
 
     Card(
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .clickable { onItemClick(postItem) },
+            .clickable { onItemClick(post) },
         colors = CardDefaults
             .cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {
@@ -71,7 +72,7 @@ fun FeedListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                ProfileImage(profilePath = postItem.user?.profile?:0)
+                ProfileImage(profilePath = 0) // TODO : Change it to the Actual Path
 
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -79,8 +80,8 @@ fun FeedListItem(
                     modifier = Modifier.weight(1F),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(text = postItem.user?.name.orEmpty(), style = MaterialTheme.typography.titleMedium)
-                    Text(text = postItem.user?.about.orEmpty(), style = MaterialTheme.typography.bodySmall)
+                    Text(text = post.userName.orEmpty(), style = MaterialTheme.typography.titleMedium)
+                    Text(text = post.userAbout.orEmpty(), style = MaterialTheme.typography.bodySmall)
                 }
 
                 IconButton(
@@ -101,7 +102,7 @@ fun FeedListItem(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = postItem.post,
+                text = post.post.orEmpty(),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(2.dp)
             )
@@ -135,7 +136,7 @@ fun FeedListItem(
             }
 
             PostActions(
-                isLiked =postItem.postActions?.isLiked?:true ,
+                isLiked =post.isLiked?:true ,
                 modifier = Modifier.padding(),
                 onLikeClicked = onLikeClick,
                 onCommentClicked = onCommentClicked
