@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shakiv.husain.instagramui.data.StoryItem
+import com.shakiv.husain.instagramui.data.mapper.toPost
 import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.domain.service.PostRepository
 import com.shakiv.husain.instagramui.domain.service.StorageService
@@ -40,12 +41,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         refreshPosts()
-
     }
 
     private fun refreshPosts() {
-
-
         viewModelScope.launch(Dispatchers.IO) {
 
             storageService.stories.collectLatest { stories: List<StoryItem> ->
@@ -55,7 +53,6 @@ class HomeViewModel @Inject constructor(
                         stories = stories
                     )
                 }
-
             }
 
         }
@@ -67,6 +64,11 @@ class HomeViewModel @Inject constructor(
                     viewModelState.update {
                         it.copy(
                             posts = posts
+                                .map { postEntity ->
+                                    postEntity.toPost()
+                                }.sortedByDescending { post ->
+                                    post.date
+                                }
                         )
                     }
                 }

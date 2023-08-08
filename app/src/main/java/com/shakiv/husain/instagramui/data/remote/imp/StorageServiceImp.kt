@@ -1,16 +1,14 @@
 package com.shakiv.husain.instagramui.data.remote.imp
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.dataObjects
 import com.google.firebase.perf.ktx.trace
 import com.shakiv.husain.instagramui.data.StoryItem
-import com.shakiv.husain.instagramui.data.post.PostItem
+import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.domain.service.StorageService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -20,10 +18,10 @@ class StorageServiceImp @Inject constructor(
 ) : StorageService {
     @OptIn(ExperimentalCoroutinesApi::class)
     override val
-            posts: Flow<List<PostItem>>
+            posts: Flow<List<PostEntity>>
         get() =
 //            auth.currentUser.flatMapLatest { user ->
-                firestore.collection(POST_COLLECTION).whereEqualTo(USER_ID_FIELD,"IoEsEzuoAZdzBeq6pQdUKzxOoeI3")
+                firestore.collection("stage_post")
                     .dataObjects()
 //            }
 
@@ -41,25 +39,25 @@ class StorageServiceImp @Inject constructor(
 
 
 
-    override suspend fun getPost(postId: String): PostItem? =
+    override suspend fun getPost(postId: String): PostEntity? =
         firestore.collection(POST_COLLECTION).document(postId).get().await()
-            .toObject(PostItem::class.java)
+            .toObject(PostEntity::class.java)
 
 
-    override suspend fun save(postItem: PostItem): String =
+    override suspend fun save(postEntity: PostEntity): String =
         trace(SAVE_POST_TRACE) {
-            postItem.also {
-                it.userId = auth.currentUserId
+            postEntity.also {
+                it.user?.userId = auth.currentUserId
             }
 
-            firestore.collection(POST_COLLECTION).add(postItem).await().id
+            firestore.collection("stage_post").add(postEntity).await().id
         }
 
 
-    override suspend fun update(postItem: PostItem): Unit =
+    override suspend fun update(postEntity: PostEntity): Unit =
         trace(UPDATE_POST_TRACE) {
 
-            firestore.collection(POST_COLLECTION).document(postItem.id).set(postItem).await()
+            firestore.collection(POST_COLLECTION).document(postEntity.id).set(postEntity).await()
         }
 
     override suspend fun delete(postId: String) {

@@ -1,9 +1,6 @@
 package com.shakiv.husain.instagramui.utils
 
-class Extentions {
+import java.util.UUID
 
 
-
-
-
-}
+fun randomId() = UUID.randomUUID().toString()
