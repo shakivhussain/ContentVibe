@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.presentation.write_post
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shakiv.husain.instagramui.data.model.PostEntity
@@ -36,6 +37,11 @@ class WritePostViewModel @Inject constructor(
     fun onPostTextChange(post: String) {
         writePostViewModelState.update {
             it.copy(post = post)
+        }
+    }
+
+    fun onPhotoPickerSelect(photos: List<Uri>) {
+        viewModelScope.launch {
         }
     }
 

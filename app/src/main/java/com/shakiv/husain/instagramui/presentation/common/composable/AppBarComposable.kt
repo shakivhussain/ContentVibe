@@ -31,8 +31,8 @@ fun TopAppBar(
             IconButton(onClick = { popUpScreen() }) {
                 ImageUtils.setImage(
                     modifier = Modifier
-                        .padding(8.dp)
-                        .size(30.dp),
+                        .padding(start = 8.dp)
+                        .size(28.dp),
                     imageId = IconsInstagram.IcBack,
                     colorFilter = ColorFilter.tint(
                         MaterialTheme.colorScheme.onSurface

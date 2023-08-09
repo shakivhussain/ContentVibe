@@ -15,6 +15,8 @@ object IconsInstagram {
     val IcMyProfile = R.drawable.profile_pic
     val IcBack = R.drawable.ic_back
     val IC_MoreOption = R.drawable.ic_more_option
+    val IC_MEDIA = R.drawable.ic_media
+    val IC_CAMERA = R.drawable.ic_photo_camera
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search
