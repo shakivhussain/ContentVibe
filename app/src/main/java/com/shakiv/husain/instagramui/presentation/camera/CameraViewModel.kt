@@ -65,12 +65,13 @@ class CameraViewModel @Inject constructor(
                         cameraState = cameraState.copy(
                             imageFile = savedFile
                         )
-                        Log.i("TakePicture", "Image Capture Succeeded")
+                        Log.e("TakePicture", "Image Captured Success")
+
                     }
 
                     override fun onError(exception: ImageCaptureException) {
                         exception.printStackTrace()
-                        Log.e("TakePicture", "Image Capture Succeeded")
+                        Log.e("TakePicture", "Image Capture Error Found")
 
                     }
                 }

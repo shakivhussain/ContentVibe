@@ -7,7 +7,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.ui.InstagramApp
 import com.shakiv.husain.instagramui.ui.theme.InstagramUITheme
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

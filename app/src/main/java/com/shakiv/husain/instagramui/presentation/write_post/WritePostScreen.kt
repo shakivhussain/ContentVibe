@@ -1,7 +1,7 @@
 package com.shakiv.husain.instagramui.presentation.write_post
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.net.Uri
+import android.Manifest.permission.CAMERA
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,11 +15,18 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -34,21 +41,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.shakiv.husain.instagramui.data.repository.PhotoSaverRepositoryImp.Companion.MAX_LOG_PHOTOS_LIMIT
 import com.shakiv.husain.instagramui.presentation.common.composable.TopAppBar
 import com.shakiv.husain.instagramui.presentation.common.composable.WritePostField
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
+import com.shakiv.husain.instagramui.utils.getActivity
 import kotlinx.coroutines.launch
 import com.shakiv.husain.instagramui.R.string as AppText
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,12 +65,13 @@ import com.shakiv.husain.instagramui.R.string as AppText
 fun WritePostScreen(
     writePostViewModel: WritePostViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    onCameraClick : () -> Unit
+    onCameraClick: () -> Unit
 ) {
 
     val writePostState by writePostViewModel.writePostUiState.collectAsStateWithLifecycle()
     var isEnabled by remember { mutableStateOf(true) }
     val focusRequest = remember { FocusRequester() }
+    val context = LocalContext.current
 
     val pickImage = rememberLauncherForActivityResult(
         ActivityResultContracts.PickMultipleVisualMedia(2),
@@ -69,14 +79,67 @@ fun WritePostScreen(
     )
 
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
 
-
-
+    LaunchedEffect(Unit) {
+        writePostViewModel.refreshSavedPhotos()
+    }
 
     LaunchedEffect(focusRequest) {
         focusRequest.requestFocus()
     }
+
+    LaunchedEffect(writePostState.isSaved) {
+
+        if (!writePostState.isSaved)
+            return@LaunchedEffect
+
+        popBackStack()
+    }
+
+
+
+    fun canWritePost(callback: () -> Unit) {
+        if (writePostViewModel.isValid()) {
+            callback()
+        } else {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar("You can't add more then $MAX_LOG_PHOTOS_LIMIT")
+            }
+        }
+    }
+
+    val requestCameraPermission = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            writePostViewModel.onPermissionChange(permission = CAMERA, isGranted)
+            canWritePost {
+                onCameraClick()
+            }
+        } else {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar("Camera currently disabled due to denied permission")
+            }
+        }
+    }
+
+
+    var showExplanationDialogForCameraPermission by remember { mutableStateOf(false) }
+
+    if (showExplanationDialogForCameraPermission) {
+        CameraExplanationDialog(
+            onConfirm = {
+                requestCameraPermission.launch(CAMERA)
+                showExplanationDialogForCameraPermission = false
+            },
+            onDismiss = {
+                showExplanationDialogForCameraPermission = false
+            }
+        )
+    }
+
 
     Scaffold(
 
@@ -97,9 +160,12 @@ fun WritePostScreen(
 
                     TextButton(
                         onClick = {
-                            writePostViewModel.writePost()
-                            isEnabled = !isEnabled
-                            popBackStack()
+                            canWritePost {
+                                writePostViewModel.writePost()
+                                isEnabled = !isEnabled
+                                EmptyDestinationsNavigator.popBackStack()
+                            }
+
                         },
                         modifier = Modifier.padding(end = 8.dp),
                         enabled = isEnabled,
@@ -113,11 +179,15 @@ fun WritePostScreen(
                         border = BorderStroke(.1.dp, MaterialTheme.colorScheme.onBackground)
                     ) {
 
-                        Text(
-                            text = stringResource(id = AppText.post_text),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier
-                        )
+                        if (writePostState.isSaving) {
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                        } else {
+                            Text(
+                                text = stringResource(id = AppText.post_text),
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier
+                            )
+                        }
                     }
 
                 }
@@ -133,13 +203,36 @@ fun WritePostScreen(
             BottomView(
                 onMediaClick = {
                     coroutineScope.launch {
+                        writePostViewModel.loadLocalPickerPictures()
                         pickImage.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
                         )
                     }
                 },
+
                 onCameraClick = {
-                    onCameraClick()
+
+                    Log.d(
+                        "TAGWritePostScreen", "WritePostScreen: ${writePostState.hasCameraAccess} "
+                    )
+
+                    canWritePost() {
+
+
+                        when {
+                            writePostState.hasCameraAccess -> onCameraClick()
+                            ActivityCompat.shouldShowRequestPermissionRationale(
+                                context.getActivity(), CAMERA
+                            ) -> showExplanationDialogForCameraPermission = true
+
+                            else -> {
+                                requestCameraPermission.launch(CAMERA)
+                            }
+                        }
+                    }
+//                    onCameraClick()
                 }
             )
         }
@@ -172,6 +265,39 @@ fun WritePostScreen(
         }
 
     }
+
+
+}
+
+@Composable
+fun CameraExplanationDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = { Text(text = stringResource(id = AppText.camera_access)) },
+        text = {
+            Text(
+                "PhotoLog would like access to the camera to be able take picture when creating a log"
+            )
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Filled.Camera, contentDescription = null,
+                tint = MaterialTheme.colorScheme.surfaceTint
+            )
+        },
+        confirmButton = {
+            Button(onClick = { onConfirm() }) {
+                Text(text = "Continue")
+            }
+        },
+
+        dismissButton = {
+            Button(onClick = { onConfirm() }) {
+                Text(text = "Dismiss")
+            }
+        }
+    )
 }
 
 
@@ -188,7 +314,7 @@ fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCamera
 
 
         ElevatedButton(
-            onClick = {onMediaClick() },
+            onClick = { onMediaClick() },
             elevation = ButtonDefaults.elevatedButtonElevation(
                 defaultElevation = .5.dp,
                 pressedElevation = 8.dp
@@ -200,7 +326,9 @@ fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCamera
             ) {
                 ImageUtils.setImage(
                     imageId = IconsInstagram.IC_MEDIA, modifier = Modifier.size(28.dp),
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onTertiaryContainer)
+                    colorFilter = ColorFilter.tint(
+                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
                 )
                 Text(
                     text = stringResource(id = AppText.media),
@@ -213,7 +341,7 @@ fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCamera
 
         ElevatedButton(
             onClick = {
-                      onCameraClick()
+                onCameraClick()
             },
             elevation = ButtonDefaults.elevatedButtonElevation(
                 defaultElevation = .5.dp,
@@ -227,7 +355,9 @@ fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCamera
                 ImageUtils.setImage(
                     imageId = IconsInstagram.IC_CAMERA,
                     modifier = Modifier.size(28.dp),
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onTertiaryContainer)
+                    colorFilter = ColorFilter.tint(
+                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
                 )
                 Text(
                     text = stringResource(id = AppText.camera),

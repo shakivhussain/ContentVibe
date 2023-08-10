@@ -26,6 +26,7 @@ import com.shakiv.husain.instagramui.presentation.common.composable.BottomNaviga
 @Composable
 fun InstagramApp(appContainer: AppContainer) {
     InstagramAppContent(appContainer)
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

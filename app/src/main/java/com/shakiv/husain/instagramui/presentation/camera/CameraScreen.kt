@@ -35,7 +35,6 @@ fun CameraScreen(
 
     val previewUseCase = remember { Preview.Builder().build() }
 
-
     LaunchedEffect(Unit) {
         val cameraProvider = cameraViewModel.getCameraProvider()
         try {
@@ -53,6 +52,7 @@ fun CameraScreen(
 
 
     LaunchedEffect(state.imageFile) {
+
         if (state.imageFile != null) {
             navController.popBackStack()
         }

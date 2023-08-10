@@ -44,12 +44,12 @@ class WritePostViewModel @Inject constructor(
     )
 
 
-    fun isValid(): Boolean {
+     fun isValid(): Boolean {
         val uiState = writePostUiState.value
-        val isValid = uiState.let { state ->
-            !state.isSaving && !photoSaver.isEmpty()
-        }
-        return isValid
+//        val isValid = uiState.let { state ->
+//            !state.isSaving && !photoSaver.isEmpty()
+//        }
+        return true
     }
 
     fun hasPermission(permission: String): Boolean {
@@ -92,7 +92,8 @@ class WritePostViewModel @Inject constructor(
     }
 
 
-    private fun refreshSavedPhotos() {
+    fun refreshSavedPhotos() {
+
         writePostViewModelState.update {
             it.copy(
                 savedPhotos = photoSaver.getPhotos()
@@ -141,7 +142,7 @@ class WritePostViewModel @Inject constructor(
             storageService.save(post)
 
             writePostViewModelState.update {
-                it.copy(isSaving = false)
+                it.copy(isSaved = true)
             }
         }
     }

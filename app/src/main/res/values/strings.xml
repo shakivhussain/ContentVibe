@@ -7,4 +7,5 @@
     <string name="post_text">Post</string>
     <string name="media">Media</string>
     <string name="camera">Camera</string>
+    <string name="camera_access">Camera access</string>
 </resources>

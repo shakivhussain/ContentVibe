@@ -9,5 +9,6 @@ data class WritePostViewModelState(
     val post: String = "",
     val hasCameraAccess: Boolean,
     val isSaving: Boolean = false,
+    val isSaved: Boolean = false,
     val savedPhotos: List<File> = emptyList()
 )
