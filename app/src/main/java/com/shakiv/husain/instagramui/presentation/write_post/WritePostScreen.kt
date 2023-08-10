@@ -50,25 +50,13 @@ import kotlinx.coroutines.launch
 import com.shakiv.husain.instagramui.R.string as AppText
 
 
-@Preview(
-    device = "id:pixel_5",
-    showBackground = false,
-    showSystemUi = false,
-    uiMode = UI_MODE_NIGHT_YES
-)
-@Composable
-fun WritePostPreview() {
-    WritePostScreen() {
-
-    }
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WritePostScreen(
     writePostViewModel: WritePostViewModel = hiltViewModel(),
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    onCameraClick : () -> Unit
 ) {
 
     val writePostState by writePostViewModel.writePostUiState.collectAsStateWithLifecycle()
@@ -81,6 +69,9 @@ fun WritePostScreen(
     )
 
     val coroutineScope = rememberCoroutineScope()
+
+
+
 
 
     LaunchedEffect(focusRequest) {
@@ -148,7 +139,7 @@ fun WritePostScreen(
                     }
                 },
                 onCameraClick = {
-
+                    onCameraClick()
                 }
             )
         }

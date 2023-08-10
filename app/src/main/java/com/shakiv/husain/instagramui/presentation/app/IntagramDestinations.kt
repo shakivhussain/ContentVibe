@@ -16,6 +16,7 @@ object InstagramRoutes {
     const val PROFILE = "Profile"
     const val COMING_SOON = "ComingSoon"
     const val ADD_POST = "AddPost"
+    const val CAMERA_SCREEN="Camera"
 }
 
 object HomeDestination : BaseDestination {
@@ -77,6 +78,14 @@ object EmptyComingSoon : BaseDestination {
 
 }
 
+
+object CameraDestination:BaseDestination{
+    override val route: String
+        get() = InstagramRoutes.CAMERA_SCREEN
+    override val icon: Int
+        get() = TODO("Not yet implemented")
+
+}
 
 val bottomTabRowScreens: List<BaseDestination> =
     listOf(

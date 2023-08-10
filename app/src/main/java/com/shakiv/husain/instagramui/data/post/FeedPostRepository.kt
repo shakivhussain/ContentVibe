@@ -3,7 +3,7 @@ package com.shakiv.husain.instagramui.data.post
 import com.shakiv.husain.instagramui.data.LocalPostProvider
 import com.shakiv.husain.instagramui.data.Resource
 import com.shakiv.husain.instagramui.data.model.PostFeed
-import com.shakiv.husain.instagramui.domain.service.PostRepository
+import com.shakiv.husain.instagramui.domain.repository.PostRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

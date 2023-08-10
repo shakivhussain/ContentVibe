@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.shakiv.husain.instagramui.data.AppContainer
+import com.shakiv.husain.instagramui.presentation.camera.CameraScreen
 import com.shakiv.husain.instagramui.presentation.common.composable.EmptyComingSoon
 import com.shakiv.husain.instagramui.presentation.home.HomeFeed
 import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen
@@ -54,9 +55,18 @@ fun InstagramNavHost(
 
 
         composable(route = AddPostDestination.route) {
-            WritePostScreen(){
-                navController.popBackStack()
-            }
+            WritePostScreen(
+                popBackStack = {
+                    navController.popBackStack()
+                },
+                onCameraClick = {
+                    navController.navigate(CameraDestination.route)
+                }
+            )
+        }
+
+        composable(route = CameraDestination.route) {
+            CameraScreen(navController = navController)
         }
 
     }
@@ -73,6 +83,6 @@ fun NavHostController.navigateToSingleTopTo(route: String) =
     }
 
 
-fun NavHostController.navigateToReelsScreen(type:String){
+fun NavHostController.navigateToReelsScreen(type: String) {
     this.navigateToSingleTopTo("${ReelsDestination.route}/$type")
 }

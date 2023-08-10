@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.mapper.toPost
 import com.shakiv.husain.instagramui.domain.service.AccountService
-import com.shakiv.husain.instagramui.domain.service.PostRepository
+import com.shakiv.husain.instagramui.domain.repository.PostRepository
 import com.shakiv.husain.instagramui.domain.service.StorageService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
