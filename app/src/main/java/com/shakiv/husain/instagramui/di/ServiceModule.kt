@@ -1,7 +1,7 @@
 package com.shakiv.husain.instagramui.di
 
 import com.shakiv.husain.instagramui.data.post.FeedPostRepository
-import com.shakiv.husain.instagramui.domain.service.PostRepository
+import com.shakiv.husain.instagramui.domain.repository.PostRepository
 import com.shakiv.husain.instagramui.data.remote.imp.AccountServiceImp
 import com.shakiv.husain.instagramui.data.remote.imp.StorageServiceImp
 import com.shakiv.husain.instagramui.domain.service.AccountService
@@ -23,10 +23,5 @@ abstract class ServiceModule {
     @Binds
     @Singleton
     abstract fun  bindStorageService(storageServiceImp: StorageServiceImp) : StorageService
-
-    @Binds
-    @Singleton
-    abstract fun bindFeedRepository(postRepository: FeedPostRepository): PostRepository
-
 
 }

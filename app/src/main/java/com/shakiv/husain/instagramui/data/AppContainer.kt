@@ -2,7 +2,7 @@ package com.shakiv.husain.instagramui.data
 
 import android.content.Context
 import com.shakiv.husain.instagramui.data.post.FeedPostRepository
-import com.shakiv.husain.instagramui.domain.service.PostRepository
+import com.shakiv.husain.instagramui.domain.repository.PostRepository
 
 interface AppContainer {
     val postRepository : PostRepository
