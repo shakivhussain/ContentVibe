@@ -63,7 +63,7 @@ class PhotoSaverRepositoryImp @Inject constructor(
     override suspend fun removeFile(photo: File) {
         withContext(Dispatchers.IO) {
             photo.delete()
-            _photos += photo
+            _photos -= photo
         }
     }
 

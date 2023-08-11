@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -19,9 +20,10 @@ import com.shakiv.husain.instagramui.utils.ImageUtils
 @Composable
 fun TopAppBar(
     modifier: Modifier,
+    scrollBehavior: TopAppBarScrollBehavior,
     title: @Composable () -> Unit = {},
     actions: @Composable (RowScope.() -> Unit)? = null,
-    popUpScreen: () -> Unit,
+    popUpScreen: () -> Unit
 ) {
 
     TopAppBar(
@@ -40,6 +42,7 @@ fun TopAppBar(
                 )
             }
         },
+        scrollBehavior = scrollBehavior,
         actions = { actions?.invoke(this) }
     )
 
