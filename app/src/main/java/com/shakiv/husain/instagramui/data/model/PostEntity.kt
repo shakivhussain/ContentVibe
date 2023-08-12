@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.data.model
 
+import android.net.Uri
 import com.shakiv.husain.instagramui.data.StoryItem
 
 
@@ -14,7 +15,8 @@ data class PostEntity(
     val date: String = "",
     val user: UserEntity? = null,
     var isLiked: Boolean = false,
-    val postActions: PostActions? = null
+    val postActions: PostActions? = null,
+    val images : List<String> = emptyList()
 )
 
 data class PostActions(

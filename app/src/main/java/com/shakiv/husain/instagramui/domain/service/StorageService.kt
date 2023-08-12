@@ -1,7 +1,9 @@
 package com.shakiv.husain.instagramui.domain.service
 
+import android.net.Uri
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.model.PostEntity
+import com.shakiv.husain.instagramui.domain.model.Response
 import kotlinx.coroutines.flow.Flow
 
 interface StorageService {
@@ -15,4 +17,8 @@ interface StorageService {
     suspend fun update(postEntity: PostEntity)
     suspend fun delete(postId: String)
 
+    suspend fun addImageToFirebaseStorage(uri: Uri) : Response<Uri>
+
+
 }
+
