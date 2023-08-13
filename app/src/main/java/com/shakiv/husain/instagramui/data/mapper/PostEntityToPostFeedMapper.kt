@@ -16,7 +16,8 @@ fun PostEntity.toPost(): Post {
         usedId = user?.userId ?: "",
         userName = user?.userName ?: "",
         userAbout = user?.userAbout ?: "",
-        userProfile = user?.userProfile ?: ""
+        userProfile = user?.userProfile ?: "",
+        imageUrl = images
     )
 }
 

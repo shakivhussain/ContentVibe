@@ -1,9 +1,9 @@
 package com.shakiv.husain.instagramui.presentation.write_post
 
 import android.Manifest.permission.CAMERA
+import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
@@ -35,6 +35,7 @@ import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -66,6 +67,8 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.shakiv.husain.instagramui.data.repository.PhotoSaverRepositoryImp.Companion.MAX_LOG_PHOTOS_LIMIT
+import com.shakiv.husain.instagramui.domain.model.Response
+import com.shakiv.husain.instagramui.presentation.common.composable.ProgressBar
 import com.shakiv.husain.instagramui.presentation.common.composable.TopAppBar
 import com.shakiv.husain.instagramui.presentation.common.composable.WritePostField
 import com.shakiv.husain.instagramui.utils.IconsInstagram
@@ -120,8 +123,9 @@ fun WritePostScreen(
 
 
 
-    fun canWritePost(callback: () -> Unit) {
-        if (writePostViewModel.isValid()) {
+
+    fun canAddPhoto(callback: () -> Unit) {
+        if (writePostViewModel.canAddPhoto()) {
             callback()
         } else {
             coroutineScope.launch {
@@ -135,7 +139,7 @@ fun WritePostScreen(
     ) { isGranted ->
         if (isGranted) {
             writePostViewModel.onPermissionChange(permission = CAMERA, isGranted)
-            canWritePost {
+            canAddPhoto {
                 onCameraClick()
             }
         } else {
@@ -160,15 +164,12 @@ fun WritePostScreen(
         )
     }
 
-
     Scaffold(
-
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .imePadding(),
-
-
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 modifier = Modifier,
@@ -183,15 +184,12 @@ fun WritePostScreen(
 
                     TextButton(
                         onClick = {
-                            canWritePost {
-                                writePostViewModel.writePost()
-                                isEnabled = !isEnabled
-                                EmptyDestinationsNavigator.popBackStack()
-                            }
-
+                            writePostViewModel.writePost()
+                            isEnabled = !isEnabled
+                            EmptyDestinationsNavigator.popBackStack()
                         },
                         modifier = Modifier.padding(end = 8.dp),
-                        enabled = isEnabled,
+                        enabled = isEnabled && !writePostState.isImageUploading && !writePostState.post.isEmpty(),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = enabledButtonColor,
                             contentColor = enabledButtonColor,
@@ -217,43 +215,39 @@ fun WritePostScreen(
 
             )
         },
-
         floatingActionButton = {
-
         },
-
         bottomBar = {
             BottomView(
                 onMediaClick = {
-                    coroutineScope.launch {
-                        writePostViewModel.loadLocalPickerPictures()
-                        pickImage.launch(
-                            "image/**"
-                        )
+                    canAddPhoto {
+                        coroutineScope.launch {
+                            writePostViewModel.loadLocalPickerPictures()
+                            pickImage.launch(
+                                "image/**"
+                            )
+                        }
                     }
                 },
 
                 onCameraClick = {
+                    canAddPhoto {
 
-                    Log.d(
-                        "TAGWritePostScreen", "WritePostScreen: ${writePostState.hasCameraAccess} "
-                    )
-
-                    canWritePost() {
+                        canAddPhoto() {
 
 
-                        when {
-                            writePostState.hasCameraAccess -> onCameraClick()
-                            ActivityCompat.shouldShowRequestPermissionRationale(
-                                context.getActivity(), CAMERA
-                            ) -> showExplanationDialogForCameraPermission = true
+                            when {
+                                writePostState.hasCameraAccess -> onCameraClick()
+                                ActivityCompat.shouldShowRequestPermissionRationale(
+                                    context.getActivity(), CAMERA
+                                ) -> showExplanationDialogForCameraPermission = true
 
-                            else -> {
-                                requestCameraPermission.launch(CAMERA)
+                                else -> {
+                                    requestCameraPermission.launch(CAMERA)
+                                }
                             }
                         }
                     }
-//                    onCameraClick()
                 }
             )
         },
@@ -283,7 +277,7 @@ fun WritePostScreen(
                     modifier = Modifier.padding(16.dp),
                     photos = writePostState.savedPhotos,
                     onRemove = { photo, index ->
-                        writePostViewModel.onPhotoRemoved(photo,index)
+                        writePostViewModel.onPhotoRemoved(photo, index)
                     })
 
             }
@@ -294,6 +288,35 @@ fun WritePostScreen(
     }
 
 
+    AddImageToStorage(
+        writePostState.addImageToStorageState,
+        addImageToDatabase = { photoUrl ->
+            writePostViewModel.updateImageUrl(photoUrl)
+        }
+    )
+
+}
+
+
+@Composable
+fun AddImageToStorage(
+    photoResponse: Response<Uri>,
+    addImageToDatabase: (downloadUrl: String) -> Unit
+) {
+    when (photoResponse) {
+        is Response.Loading -> ProgressBar()
+        is Response.Success -> photoResponse.data?.let { downloadUrl ->
+            LaunchedEffect(downloadUrl) {
+                addImageToDatabase(downloadUrl.toString())
+            }
+        }
+
+        is Response.Failure -> print(photoResponse.e)
+
+        else -> {
+            print("Something went wrong")
+        }
+    }
 }
 
 @Composable
@@ -332,7 +355,7 @@ fun CameraExplanationDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
 fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCameraClick: () -> Unit) {
 
     FlowRow(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(bottom = 8.dp, start = 8.dp),
         mainAxisSpacing = 8.dp,
@@ -405,7 +428,7 @@ fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCamera
 fun PhotoGrid(
     modifier: Modifier,
     photos: List<File>,
-    onRemove: ((photo: File, index:Int) -> Unit)? = null
+    onRemove: ((photo: File, index: Int) -> Unit)? = null
 ) {
 
     Row(modifier) {

@@ -52,7 +52,6 @@ fun CameraScreen(
 
 
     LaunchedEffect(state.imageFile) {
-
         if (state.imageFile != null) {
             navController.popBackStack()
         }

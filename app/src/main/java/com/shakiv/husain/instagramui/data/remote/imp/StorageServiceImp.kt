@@ -70,9 +70,7 @@ class StorageServiceImp @Inject constructor(
 
     override suspend fun addImageToFirebaseStorage(uri: Uri): Response<Uri> {
         return try {
-
             Response.Loading
-
             val downloadUrl = storage.reference.child(IMAGES).child("${randomId()}.jpg")
                 .putFile(uri).await()
                 .storage.downloadUrl.await()

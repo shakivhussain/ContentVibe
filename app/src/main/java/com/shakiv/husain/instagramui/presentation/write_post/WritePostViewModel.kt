@@ -48,11 +48,9 @@ class WritePostViewModel @Inject constructor(
 
     fun isValid(): Boolean {
         val uiState = writePostUiState.value
-//        val isValid = uiState.let { state ->
-//            !state.isSaving && !photoSaver.isEmpty()
-//        }
-        return true
+        return !uiState.isSaving && !uiState.post.isEmpty()
     }
+
 
     fun hasPermission(permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -65,7 +63,6 @@ class WritePostViewModel @Inject constructor(
     fun onPermissionChange(permission: String, isGranted: Boolean) {
         when (permission) {
             Manifest.permission.CAMERA -> {
-
                 writePostViewModelState.update {
                     it.copy(hasCameraAccess = isGranted)
                 }
@@ -95,7 +92,6 @@ class WritePostViewModel @Inject constructor(
 
 
     fun refreshSavedPhotos() {
-
         writePostViewModelState.update {
             it.copy(
                 savedPhotos = photoSaver.getPhotos()
@@ -112,12 +108,12 @@ class WritePostViewModel @Inject constructor(
     fun onPhotoPickerSelect(photos: Uri?) {
         viewModelScope.launch {
             photoSaver.cacheFromURI(photos ?: return@launch)
+            uploadImagesToStorage()
             refreshSavedPhotos()
         }
     }
 
     fun writePost() {
-
 
         if (!isValid()) {
             return
@@ -128,34 +124,6 @@ class WritePostViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-
-            val photoList = photoSaver.getPhotos()
-
-            photoList.getOrNull(0)?.let { photo ->
-
-                val photoResponse = storageService.addImageToFirebaseStorage(
-                    photo.toUri()
-                )
-
-                when (photoResponse) {
-                    is Response.Success -> {
-
-                    }
-
-                    is Response.Failure -> {
-                        writePostViewModelState.update {
-                            it.copy(errorMessage = "Error in uploading image")
-                        }
-                    }
-
-                    else -> {
-                        writePostViewModelState.update {
-                            it.copy(errorMessage = "Error in uploading image")
-                        }
-                    }
-                }
-            }
-
 
             val user = UserEntity(
                 userId = randomId(),
@@ -169,8 +137,9 @@ class WritePostViewModel @Inject constructor(
                 post = writePostUiState.value.post,
                 date = DateUtils.getCurrentUTCTime(),
                 user = user,
-//                images = imageUrls
+                images = writePostUiState.value.imageUrl
             )
+
             storageService.save(post)
 
             writePostViewModelState.update {
@@ -179,36 +148,44 @@ class WritePostViewModel @Inject constructor(
         }
     }
 
-    private fun uploadImages() {
+    private fun uploadImagesToStorage() {
 
         viewModelScope.launch {
-            var imageUrls = mutableListOf<String>()
 
-            photoSaver.getPhotos().forEach { photo ->
-                val imageUrlResponse: Response<Uri> =
-                    storageService.addImageToFirebaseStorage(photo.toUri())
+            val photoList = photoSaver.getPhotos()
 
-                when (imageUrlResponse) {
-                    is Response.Success -> {
-                        imageUrls.add(imageUrlResponse.data.toString() ?: return@forEach)
+            if (photoList.isNotEmpty()) {
+                photoList.forEach { photo ->
+
+                    writePostViewModelState.update {
+                        it.copy(
+                            addImageToStorageState = Response.Loading,
+                            isImageUploading = true
+                        )
                     }
 
-                    is Response.Failure -> {
-                        writePostViewModelState.update {
-                            it.copy(
-                                errorMessage = "Error in uploading image"
-                            )
-                        }
+                    val photoResponse = storageService.addImageToFirebaseStorage(
+                        photo.toUri()
+                    )
+                    writePostViewModelState.update {
+                        it.copy(
+                            addImageToStorageState = photoResponse,
+                            isImageUploading = false
+                        )
                     }
-
-                    else -> {}
                 }
-
             }
         }
 
     }
 
+    fun updateImageUrl(imageUrl: String) {
+        writePostViewModelState.update {
+            it.copy(
+                imageUrl = imageUrl
+            )
+        }
+    }
 
     fun canAddPhoto() = photoSaver.canAddPhoto()
 

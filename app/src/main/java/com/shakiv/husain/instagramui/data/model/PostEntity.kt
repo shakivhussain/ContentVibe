@@ -16,7 +16,7 @@ data class PostEntity(
     val user: UserEntity? = null,
     var isLiked: Boolean = false,
     val postActions: PostActions? = null,
-    val images : List<String> = emptyList()
+    val images : String = ""
 )
 
 data class PostActions(

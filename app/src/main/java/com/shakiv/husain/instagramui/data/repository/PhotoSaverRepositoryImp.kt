@@ -79,6 +79,6 @@ class PhotoSaverRepositoryImp @Inject constructor(
     }
 
     companion object {
-        const val MAX_LOG_PHOTOS_LIMIT = 2
+        const val MAX_LOG_PHOTOS_LIMIT = 1
     }
 }
