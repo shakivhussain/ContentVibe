@@ -1,12 +1,16 @@
 package com.shakiv.husain.instagramui.data.remote.imp
 
+import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.dataObjects
 import com.google.firebase.perf.ktx.trace
+import com.google.firebase.storage.FirebaseStorage
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.model.PostEntity
+import com.shakiv.husain.instagramui.domain.model.Response
 import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.domain.service.StorageService
+import com.shakiv.husain.instagramui.utils.randomId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
@@ -14,29 +18,29 @@ import javax.inject.Inject
 
 class StorageServiceImp @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val auth: AccountService
+    private val auth: AccountService,
+    private val storage: FirebaseStorage
 ) : StorageService {
     @OptIn(ExperimentalCoroutinesApi::class)
     override val
             posts: Flow<List<PostEntity>>
         get() =
 //            auth.currentUser.flatMapLatest { user ->
-                firestore.collection("stage_post")
-                    .dataObjects()
+            firestore.collection("stage_post")
+                .dataObjects()
 //            }
 
 
     override val stories: Flow<List<StoryItem>>
         get() = firestore.collection(STORY_COLLECTION).dataObjects()
 
-    override suspend fun saveStory(storyItem: StoryItem) : String =
+    override suspend fun saveStory(storyItem: StoryItem): String =
         trace(SAVE_STORY_TRACE) {
             storyItem.also {
-                it.userId=auth.currentUserId
+                it.userId = auth.currentUserId
             }
             firestore.collection(STORY_COLLECTION).add(storyItem).await().id
         }
-
 
 
     override suspend fun getPost(postId: String): PostEntity? =
@@ -64,6 +68,20 @@ class StorageServiceImp @Inject constructor(
         firestore.collection(POST_COLLECTION).document(postId).delete().await()
     }
 
+    override suspend fun addImageToFirebaseStorage(uri: Uri): Response<Uri> {
+        return try {
+
+            Response.Loading
+
+            val downloadUrl = storage.reference.child(IMAGES).child("${randomId()}.jpg")
+                .putFile(uri).await()
+                .storage.downloadUrl.await()
+            Response.Success(downloadUrl)
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
     companion object {
         private const val USER_ID_FIELD = "userId"
         private const val POST_COLLECTION = "posts"
@@ -71,6 +89,9 @@ class StorageServiceImp @Inject constructor(
         private const val SAVE_STORY_TRACE = "saveStory"
         private const val SAVE_POST_TRACE = "savePost"
         private const val UPDATE_POST_TRACE = "updatePost"
+        private const val IMAGES = "images"
+
+
     }
 }
 

@@ -168,6 +168,7 @@ fun WritePostScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .imePadding(),
 
+
         topBar = {
             TopAppBar(
                 modifier = Modifier,
@@ -257,7 +258,7 @@ fun WritePostScreen(
 //                    onCameraClick()
                 }
             )
-        }
+        },
     ) { innerPadding ->
 
         Box(

@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
@@ -61,6 +62,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 storageService.posts.collectLatest { posts ->
+
+
+                    Log.d("TAG", "refreshPosts: ")
+
                     viewModelState.update {
                         it.copy(
                             posts = posts
@@ -73,6 +78,8 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
+
+                Log.d("TAG", " Error refreshPosts: $e ")
 
             }
         }

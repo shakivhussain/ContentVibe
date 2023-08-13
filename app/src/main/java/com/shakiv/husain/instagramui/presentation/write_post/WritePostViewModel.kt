@@ -5,30 +5,13 @@ import android.app.Application
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.compose.AsyncImage
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
-import com.shakiv.husain.instagramui.data.repository.PhotoSaverRepositoryImp.Companion.MAX_LOG_PHOTOS_LIMIT
+import com.shakiv.husain.instagramui.domain.model.Response
 import com.shakiv.husain.instagramui.domain.repository.PhotoSaverRepository
 import com.shakiv.husain.instagramui.domain.service.StorageService
 import com.shakiv.husain.instagramui.utils.DateUtils
@@ -63,7 +46,7 @@ class WritePostViewModel @Inject constructor(
     )
 
 
-     fun isValid(): Boolean {
+    fun isValid(): Boolean {
         val uiState = writePostUiState.value
 //        val isValid = uiState.let { state ->
 //            !state.isSaving && !photoSaver.isEmpty()
@@ -135,6 +118,7 @@ class WritePostViewModel @Inject constructor(
 
     fun writePost() {
 
+
         if (!isValid()) {
             return
         }
@@ -144,6 +128,10 @@ class WritePostViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+
+
+
+
 
             val user = UserEntity(
                 userId = randomId(),
@@ -157,6 +145,7 @@ class WritePostViewModel @Inject constructor(
                 post = writePostUiState.value.post,
                 date = DateUtils.getCurrentUTCTime(),
                 user = user,
+//                images = imageUrls
             )
             storageService.save(post)
 
