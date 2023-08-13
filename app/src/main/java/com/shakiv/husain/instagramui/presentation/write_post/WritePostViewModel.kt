@@ -109,9 +109,9 @@ class WritePostViewModel @Inject constructor(
         }
     }
 
-    fun onPhotoPickerSelect(photos: List<Uri>) {
+    fun onPhotoPickerSelect(photos: Uri?) {
         viewModelScope.launch {
-            photoSaver.cacheFromUris(photos)
+            photoSaver.cacheFromURI(photos ?: return@launch)
             refreshSavedPhotos()
         }
     }
@@ -129,8 +129,32 @@ class WritePostViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            val photoList = photoSaver.getPhotos()
 
+            photoList.getOrNull(0)?.let { photo ->
 
+                val photoResponse = storageService.addImageToFirebaseStorage(
+                    photo.toUri()
+                )
+
+                when (photoResponse) {
+                    is Response.Success -> {
+
+                    }
+
+                    is Response.Failure -> {
+                        writePostViewModelState.update {
+                            it.copy(errorMessage = "Error in uploading image")
+                        }
+                    }
+
+                    else -> {
+                        writePostViewModelState.update {
+                            it.copy(errorMessage = "Error in uploading image")
+                        }
+                    }
+                }
+            }
 
 
             val user = UserEntity(
@@ -155,10 +179,45 @@ class WritePostViewModel @Inject constructor(
         }
     }
 
+    private fun uploadImages() {
+
+        viewModelScope.launch {
+            var imageUrls = mutableListOf<String>()
+
+            photoSaver.getPhotos().forEach { photo ->
+                val imageUrlResponse: Response<Uri> =
+                    storageService.addImageToFirebaseStorage(photo.toUri())
+
+                when (imageUrlResponse) {
+                    is Response.Success -> {
+                        imageUrls.add(imageUrlResponse.data.toString() ?: return@forEach)
+                    }
+
+                    is Response.Failure -> {
+                        writePostViewModelState.update {
+                            it.copy(
+                                errorMessage = "Error in uploading image"
+                            )
+                        }
+                    }
+
+                    else -> {}
+                }
+
+            }
+        }
+
+    }
+
 
     fun canAddPhoto() = photoSaver.canAddPhoto()
 
-    fun onPhotoRemoved(photo: File) {
+    fun onPhotoRemoved(photo: File, index: Int) {
+
+        writePostViewModelState.update {
+            it.copy()
+        }
+
         viewModelScope.launch {
             photoSaver.removeFile(photo)
             refreshSavedPhotos()

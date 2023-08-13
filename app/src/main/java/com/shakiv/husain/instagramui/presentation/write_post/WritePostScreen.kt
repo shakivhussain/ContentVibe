@@ -91,7 +91,7 @@ fun WritePostScreen(
     val context = LocalContext.current
 
     val pickImage = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia(MAX_LOG_PHOTOS_LIMIT),
+        ActivityResultContracts.GetContent(),
         onResult = writePostViewModel::onPhotoPickerSelect
     )
 
@@ -228,9 +228,7 @@ fun WritePostScreen(
                     coroutineScope.launch {
                         writePostViewModel.loadLocalPickerPictures()
                         pickImage.launch(
-                            PickVisualMediaRequest(
-                                ActivityResultContracts.PickVisualMedia.ImageOnly
-                            )
+                            "image/**"
                         )
                     }
                 },
@@ -284,8 +282,8 @@ fun WritePostScreen(
                 PhotoGrid(
                     modifier = Modifier.padding(16.dp),
                     photos = writePostState.savedPhotos,
-                    onRemove = { photo: File ->
-                        writePostViewModel.onPhotoRemoved(photo)
+                    onRemove = { photo, index ->
+                        writePostViewModel.onPhotoRemoved(photo,index)
                     })
 
             }
@@ -407,7 +405,7 @@ fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCamera
 fun PhotoGrid(
     modifier: Modifier,
     photos: List<File>,
-    onRemove: ((photo: File) -> Unit)? = null
+    onRemove: ((photo: File, index:Int) -> Unit)? = null
 ) {
 
     Row(modifier) {
@@ -431,7 +429,7 @@ fun PhotoGrid(
                     )
 
                     if (onRemove != null) {
-                        FilledTonalIconButton(onClick = { onRemove(file) }) {
+                        FilledTonalIconButton(onClick = { onRemove(file, index) }) {
                             Icon(Icons.Filled.Close, null)
                         }
                     }
