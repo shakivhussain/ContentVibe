@@ -151,9 +151,7 @@ class WritePostViewModel @Inject constructor(
     private fun uploadImagesToStorage() {
 
         viewModelScope.launch {
-
             val photoList = photoSaver.getPhotos()
-
             if (photoList.isNotEmpty()) {
                 photoList.forEach { photo ->
 
