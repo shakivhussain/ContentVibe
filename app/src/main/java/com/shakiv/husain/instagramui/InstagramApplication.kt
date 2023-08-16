@@ -15,7 +15,6 @@ class InstagramApplication : Application() {
         super.onCreate()
         container = AppContainerImp(this)
         FirebaseApp.initializeApp(this);
-
     }
 
 }

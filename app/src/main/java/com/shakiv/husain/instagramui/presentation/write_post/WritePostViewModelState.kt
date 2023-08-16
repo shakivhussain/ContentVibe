@@ -14,5 +14,6 @@ data class WritePostViewModelState(
     val savedPhotos: List<File> = emptyList(),
     val imageUrl     : String = "",
     val isImageUploading: Boolean=false,
-    val addImageToStorageState :  Response<Uri> = Response.Success(null)
+    val addImageToStorageState :  Response<Uri> = Response.Success(null),
+    val cameraImage : String=""
 )

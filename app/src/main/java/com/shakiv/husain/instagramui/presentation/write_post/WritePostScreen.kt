@@ -68,6 +68,7 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.shakiv.husain.instagramui.data.repository.PhotoSaverRepositoryImp.Companion.MAX_LOG_PHOTOS_LIMIT
 import com.shakiv.husain.instagramui.domain.model.Response
+import com.shakiv.husain.instagramui.presentation.common.composable.PhotoGrid
 import com.shakiv.husain.instagramui.presentation.common.composable.ProgressBar
 import com.shakiv.husain.instagramui.presentation.common.composable.TopAppBar
 import com.shakiv.husain.instagramui.presentation.common.composable.WritePostField
@@ -105,9 +106,12 @@ fun WritePostScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
 
-    LaunchedEffect(Unit) {
-        writePostViewModel.refreshSavedPhotos()
+    LaunchedEffect(writePostState.savedPhotos){
+//        if (!writePostState.savedPhotos.isNullOrEmpty()){
+//            writePostViewModel.uploadImage()
+//        }
     }
+
 
     LaunchedEffect(focusRequest) {
         focusRequest.requestFocus()
@@ -423,42 +427,3 @@ fun BottomView(modifier: Modifier = Modifier, onMediaClick: () -> Unit, onCamera
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PhotoGrid(
-    modifier: Modifier,
-    photos: List<File>,
-    onRemove: ((photo: File, index: Int) -> Unit)? = null
-) {
-
-    Row(modifier) {
-        repeat(MAX_LOG_PHOTOS_LIMIT) { index ->
-            val file = photos.getOrNull(index)
-
-            if (file == null) {
-                Box(Modifier.weight(1f))
-            } else {
-                Box(
-                    contentAlignment = Alignment.TopEnd,
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(10.dp))
-                        .aspectRatio(1f)
-                ) {
-                    AsyncImage(
-                        model = file,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop
-                    )
-
-                    if (onRemove != null) {
-                        FilledTonalIconButton(onClick = { onRemove(file, index) }) {
-                            Icon(Icons.Filled.Close, null)
-                        }
-                    }
-                }
-            }
-            Spacer(Modifier.width(8.dp))
-        }
-    }
-}

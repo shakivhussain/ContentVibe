@@ -113,6 +113,14 @@ class WritePostViewModel @Inject constructor(
         }
     }
 
+
+
+    fun uploadImage(){
+        refreshSavedPhotos()
+        uploadImagesToStorage()
+    }
+
+
     fun writePost() {
 
         if (!isValid()) {
