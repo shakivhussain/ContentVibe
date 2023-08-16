@@ -107,11 +107,14 @@ fun WritePostScreen(
 
 
     LaunchedEffect(writePostState.savedPhotos){
-//        if (!writePostState.savedPhotos.isNullOrEmpty()){
-//            writePostViewModel.uploadImage()
-//        }
+        if (!writePostState.savedPhotos.isNullOrEmpty()){
+            writePostViewModel.uploadImage()
+        }
     }
 
+    LaunchedEffect(Unit) {
+        writePostViewModel.refreshSavedPhotos()
+    }
 
     LaunchedEffect(focusRequest) {
         focusRequest.requestFocus()
