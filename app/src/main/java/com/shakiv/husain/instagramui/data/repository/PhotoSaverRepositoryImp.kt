@@ -67,6 +67,8 @@ class PhotoSaverRepositoryImp @Inject constructor(
         }
     }
 
+
+
     override suspend fun savePhotos(): List<File> {
         return withContext(Dispatchers.IO) {
             val savedPhotos = _photos.map {
@@ -76,6 +78,11 @@ class PhotoSaverRepositoryImp @Inject constructor(
             _photos.clear()
             savedPhotos
         }
+    }
+
+    override suspend fun clear() {
+        _photos.forEach { it.delete() }
+        _photos.clear()
     }
 
     companion object {

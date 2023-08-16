@@ -115,7 +115,7 @@ class WritePostViewModel @Inject constructor(
 
 
 
-    fun uploadImage(){
+    fun uploadCameraImage(){
         uploadImagesToStorage()
         refreshSavedPhotos()
     }
@@ -183,6 +183,12 @@ class WritePostViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun clearImages(){
+        viewModelScope.launch {
+            photoSaver.clear()
+        }
     }
 
     fun updateImageUrl(imageUrl: String) {

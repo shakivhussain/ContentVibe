@@ -2,7 +2,6 @@ package com.shakiv.husain.instagramui.presentation.write_post
 
 import android.Manifest.permission.CAMERA
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -10,28 +9,22 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -50,19 +43,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -76,7 +66,6 @@ import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
 import com.shakiv.husain.instagramui.utils.getActivity
 import kotlinx.coroutines.launch
-import java.io.File
 import com.shakiv.husain.instagramui.R.string as AppText
 
 
@@ -108,7 +97,7 @@ fun WritePostScreen(
 
     LaunchedEffect(writePostState.savedPhotos){
         if (!writePostState.savedPhotos.isNullOrEmpty()){
-            writePostViewModel.uploadImage()
+            writePostViewModel.uploadCameraImage()
         }
     }
 
@@ -125,6 +114,7 @@ fun WritePostScreen(
         if (!writePostState.isSaved)
             return@LaunchedEffect
 
+        writePostViewModel.clearImages()
         popBackStack()
     }
 
@@ -182,6 +172,7 @@ fun WritePostScreen(
                 modifier = Modifier,
                 scrollBehavior = scrollBehavior,
                 popUpScreen = {
+                    writePostViewModel.clearImages()
                     popBackStack()
                 },
                 actions = {
