@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shakiv.husain.instagramui.data.model.PostActions
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.model.Response
@@ -131,6 +132,8 @@ class WritePostViewModel @Inject constructor(
             it.copy(isSaving = true)
         }
 
+
+
         viewModelScope.launch {
 
             val user = UserEntity(
@@ -145,7 +148,8 @@ class WritePostViewModel @Inject constructor(
                 post = writePostUiState.value.post,
                 date = DateUtils.getCurrentUTCTime(),
                 user = user,
-                images = writePostUiState.value.imageUrl
+                images = writePostUiState.value.imageUrl,
+                postActions = PostActions()
             )
 
             storageService.save(post)

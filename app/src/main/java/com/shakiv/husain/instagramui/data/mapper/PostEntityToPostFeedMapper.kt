@@ -11,8 +11,8 @@ fun PostEntity.toPost(): Post {
         id = id,
         post = post,
         date = date,
-        isLiked = postActions?.isLiked,
-        likes = postActions?.likes ?: 0,
+        isLiked = isLiked,
+        likes = likes ?: 0,
         usedId = user?.userId ?: "",
         userName = user?.userName ?: "",
         userAbout = user?.userAbout ?: "",
@@ -24,10 +24,12 @@ fun PostEntity.toPost(): Post {
 
 fun Post.toPostEntity(): PostEntity {
     return PostEntity(
-        id = id ?: "",
-        post = post ?: "",
+        id = id.orEmpty(),
+        post = post.orEmpty(),
         isLiked = isLiked ?: false,
-
+        likes = likes,
+        images = imageUrl,
+        date = date.orEmpty(),
         user = UserEntity(
             userId = usedId ?: "",
             userName = userName ?: "",

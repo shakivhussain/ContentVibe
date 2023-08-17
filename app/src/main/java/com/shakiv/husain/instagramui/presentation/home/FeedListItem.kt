@@ -51,14 +51,17 @@ fun PreviewPostItem(
         postActions = com.shakiv.husain.instagramui.data.model.PostActions(false, false),
         images = "https://firebasestorage.googleapis.com/v0/b/contentvibe-f9adc.appspot.com/o/images%2F4e44cc83-9ee7-4d9b-9b81-b3e022adabd1.jpg?alt=media&token=02ddcf9b-e66a-41d2-bdd4-55ad660b6cf9"
     )
-    FeedListItem(post = post.toPost(), onItemClick = {})
+    FeedListItem(post = post.toPost(), onItemClick = {},
+        onLikeClick = {}
+        )
 }
 
 @Composable
 fun FeedListItem(
     post: Post,
     modifier: Modifier = Modifier,
-    onItemClick: (Post) -> Unit,
+    onLikeClick : () -> Unit,
+    onItemClick: (Post) -> Unit
 ) {
 
     Log.d("TAGPostList", "PostList: $post")
@@ -159,9 +162,6 @@ fun FeedListItem(
                 )
             }
 
-            val onLikeClick = {
-            }
-
             val onCommentClicked = {
             }
 
@@ -169,7 +169,7 @@ fun FeedListItem(
             }
 
             PostActions(
-                isLiked = post.isLiked ?: true,
+                post = post,
                 onLikeClicked = onLikeClick,
                 onCommentClicked = onCommentClicked,
                 onShareClicked = onShareClicked

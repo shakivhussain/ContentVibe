@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shakiv.husain.instagramui.data.StoryItem
 import com.shakiv.husain.instagramui.data.mapper.toPost
+import com.shakiv.husain.instagramui.data.mapper.toPostEntity
+import com.shakiv.husain.instagramui.domain.model.Post
 import com.shakiv.husain.instagramui.domain.repository.PostRepository
 import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.domain.service.StorageService
@@ -44,6 +46,21 @@ class HomeViewModel @Inject constructor(
         refreshPosts()
     }
 
+
+    fun onPostLiked(post: Post) {
+        viewModelScope.launch {
+            val postEntity = post.toPostEntity()
+            val isLiked = (post.isLiked?:false)
+            storageService.update(
+                postEntity.copy(
+                    isLiked = !isLiked,
+                    likes = if (isLiked) post.likes.minus(1) else post.likes.minus(1)
+                )
+            )
+        }
+    }
+
+
     private fun refreshPosts() {
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -63,13 +80,14 @@ class HomeViewModel @Inject constructor(
             try {
                 storageService.posts.collectLatest { posts ->
 
+
+                    Log.d("TAG", "HomeFeed refreshPosts: $posts ")
+
                     viewModelState.update {
                         it.copy(
                             posts = posts
                                 .map { postEntity ->
                                     postEntity.toPost()
-                                }.sortedByDescending { post ->
-                                    post.date
                                 }
                         )
                     }
