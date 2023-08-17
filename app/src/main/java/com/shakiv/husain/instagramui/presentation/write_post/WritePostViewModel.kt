@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shakiv.husain.instagramui.data.model.PostActions
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.model.Response
@@ -48,11 +49,9 @@ class WritePostViewModel @Inject constructor(
 
     fun isValid(): Boolean {
         val uiState = writePostUiState.value
-//        val isValid = uiState.let { state ->
-//            !state.isSaving && !photoSaver.isEmpty()
-//        }
-        return true
+        return !uiState.isSaving && !uiState.post.isEmpty()
     }
+
 
     fun hasPermission(permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -65,7 +64,6 @@ class WritePostViewModel @Inject constructor(
     fun onPermissionChange(permission: String, isGranted: Boolean) {
         when (permission) {
             Manifest.permission.CAMERA -> {
-
                 writePostViewModelState.update {
                     it.copy(hasCameraAccess = isGranted)
                 }
@@ -95,7 +93,6 @@ class WritePostViewModel @Inject constructor(
 
 
     fun refreshSavedPhotos() {
-
         writePostViewModelState.update {
             it.copy(
                 savedPhotos = photoSaver.getPhotos()
@@ -109,15 +106,23 @@ class WritePostViewModel @Inject constructor(
         }
     }
 
-    fun onPhotoPickerSelect(photos: List<Uri>) {
+    fun onPhotoPickerSelect(photos: Uri?) {
         viewModelScope.launch {
-            photoSaver.cacheFromUris(photos)
+            photoSaver.cacheFromURI(photos ?: return@launch)
+            uploadImagesToStorage()
             refreshSavedPhotos()
         }
     }
 
-    fun writePost() {
 
+
+    fun uploadCameraImage(){
+        uploadImagesToStorage()
+        refreshSavedPhotos()
+    }
+
+
+    fun writePost() {
 
         if (!isValid()) {
             return
@@ -127,11 +132,9 @@ class WritePostViewModel @Inject constructor(
             it.copy(isSaving = true)
         }
 
+
+
         viewModelScope.launch {
-
-
-
-
 
             val user = UserEntity(
                 userId = randomId(),
@@ -145,8 +148,10 @@ class WritePostViewModel @Inject constructor(
                 post = writePostUiState.value.post,
                 date = DateUtils.getCurrentUTCTime(),
                 user = user,
-//                images = imageUrls
+                images = writePostUiState.value.imageUrl,
+                postActions = PostActions()
             )
+
             storageService.save(post)
 
             writePostViewModelState.update {
@@ -155,10 +160,57 @@ class WritePostViewModel @Inject constructor(
         }
     }
 
+    private fun uploadImagesToStorage() {
+
+        viewModelScope.launch {
+            val photoList = photoSaver.getPhotos()
+            if (photoList.isNotEmpty()) {
+                photoList.forEach { photo ->
+
+                    writePostViewModelState.update {
+                        it.copy(
+                            addImageToStorageState = Response.Loading,
+                            isImageUploading = true
+                        )
+                    }
+
+                    val photoResponse = storageService.addImageToFirebaseStorage(
+                        photo.toUri()
+                    )
+                    writePostViewModelState.update {
+                        it.copy(
+                            addImageToStorageState = photoResponse,
+                            isImageUploading = false
+                        )
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun clearImages(){
+        viewModelScope.launch {
+            photoSaver.clear()
+        }
+    }
+
+    fun updateImageUrl(imageUrl: String) {
+        writePostViewModelState.update {
+            it.copy(
+                imageUrl = imageUrl
+            )
+        }
+    }
 
     fun canAddPhoto() = photoSaver.canAddPhoto()
 
-    fun onPhotoRemoved(photo: File) {
+    fun onPhotoRemoved(photo: File, index: Int) {
+
+        writePostViewModelState.update {
+            it.copy()
+        }
+
         viewModelScope.launch {
             photoSaver.removeFile(photo)
             refreshSavedPhotos()

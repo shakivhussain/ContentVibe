@@ -20,4 +20,6 @@ interface PhotoSaverRepository {
     suspend fun removeFile(photo: File): Unit
 
     suspend fun savePhotos(): List<File>
+
+    suspend fun clear()
 }

@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.shakiv.husain.instagramui.domain.model.Post
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.IconsInstagram.IcBookmark
 import com.shakiv.husain.instagramui.utils.IconsInstagram.IcChat
@@ -19,16 +23,16 @@ import com.shakiv.husain.instagramui.utils.ImageUtils
 @Preview
 @Composable
 fun PrevPostAction() {
-    PostActions(
-        modifier = Modifier.padding(), onLikeClicked = { /*TODO*/ },
-        onCommentClicked = { /*TODO*/ }) {
-    }
+//    PostActions(
+//        modifier = Modifier.padding(), onLikeClicked = { /*TODO*/ },
+//        onCommentClicked = { /*TODO*/ }) {
+//    }
 }
 
 @Composable
 fun PostActions(
     modifier: Modifier = Modifier,
-    isLiked: Boolean = false,
+    post: Post ,
     onLikeClicked: () -> Unit,
     onCommentClicked: () -> Unit,
     onShareClicked: () -> Unit,
@@ -44,7 +48,9 @@ fun PostActions(
             horizontalArrangement = Arrangement.Start
         ) {
 
-            val likeIcon = if (isLiked) IcLike else IcLike
+            val likeIcon = post.isLiked?.let {
+                 if (it) IcLike else IcChat
+            }?: IcLike
 
             IconButton(onClick = { onLikeClicked() }) {
                 ImageUtils.setImage(imageId = likeIcon)

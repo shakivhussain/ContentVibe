@@ -1,6 +1,7 @@
 package com.shakiv.husain.instagramui.data.remote.imp
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.dataObjects
 import com.google.firebase.perf.ktx.trace
@@ -26,7 +27,7 @@ class StorageServiceImp @Inject constructor(
             posts: Flow<List<PostEntity>>
         get() =
 //            auth.currentUser.flatMapLatest { user ->
-            firestore.collection("stage_post")
+            firestore.collection(STAGE_POST_COLLECTION)
                 .dataObjects()
 //            }
 
@@ -58,11 +59,19 @@ class StorageServiceImp @Inject constructor(
         }
 
 
-    override suspend fun update(postEntity: PostEntity): Unit =
-        trace(UPDATE_POST_TRACE) {
+    override suspend fun update(postEntity: PostEntity): Unit {
 
-            firestore.collection(POST_COLLECTION).document(postEntity.id).set(postEntity).await()
+        try {
+
+
+            trace(UPDATE_POST_TRACE) {
+                firestore.collection(STAGE_POST_COLLECTION).document(postEntity.id).set(postEntity).await()
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
         }
+    }
+
 
     override suspend fun delete(postId: String) {
         firestore.collection(POST_COLLECTION).document(postId).delete().await()
@@ -70,9 +79,7 @@ class StorageServiceImp @Inject constructor(
 
     override suspend fun addImageToFirebaseStorage(uri: Uri): Response<Uri> {
         return try {
-
             Response.Loading
-
             val downloadUrl = storage.reference.child(IMAGES).child("${randomId()}.jpg")
                 .putFile(uri).await()
                 .storage.downloadUrl.await()
@@ -85,6 +92,7 @@ class StorageServiceImp @Inject constructor(
     companion object {
         private const val USER_ID_FIELD = "userId"
         private const val POST_COLLECTION = "posts"
+        private const val STAGE_POST_COLLECTION = "stage_post"
         private const val STORY_COLLECTION = "stories"
         private const val SAVE_STORY_TRACE = "saveStory"
         private const val SAVE_POST_TRACE = "savePost"

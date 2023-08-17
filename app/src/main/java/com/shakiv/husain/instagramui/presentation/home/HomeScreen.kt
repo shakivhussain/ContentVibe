@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.instagramui.data.StoryItem
-import com.shakiv.husain.instagramui.data.mapper.toPost
 import com.shakiv.husain.instagramui.data.model.PostActions
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
@@ -52,12 +52,24 @@ fun HomeFeed(
 
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
-    HomeFeed(uiState = uiState, onItemClick = onItemClick, )
+    Log.d("TAG", "HomeFeed: ${uiState} ")
+
+    HomeFeed(
+        uiState = uiState,
+        onItemClick = {
+        },
+        onLiked = {
+            Log.d("TAG", "HomeFeed onLiked Cliked : ${it} ")
+
+//            return@HomeFeed
+            homeViewModel.onPostLiked(it)
+        }
+    )
 
 }
 
 @Composable
-fun HomeFeed(uiState: HomeViewModelState, onItemClick: (Post) -> Unit) {
+fun HomeFeed(uiState: HomeViewModelState, onItemClick: (Post) -> Unit, onLiked: (Post) -> Unit, homeViewModel: HomeViewModel= hiltViewModel()) {
 
     val postLazyListState = rememberLazyListState()
     val storyLazyListState = rememberLazyListState()
@@ -72,8 +84,8 @@ fun HomeFeed(uiState: HomeViewModelState, onItemClick: (Post) -> Unit) {
             storyList = uiState.stories,
             postLazyListState = postLazyListState,
             storyLazyListState,
-            onItemClick = onItemClick
-
+            onItemClick = onItemClick,
+            onLiked = { onLiked(it) }
         )
     }
 
@@ -86,10 +98,15 @@ fun PostList(
     storyList: List<StoryItem>,
     postLazyListState: LazyListState,
     storyLazyListState: LazyListState,
-    onItemClick: (Post) -> Unit
+    onItemClick: (Post) -> Unit,
+    onLiked: (Post) -> Unit
 ) {
 
+
+
     Column(modifier = Modifier.fillMaxSize()) {
+
+        Log.d("TAG", "HomeFeed Data Update")
 
         AppHeader()
 
@@ -108,7 +125,10 @@ fun PostList(
             }
             items(postList) { post ->
 
-                FeedListItem(post = post) { postItem ->
+                FeedListItem(
+                    onLikeClick = { onLiked(post) }
+                    ,post = post
+                ) { postItem ->
                     onItemClick(postItem)
                 }
             }
@@ -136,7 +156,7 @@ fun AppHeader() {
 
         Spacer(modifier = Modifier.weight(1F))
 
-        IconButton( onClick = { /*TODO*/ }) {
+        IconButton(onClick = { /*TODO*/ }) {
             Image(
                 modifier = Modifier,
                 painter = painterResource(id = IconsInstagram.LIKE),
@@ -146,7 +166,7 @@ fun AppHeader() {
         }
 
 
-        IconButton( onClick = { /*TODO*/ }) {
+        IconButton(onClick = { /*TODO*/ }) {
             Image(
 
                 painter = painterResource(id = IconsInstagram.CHAT),
@@ -195,19 +215,26 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewStoryListItem() {
-    val user = UserEntity("$1 Shakiv Husain", isAnonymous = true, "Professional", userProfile = "IconsInstagram.ProfilePic")
+    val user = UserEntity(
+        "$1 Shakiv Husain", isAnonymous = true, "Professional",
+        userProfile = "IconsInstagram.ProfilePic"
+    )
 
     val postAction = PostActions(
         isLiked = 1 % 2 == 0,
         isDislike = 2 % 2 != 0,
     )
 
-    val post = PostEntity("Shakiv Husain",
+    val post = PostEntity(
+        "Shakiv Husain",
         user = user,
         postActions = postAction
     )
 
-    FeedListItem(post.toPost(),){
-
-    }
+//    FeedListItem(
+//        post.toPost(),
+////        onLikeClick = {}
+//    ) {
+//
+//    }
 }

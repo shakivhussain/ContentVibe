@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
@@ -19,10 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.shakiv.husain.instagramui.data.mapper.toPost
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
@@ -45,16 +48,20 @@ fun PreviewPostItem(
             "Shakiv Husain", isAnonymous = true, "Developer",
             userProfile = "IconsInstagram.ProfilePic"
         ),
-        postActions = com.shakiv.husain.instagramui.data.model.PostActions(false, false)
+        postActions = com.shakiv.husain.instagramui.data.model.PostActions(false, false),
+        images = "https://firebasestorage.googleapis.com/v0/b/contentvibe-f9adc.appspot.com/o/images%2F4e44cc83-9ee7-4d9b-9b81-b3e022adabd1.jpg?alt=media&token=02ddcf9b-e66a-41d2-bdd4-55ad660b6cf9"
     )
-    FeedListItem(post = post.toPost(), onItemClick = {})
+    FeedListItem(post = post.toPost(), onItemClick = {},
+        onLikeClick = {}
+        )
 }
 
 @Composable
 fun FeedListItem(
     post: Post,
     modifier: Modifier = Modifier,
-    onItemClick: (Post) -> Unit,
+    onLikeClick : () -> Unit,
+    onItemClick: (Post) -> Unit
 ) {
 
     Log.d("TAGPostList", "PostList: $post")
@@ -131,20 +138,28 @@ fun FeedListItem(
                 modifier = Modifier.padding(12.dp)
             )
 
-            if (post.imageUrl.isNotEmpty()) {
-                ImageUtils.setImage(
-                    imageId = IconsInstagram.IcMyProfile,
-                    modifier = Modifier.fillMaxWidth(),
-                    contentScale = ContentScale.Crop
+            if (!post.imageUrl.isNullOrEmpty()) {
+                AsyncImage(
+                    model = post.imageUrl.orEmpty(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(end = 6.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                topEnd = 12.dp,
+                                topStart = 12.dp,
+                                bottomStart = 12.dp,
+                                bottomEnd = 12.dp
+
+                            )
+                        )
                 )
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(16.dp)
                 )
-            }
-
-            val onLikeClick = {
             }
 
             val onCommentClicked = {
@@ -154,7 +169,7 @@ fun FeedListItem(
             }
 
             PostActions(
-                isLiked = post.isLiked ?: true,
+                post = post,
                 onLikeClicked = onLikeClick,
                 onCommentClicked = onCommentClicked,
                 onShareClicked = onShareClicked

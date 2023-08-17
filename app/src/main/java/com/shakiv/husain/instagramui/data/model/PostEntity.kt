@@ -1,6 +1,7 @@
 package com.shakiv.husain.instagramui.data.model
 
 import android.net.Uri
+import com.google.firebase.firestore.DocumentId
 import com.shakiv.husain.instagramui.data.StoryItem
 
 
@@ -10,13 +11,14 @@ data class PostFeed(
 )
 
 data class PostEntity(
-    val id: String = "",
+    @DocumentId val id: String = "",
     val post: String = "",
     val date: String = "",
     val user: UserEntity? = null,
     var isLiked: Boolean = false,
+    var likes: Int=0,
     val postActions: PostActions? = null,
-    val images : List<String> = emptyList()
+    val images : String = ""
 )
 
 data class PostActions(

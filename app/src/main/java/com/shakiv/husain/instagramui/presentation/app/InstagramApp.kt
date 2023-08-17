@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui
+package com.shakiv.husain.instagramui.presentation.app
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -16,11 +16,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shakiv.husain.instagramui.data.AppContainer
-import com.shakiv.husain.instagramui.presentation.app.AddPostDestination
-import com.shakiv.husain.instagramui.presentation.app.HomeDestination
-import com.shakiv.husain.instagramui.presentation.app.InstagramNavHost
-import com.shakiv.husain.instagramui.presentation.app.bottomTabRowScreens
-import com.shakiv.husain.instagramui.presentation.app.navigateToSingleTopTo
 import com.shakiv.husain.instagramui.presentation.common.composable.BottomNavigationTabRow
 
 @Composable
