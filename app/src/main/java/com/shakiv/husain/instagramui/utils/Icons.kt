@@ -3,6 +3,8 @@ package com.shakiv.husain.instagramui.utils
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import com.shakiv.husain.instagramui.R
 
 object IconsInstagram {
@@ -10,7 +12,8 @@ object IconsInstagram {
     val ProfilePic = R.drawable.profile_pic
     val IcSharePost = R.drawable.ic_share
     val IcChat = R.drawable.ic_chat
-    val IcLike = R.drawable.ic_message
+    val IcLikeBorder = Icons.Rounded.FavoriteBorder
+    val IcLikeFilled = Icons.Rounded.Favorite
     val IcBookmark = R.drawable.ic_bookmark
     val IcMyProfile = R.drawable.profile_pic
     val IcBack = R.drawable.ic_back

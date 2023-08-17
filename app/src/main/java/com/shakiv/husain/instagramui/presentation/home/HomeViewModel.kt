@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
             storageService.update(
                 postEntity.copy(
                     isLiked = !isLiked,
-                    likes = if (isLiked) post.likes.minus(1) else post.likes.minus(1)
+                    likes = if (isLiked) post.likes.minus(1) else post.likes.plus(1)
                 )
             )
         }
@@ -88,6 +88,8 @@ class HomeViewModel @Inject constructor(
                             posts = posts
                                 .map { postEntity ->
                                     postEntity.toPost()
+                                }.sortedByDescending { post ->
+                                    post.date
                                 }
                         )
                     }
