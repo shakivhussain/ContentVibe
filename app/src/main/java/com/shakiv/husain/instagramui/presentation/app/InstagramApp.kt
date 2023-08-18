@@ -42,6 +42,10 @@ fun InstagramAppContent(appContainer: AppContainer) {
             false
         }
 
+        CameraDestination.route -> {
+            false
+        }
+
         else -> {
             true
         }
