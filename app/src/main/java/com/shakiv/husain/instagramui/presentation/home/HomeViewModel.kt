@@ -95,9 +95,7 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-
                 Log.d("TAG", " Error refreshPosts: $e ")
-
             }
         }
     }
