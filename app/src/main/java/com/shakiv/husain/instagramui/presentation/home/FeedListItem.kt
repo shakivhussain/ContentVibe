@@ -105,16 +105,7 @@ fun FeedListItem(
                         )
                     }
 
-                    Spacer(
-                        modifier = Modifier.width(8.dp)
-                    )
 
-                    Text(
-                        text = DateUtils.toDuration(post.date.orEmpty()),
-                        maxLines = 1,
-                        style = MaterialTheme.typography.bodySmall,
-                        overflow = TextOverflow.Ellipsis
-                    )
                 }
 
                 IconButton(
@@ -135,7 +126,7 @@ fun FeedListItem(
             Text(
                 text = post.post.orEmpty(),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding( 12.dp)
             )
 
             if (!post.imageUrl.isNullOrEmpty()) {
@@ -158,9 +149,24 @@ fun FeedListItem(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(16.dp)
+                        .height(8.dp)
                 )
             }
+
+
+//            if(post.imageUrl.isNullOrEmpty()){
+//                Spacer(
+//                    modifier = Modifier.width(8.dp)
+//                )
+//            }
+
+            Text(
+                modifier = Modifier.padding(12.dp),
+                text = DateUtils.toDuration(post.date.orEmpty()),
+                maxLines = 1,
+                style = MaterialTheme.typography.bodySmall,
+                overflow = TextOverflow.Ellipsis
+            )
 
             val onCommentClicked = {
             }

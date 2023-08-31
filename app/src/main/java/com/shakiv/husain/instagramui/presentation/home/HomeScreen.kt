@@ -118,9 +118,9 @@ fun PostList(
         ) {
             item {
                 StoryList(storyList = storyList, storyLazyListState)
-                Spacer(modifier = Modifier.height(8.dp))
+//                Spacer(modifier = Modifier.height(18.dp))
                 Divider(
-                    Modifier.fillMaxWidth(), thickness = .5.dp
+                    Modifier.fillMaxWidth(), thickness = .2.dp,
                 )
             }
             items(postList) { post ->
