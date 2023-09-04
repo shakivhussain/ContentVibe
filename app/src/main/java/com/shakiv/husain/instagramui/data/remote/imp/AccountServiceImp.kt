@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.data.remote.imp
 
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.service.AccountService
@@ -45,5 +46,15 @@ class AccountServiceImp @Inject constructor(private val auth: FirebaseAuth) : Ac
         auth.signOut()
         createAnonymousAccount()
     }
+
+    override suspend fun signInWithCredential(authCredential: AuthCredential) {
+
+        try {
+            auth.signInWithCredential(authCredential).await()
+        } catch (e: Exception) {
+
+        }
+    }
+
 
 }

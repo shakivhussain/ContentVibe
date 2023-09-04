@@ -3,6 +3,7 @@ package com.shakiv.husain.instagramui.data.remote.imp
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.dataObjects
 import com.google.firebase.perf.ktx.trace
 import com.google.firebase.storage.FirebaseStorage
@@ -28,6 +29,8 @@ class StorageServiceImp @Inject constructor(
         get() =
 //            auth.currentUser.flatMapLatest { user ->
             firestore.collection(STAGE_POST_COLLECTION)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .limit(5)
                 .dataObjects()
 //            }
 
