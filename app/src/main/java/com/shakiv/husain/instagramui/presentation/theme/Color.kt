@@ -1,4 +1,4 @@
-package com.shakiv.husain.instagramui.ui.theme
+package com.shakiv.husain.instagramui.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

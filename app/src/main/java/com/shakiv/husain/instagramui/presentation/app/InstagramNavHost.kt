@@ -8,11 +8,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.shakiv.husain.instagramui.data.AppContainer
+import com.shakiv.husain.instagramui.presentation.auth.AuthScreen
 import com.shakiv.husain.instagramui.presentation.camera.CameraScreen
 import com.shakiv.husain.instagramui.presentation.common.composable.EmptyComingSoon
 import com.shakiv.husain.instagramui.presentation.home.HomeFeed
 import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen
 import com.shakiv.husain.instagramui.presentation.write_post.WritePostScreen
+import com.shakiv.husain.instagramui.utils.AppRoutes.AUTH_SCREEN
 
 @Composable
 fun InstagramNavHost(
@@ -24,7 +26,7 @@ fun InstagramNavHost(
     NavHost(
         navController = navController,
         modifier = modifier,
-        startDestination = HomeDestination.route
+        startDestination = AUTH_SCREEN
     ) {
 
         composable(route = HomeDestination.route) {
@@ -68,6 +70,11 @@ fun InstagramNavHost(
         composable(route = CameraDestination.route) {
             CameraScreen(navController = navController)
         }
+
+        composable(AUTH_SCREEN){
+            AuthScreen()
+        }
+
 
     }
 }

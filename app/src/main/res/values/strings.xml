@@ -8,4 +8,9 @@
     <string name="media">Media</string>
     <string name="camera">Camera</string>
     <string name="camera_access">Camera access</string>
+    <string name="generic_error">Something wrong happened. Please try again.</string>
+    <string name="email_error">Please insert a valid email.</string>
+    <string name="empty_password_error">Password cannot be empty.</string>
+
+
 </resources>

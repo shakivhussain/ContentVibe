@@ -80,16 +80,11 @@ class HomeViewModel @Inject constructor(
             try {
                 storageService.posts.collectLatest { posts ->
 
-
-                    Log.d("TAG", "HomeFeed refreshPosts: $posts ")
-
                     viewModelState.update {
                         it.copy(
                             posts = posts
                                 .map { postEntity ->
                                     postEntity.toPost()
-                                }.sortedByDescending { post ->
-                                    post.date
                                 }
                         )
                     }
