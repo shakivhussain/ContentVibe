@@ -2,7 +2,9 @@ package com.shakiv.husain.instagramui.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import com.shakiv.husain.instagramui.R
@@ -20,6 +22,8 @@ object IconsInstagram {
     val IC_MoreOption = R.drawable.ic_more_option
     val IC_MEDIA = R.drawable.ic_media
     val IC_CAMERA = R.drawable.ic_photo_camera
+    val IC_LOCK = Icons.Default.Lock
+    val IC_EMAIL = Icons.Rounded.Email
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

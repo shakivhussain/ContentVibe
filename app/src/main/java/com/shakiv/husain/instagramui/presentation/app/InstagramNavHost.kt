@@ -7,13 +7,16 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.shakiv.husain.instagramui.presentation.auth.AuthScreen
+import com.shakiv.husain.instagramui.presentation.auth.AuthViewModel
+import com.shakiv.husain.instagramui.presentation.auth.LoginScreen
+import com.shakiv.husain.instagramui.presentation.auth.SignUpScreen
 import com.shakiv.husain.instagramui.presentation.camera.CameraScreen
 import com.shakiv.husain.instagramui.presentation.common.composable.EmptyComingSoon
 import com.shakiv.husain.instagramui.presentation.home.HomeFeed
 import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen
 import com.shakiv.husain.instagramui.presentation.write_post.WritePostScreen
-import com.shakiv.husain.instagramui.utils.AppRoutes.AUTH_SCREEN
+import com.shakiv.husain.instagramui.utils.AppRoutes.LOGIN_SCREEN
+import com.shakiv.husain.instagramui.utils.AppRoutes.SIGN_UP_SCREEN
 
 @Composable
 fun InstagramNavHost(
@@ -24,7 +27,7 @@ fun InstagramNavHost(
     NavHost(
         navController = appState.navController,
         modifier = modifier,
-        startDestination = AUTH_SCREEN
+        startDestination = LOGIN_SCREEN
     ) {
 
         composable(route = HomeDestination.route) {
@@ -69,8 +72,14 @@ fun InstagramNavHost(
             }
         }
 
-        composable(AUTH_SCREEN) {
-            AuthScreen()
+        composable(SIGN_UP_SCREEN) {
+            SignUpScreen()
+        }
+
+        composable(LOGIN_SCREEN) {
+            LoginScreen {
+                appState.navigate(it)
+            }
         }
 
     }
