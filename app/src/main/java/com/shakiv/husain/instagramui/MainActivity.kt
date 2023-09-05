@@ -3,8 +3,6 @@ package com.shakiv.husain.instagramui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Surface
-import androidx.compose.ui.unit.dp
 import com.shakiv.husain.instagramui.presentation.app.InstagramApp
 import com.shakiv.husain.instagramui.presentation.theme.InstagramUITheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,14 +12,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appContainer = (application as InstagramApplication).container
-
         setContent {
             InstagramUITheme {
-
-                Surface(tonalElevation = 5.dp) {
-                    InstagramApp(appContainer)
-                }
+                InstagramApp()
             }
         }
     }

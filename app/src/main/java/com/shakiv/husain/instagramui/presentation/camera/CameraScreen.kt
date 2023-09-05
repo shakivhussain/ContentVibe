@@ -26,8 +26,8 @@ import com.shakiv.husain.instagramui.utils.ImageUtils
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraScreen(
-    navController: NavController,
-    cameraViewModel: CameraViewModel = hiltViewModel()
+    cameraViewModel: CameraViewModel = hiltViewModel(),
+    onPopBack : () -> Unit
 ) {
 
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -53,7 +53,7 @@ fun CameraScreen(
 
     LaunchedEffect(state.imageFile) {
         if (state.imageFile != null) {
-            navController.popBackStack()
+            onPopBack()
         }
     }
 

@@ -7,7 +7,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.shakiv.husain.instagramui.data.AppContainer
 import com.shakiv.husain.instagramui.presentation.auth.AuthScreen
 import com.shakiv.husain.instagramui.presentation.camera.CameraScreen
 import com.shakiv.husain.instagramui.presentation.common.composable.EmptyComingSoon
@@ -18,25 +17,22 @@ import com.shakiv.husain.instagramui.utils.AppRoutes.AUTH_SCREEN
 
 @Composable
 fun InstagramNavHost(
-    navController: NavHostController,
+    appState: ContentVibeAppState,
     modifier: Modifier = Modifier,
-    appContainer: AppContainer,
+) {
 
-    ) {
     NavHost(
-        navController = navController,
+        navController = appState.navController,
         modifier = modifier,
         startDestination = AUTH_SCREEN
     ) {
 
         composable(route = HomeDestination.route) {
-
             HomeFeed(
                 onItemClick = {
-                    navController.navigateToSingleTopTo(ProfileDestination.route)
+                    appState.navigate(ProfileDestination.route)
                 },
-
-                )
+            )
         }
 
         composable(route = SearchDestination.route) {
@@ -59,22 +55,23 @@ fun InstagramNavHost(
         composable(route = AddPostDestination.route) {
             WritePostScreen(
                 popBackStack = {
-                    navController.popBackStack()
+                    appState.navController.popBackStack()
                 },
                 onCameraClick = {
-                    navController.navigate(CameraDestination.route)
+                    appState.navigate(CameraDestination.route)
                 }
             )
         }
 
         composable(route = CameraDestination.route) {
-            CameraScreen(navController = navController)
+            CameraScreen() {
+                appState.navController.popBackStack()
+            }
         }
 
-        composable(AUTH_SCREEN){
+        composable(AUTH_SCREEN) {
             AuthScreen()
         }
-
 
     }
 }
