@@ -9,11 +9,9 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class InstagramApplication : Application() {
 
-    lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
-        container = AppContainerImp(this)
         FirebaseApp.initializeApp(this);
     }
 

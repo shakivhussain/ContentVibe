@@ -7,9 +7,18 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,9 +29,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.shakiv.husain.instagramui.R
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(authViewModel: AuthViewModel = hiltViewModel()) {
-
     val token = stringResource(R.string.default_web_client_id)
 
     val launcher = rememberLauncherForActivityResult(
@@ -33,12 +42,21 @@ fun AuthScreen(authViewModel: AuthViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
 
-    Button(onClick = {
-        startGoogleSignIn(token, context, launcher)
-    }) {
-        Text(text = "Login With Google")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Button(
+            modifier = Modifier.padding(),
+            onClick = {
+                startGoogleSignIn(token, context, launcher)
+            }) {
+            Text(text = "Login With Google")
+        }
     }
-
 }
 
 private fun startGoogleSignIn(
