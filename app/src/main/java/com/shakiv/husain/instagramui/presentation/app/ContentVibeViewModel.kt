@@ -1,5 +1,6 @@
 package com.shakiv.husain.instagramui.presentation.app
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
@@ -9,11 +10,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 open class ContentVibeViewModel : ViewModel() {
-    fun launchCatching(snackBar: Boolean = true, block: suspend CoroutineScope.() -> Unit) =
+    fun launchCatching(snackBar: Boolean = true, errorBlock : (String) -> Unit, block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
                 if (snackBar) {
+                    Log.d("TAG", "launchCatching: ${throwable.printStackTrace()} ")
                     SnackBarManager.showMessage(throwable.toSnackBarMessage())
+                    errorBlock(throwable.message.orEmpty())
                 }
             },
             block = block

@@ -14,12 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -27,11 +26,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.shakiv.husain.instagramui.R
+import com.shakiv.husain.instagramui.domain.model.Resource
+import com.shakiv.husain.instagramui.presentation.common.composable.BasicButton
+import com.shakiv.husain.instagramui.presentation.common.composable.ConfirmPassword
+import com.shakiv.husain.instagramui.presentation.common.composable.EmailField
+import com.shakiv.husain.instagramui.presentation.common.composable.PasswordField
+import com.shakiv.husain.instagramui.presentation.common.composable.ProgressBar
+import com.shakiv.husain.instagramui.utils.extentions.fieldModifier
+import com.shakiv.husain.instagramui.utils.extentions.getContext
+import com.shakiv.husain.instagramui.R.string as AppText
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AuthScreen(authViewModel: AuthViewModel = hiltViewModel()) {
+fun SignUpScreen(
+    authViewModel: AuthViewModel = hiltViewModel(),
+) {
+
+    val uiState = authViewModel.loginUiState
     val token = stringResource(R.string.default_web_client_id)
 
     val launcher = rememberLauncherForActivityResult(
@@ -40,7 +50,9 @@ fun AuthScreen(authViewModel: AuthViewModel = hiltViewModel()) {
         handleGoogleSignInResult(it.data, authViewModel)
     }
 
-    val context = LocalContext.current
+    val context = getContext()
+
+    val fieldModifier = Modifier.fieldModifier()
 
     Column(
         modifier = Modifier
@@ -49,12 +61,58 @@ fun AuthScreen(authViewModel: AuthViewModel = hiltViewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        EmailField(
+            value = uiState.email, onNewValue = authViewModel::onEmailChange,
+            modifier = fieldModifier
+        )
+        PasswordField(
+            value = uiState.password, onNewValue = authViewModel::onPasswordChange, fieldModifier
+        )
+        ConfirmPassword(
+            value = uiState.confirmPassword, onNewValue = authViewModel::onConfirmPassword,
+            fieldModifier
+        )
+
+        BasicButton(text = AppText.login_register) {
+            authViewModel.onSignUpClick {
+                Log.d("TAGAuth", "AuthScreen: Success")
+            }
+        }
+
         Button(
             modifier = Modifier.padding(),
             onClick = {
                 startGoogleSignIn(token, context, launcher)
             }) {
             Text(text = "Login With Google")
+        }
+    }
+
+    SignUp(){
+        authViewModel.sendEmailVerification()
+    }
+
+}
+
+@Composable
+fun SignUp(
+    authViewModel: AuthViewModel = hiltViewModel(),
+    sendVerificationLink: () -> Unit
+) {
+    when (val signUpState = authViewModel.signUpState) {
+        is Resource.Loading -> ProgressBar()
+        is Resource.Success -> {
+            val isUserSignerUp = signUpState.data ?: false
+            LaunchedEffect(key1 = isUserSignerUp) {
+                if (isUserSignerUp) {
+                    sendVerificationLink()
+                }
+            }
+        }
+
+        is Resource.Error -> {
+
         }
     }
 }

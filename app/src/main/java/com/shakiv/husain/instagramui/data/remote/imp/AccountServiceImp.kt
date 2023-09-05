@@ -2,8 +2,11 @@ package com.shakiv.husain.instagramui.data.remote.imp
 
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.perf.ktx.trace
+import com.google.firebase.perf.metrics.Trace
 import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.service.AccountService
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -31,6 +34,15 @@ class AccountServiceImp @Inject constructor(private val auth: FirebaseAuth) : Ac
         auth.signInWithEmailAndPassword(email, password).await()
     }
 
+
+    override suspend fun signUpWithEmail(email: String, password: String): Unit =
+        trace(SIGNUP_TRACE) {
+//            val credential = EmailAuthProvider.getCredential(email, password)
+//            auth.currentUser!!.linkWithCredential(credential).await()!!
+            auth.createUserWithEmailAndPassword(email, password)
+        }
+
+
     override suspend fun createAnonymousAccount() {
         auth.signInAnonymously().await()
     }
@@ -55,6 +67,21 @@ class AccountServiceImp @Inject constructor(private val auth: FirebaseAuth) : Ac
 
         }
     }
+
+
+    override suspend fun sendEmailVerification() {
+        auth.currentUser?.sendEmailVerification()
+    }
+
+    override suspend fun sendResetPasswordLink(email: String) {
+        auth.sendPasswordResetEmail(email).await()
+    }
+
+    companion object {
+        const val SIGNUP_TRACE = "signup"
+    }
+
+    inline fun <T> trace(name: String, block: Trace.() -> T): T = Trace.create(name).trace(block)
 
 
 }
