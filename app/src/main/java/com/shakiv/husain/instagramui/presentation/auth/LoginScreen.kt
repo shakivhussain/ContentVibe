@@ -1,9 +1,19 @@
 package com.shakiv.husain.instagramui.presentation.auth
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shakiv.husain.instagramui.domain.model.Resource
 import com.shakiv.husain.instagramui.presentation.app.HomeDestination
@@ -11,9 +21,13 @@ import com.shakiv.husain.instagramui.presentation.common.composable.BasicButton
 import com.shakiv.husain.instagramui.presentation.common.composable.EmailField
 import com.shakiv.husain.instagramui.presentation.common.composable.PasswordField
 import com.shakiv.husain.instagramui.presentation.common.composable.ProgressBar
+import com.shakiv.husain.instagramui.utils.extentions.fieldModifier
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
 import com.shakiv.husain.instagramui.R.string as AppText
 
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
@@ -21,20 +35,54 @@ fun LoginScreen(
 ) {
     val uiState = authViewModel.loginUiState
 
-    Column {
 
-        EmailField(value = uiState.email, onNewValue = authViewModel::onEmailChange)
-        PasswordField(value = uiState.password, onNewValue = authViewModel::onPasswordChange)
+    Scaffold(
+        topBar = {
 
-        BasicButton(text = AppText.login) {
-            authViewModel.onLoginClick()
+        },
+        bottomBar = {
+
         }
+    ) {
 
-        BasicButton(text = AppText.forgot_password) {
-            authViewModel.sendResetPasswordLink()
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            val fieldModifier = Modifier.fieldModifier()
+
+            Text(
+                text = "Login",
+                style = MaterialTheme.typography.headlineLarge
+            )
+
+            EmailField(
+                value = uiState.email,
+                onNewValue = authViewModel::onEmailChange,
+                modifier = fieldModifier
+            )
+            PasswordField(
+                value = uiState.password,
+                onNewValue = authViewModel::onPasswordChange,
+                modifier = fieldModifier
+            )
+
+            BasicButton(text = AppText.login) {
+                authViewModel.onLoginClick()
+            }
+
+            BasicButton(text = AppText.forgot_password) {
+                authViewModel.sendResetPasswordLink()
+            }
+
         }
 
     }
+
 
     Login(
         navigateToNextScreen = navigateToNextScreen

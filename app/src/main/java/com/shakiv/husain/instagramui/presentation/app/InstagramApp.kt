@@ -25,6 +25,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shakiv.husain.instagramui.presentation.common.composable.BottomNavigationTabRow
+import com.shakiv.husain.instagramui.utils.AppRoutes.LOGIN_SCREEN
+import com.shakiv.husain.instagramui.utils.AppRoutes.SIGN_UP_SCREEN
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarMessage.Companion.toMessage
 import kotlinx.coroutines.CoroutineScope
@@ -51,33 +53,33 @@ fun InstagramAppContent() {
 
     bottomBarState = needToShowBottomNavigation(currentDestination?.route)
 
-        Surface {
-            Scaffold(
-                snackbarHost = {
-                    SnackbarHost(
-                        appState.snackbarHostState
-                    )
-                },
-                modifier = Modifier,
-                bottomBar = {
-                    AnimatedVisibility(
-                        visible = bottomBarState,
-                        enter = slideInVertically(initialOffsetY = { it }),
-                        exit = slideOutVertically(targetOffsetY = { it }),
-                    ) {
-                        BottomNavigationTabRow(screens, currentScreen) { newScreen ->
-                            appState.navController.navigateToSingleTopTo(newScreen.route)
-                        }
+    Surface {
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(
+                    appState.snackbarHostState
+                )
+            },
+            modifier = Modifier,
+            bottomBar = {
+                AnimatedVisibility(
+                    visible = bottomBarState,
+                    enter = slideInVertically(initialOffsetY = { it }),
+                    exit = slideOutVertically(targetOffsetY = { it }),
+                ) {
+                    BottomNavigationTabRow(screens, currentScreen) { newScreen ->
+                        appState.navController.navigateToSingleTopTo(newScreen.route)
                     }
                 }
-            ) { innerPadding ->
-
-                InstagramNavHost(
-                    appState,
-                    modifier = Modifier.padding(innerPadding),
-                )
             }
+        ) { innerPadding ->
+
+            InstagramNavHost(
+                appState,
+                modifier = Modifier.padding(innerPadding),
+            )
         }
+    }
 
 
 }
@@ -89,9 +91,12 @@ fun needToShowBottomNavigation(route: String?): Boolean {
 
     return when (route) {
         AddPostDestination.route,
-        CameraDestination.route -> {
+        CameraDestination.route,
+        LOGIN_SCREEN,
+        SIGN_UP_SCREEN -> {
             false
         }
+
         else -> {
             true
         }

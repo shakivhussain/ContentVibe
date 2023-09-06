@@ -39,6 +39,9 @@ class AuthViewModel @Inject constructor(
     var loginUiState by mutableStateOf(LoginUiState())
         private set
 
+
+    val hasUser = accountService.hasUser
+
     private val email
         get() = loginUiState.email
 
