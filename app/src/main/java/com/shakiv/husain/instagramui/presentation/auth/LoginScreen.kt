@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shakiv.husain.instagramui.domain.model.Resource
 import com.shakiv.husain.instagramui.presentation.app.HomeDestination
@@ -26,13 +25,13 @@ import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
 import com.shakiv.husain.instagramui.R.string as AppText
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
     navigateToNextScreen: (String) -> Unit
 ) {
+
     val uiState = authViewModel.loginUiState
 
 

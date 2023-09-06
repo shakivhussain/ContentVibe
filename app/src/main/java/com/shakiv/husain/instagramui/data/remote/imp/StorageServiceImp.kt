@@ -30,7 +30,7 @@ class StorageServiceImp @Inject constructor(
 //            auth.currentUser.flatMapLatest { user ->
             firestore.collection(STAGE_POST_COLLECTION)
                 .orderBy("date", Query.Direction.DESCENDING)
-                .limit(5)
+//                .limit(5)
                 .dataObjects()
 //            }
 

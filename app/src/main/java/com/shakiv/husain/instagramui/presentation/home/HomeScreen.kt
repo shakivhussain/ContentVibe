@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,18 +42,21 @@ import com.shakiv.husain.instagramui.data.model.PostActions
 import com.shakiv.husain.instagramui.data.model.PostEntity
 import com.shakiv.husain.instagramui.data.model.UserEntity
 import com.shakiv.husain.instagramui.domain.model.Post
+import com.shakiv.husain.instagramui.domain.model.UserPreferences
+import com.shakiv.husain.instagramui.presentation.app.DataStoreViewModel
 import com.shakiv.husain.instagramui.presentation.common.composable.ProfileImage
+import com.shakiv.husain.instagramui.utils.DataStoreConstant
 import com.shakiv.husain.instagramui.utils.IconsInstagram
+import com.shakiv.husain.instagramui.utils.extentions.logd
+import kotlinx.coroutines.delay
 
 @Composable
 fun HomeFeed(
     onItemClick: (Post) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
-) {
+    ) {
 
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
-
-    Log.d("TAG", "HomeFeed: ${uiState} ")
 
     HomeFeed(
         uiState = uiState,

@@ -19,6 +19,7 @@ import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen
 import com.shakiv.husain.instagramui.presentation.write_post.WritePostScreen
 import com.shakiv.husain.instagramui.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.instagramui.utils.AppRoutes.SIGN_UP_SCREEN
+import com.shakiv.husain.instagramui.utils.extentions.logd
 
 @Composable
 fun InstagramNavHost(
@@ -30,7 +31,7 @@ fun InstagramNavHost(
 
     val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
 
-
+    logd("$startDestination")
 
     NavHost(
         navController = appState.navController,
