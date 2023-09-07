@@ -1,8 +1,10 @@
 package com.shakiv.husain.instagramui.presentation.app
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,18 +19,28 @@ import com.shakiv.husain.instagramui.presentation.profile.ProfileScreen
 import com.shakiv.husain.instagramui.presentation.write_post.WritePostScreen
 import com.shakiv.husain.instagramui.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.instagramui.utils.AppRoutes.SIGN_UP_SCREEN
+import com.shakiv.husain.instagramui.utils.extentions.logd
 
 @Composable
 fun InstagramNavHost(
     appState: ContentVibeAppState,
     modifier: Modifier = Modifier,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
+
+
+    val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
+
+    logd("$startDestination")
 
     NavHost(
         navController = appState.navController,
         modifier = modifier,
-        startDestination = LOGIN_SCREEN
+        startDestination = startDestination
     ) {
+
+
+
 
         composable(route = HomeDestination.route) {
             HomeFeed(
