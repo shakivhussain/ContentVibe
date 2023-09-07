@@ -24,6 +24,7 @@ object IconsInstagram {
     val IC_CAMERA = R.drawable.ic_photo_camera
     val IC_LOCK = Icons.Default.Lock
     val IC_EMAIL = Icons.Rounded.Email
+    val IC_GOOGLE = R.drawable.ic_google
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

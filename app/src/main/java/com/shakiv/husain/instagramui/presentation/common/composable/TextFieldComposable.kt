@@ -27,13 +27,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.sp
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
 import kotlinx.coroutines.job
 import com.shakiv.husain.instagramui.R.drawable as AppIcon
 import com.shakiv.husain.instagramui.R.string as AppText
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
