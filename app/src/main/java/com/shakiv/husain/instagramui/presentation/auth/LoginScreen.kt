@@ -2,6 +2,7 @@ package com.shakiv.husain.instagramui.presentation.auth
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +34,9 @@ import com.shakiv.husain.instagramui.presentation.common.composable.PasswordFiel
 import com.shakiv.husain.instagramui.presentation.common.composable.ProgressBar
 import com.shakiv.husain.instagramui.presentation.common.composable.RegularButton
 import com.shakiv.husain.instagramui.presentation.common.composable.RegularSmallButton
+import com.shakiv.husain.instagramui.utils.AppRoutes
 import com.shakiv.husain.instagramui.utils.IconsInstagram
+import com.shakiv.husain.instagramui.utils.ImageUtils
 import com.shakiv.husain.instagramui.utils.extentions.fieldModifier
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
 import com.shakiv.husain.instagramui.R.string as AppText
@@ -50,15 +55,19 @@ fun LoginPreview() {
         loginUiState = loginUiState,
         onEmailNewValue = {},
         onPasswordNewValue = {},
-        onLoginClick = { /*TODO*/ }) {
-    }
+        onLoginClick = { /*TODO*/ },
+        redirectToSignupScreen = {},
+        sendResetPasswordLink = {}
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
-    navigateToNextScreen: (String) -> Unit
+    navigateToNextScreen: (String) -> Unit,
+    redirectToSignupScreen: (String) -> Unit
+
 ) {
 
     val uiState = authViewModel.loginUiState
@@ -68,7 +77,8 @@ fun LoginScreen(
         onEmailNewValue = authViewModel::onEmailChange,
         onPasswordNewValue = authViewModel::onPasswordChange,
         onLoginClick = { authViewModel.onLoginClick() },
-        sendResetPasswordLink = { authViewModel.sendResetPasswordLink() }
+        sendResetPasswordLink = { authViewModel.sendResetPasswordLink() },
+        redirectToSignupScreen = redirectToSignupScreen
     )
 
 
@@ -93,27 +103,29 @@ fun LoginScreenContent(
     onPasswordNewValue: (String) -> Unit,
     onLoginClick: () -> Unit,
     sendResetPasswordLink: () -> Unit,
-
-    ) {
-    Scaffold(
-        topBar = {
-
-        },
-        bottomBar = {
-
-        }
-    ) {
+    redirectToSignupScreen: (String) -> Unit
+) {
+    Scaffold() {
 
         Column(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(vertical = 20.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
 
 
             val fieldModifier = Modifier.fieldModifier()
+
+            ImageUtils.setImage(
+                modifier = Modifier.fillMaxWidth(.5F),
+                imageId = IconsInstagram.IC_LOGIN
+            )
+
+            Spacer(modifier = Modifier.size(16.dp))
 
             Text(
                 text = "Login",
@@ -178,7 +190,7 @@ fun LoginScreenContent(
 
                 RegularSmallButton(
                     modifier = Modifier,
-                    icon = IconsInstagram.IC_GOOGLE,
+                    icon = IconsInstagram.IC_FORGOT,
                     title = AppText.forgot,
                     onButtonClick = sendResetPasswordLink,
                     colors = CardDefaults.cardColors(
@@ -203,9 +215,13 @@ fun LoginScreenContent(
                     color = MaterialTheme.colorScheme.secondary
 
                 )
-                Spacer(modifier = Modifier.size(4.dp))
 
                 Text(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp, horizontal = 4.dp)
+                        .clickable {
+                            redirectToSignupScreen(AppRoutes.SIGN_UP_SCREEN)
+                        },
                     text = stringResource(id = AppText.create_now),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onBackground

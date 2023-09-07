@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.LockOpen
 import com.shakiv.husain.instagramui.R
 
 object IconsInstagram {
@@ -25,6 +26,8 @@ object IconsInstagram {
     val IC_LOCK = Icons.Default.Lock
     val IC_EMAIL = Icons.Rounded.Email
     val IC_GOOGLE = R.drawable.ic_google
+    val IC_LOGIN = R.drawable.ic_login
+    val IC_FORGOT = R.drawable.ic_forgot
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

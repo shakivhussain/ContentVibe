@@ -42,7 +42,6 @@ fun SignUpScreen(
 ) {
 
     val uiState = authViewModel.loginUiState
-    val token = stringResource(R.string.default_web_client_id)
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -50,8 +49,40 @@ fun SignUpScreen(
         handleGoogleSignInResult(it.data, authViewModel)
     }
 
-    val context = getContext()
 
+
+    SignUpScreenContent(
+        uiState = uiState,
+        onEmailNewValue = authViewModel::onEmailChange,
+        onPasswordNewValue = authViewModel::onPasswordChange,
+        onConfirmPasswordNewValue = authViewModel::onConfirmPassword,
+        onSignUpClick = {
+            authViewModel.onSignUpClick {
+                Log.d("TAGAuth", "AuthScreen: Success")
+            }
+        },
+        launcher
+    )
+
+
+    SignUp() {
+        authViewModel.sendEmailVerification()
+    }
+
+}
+
+@Composable
+fun SignUpScreenContent(
+    uiState: LoginUiState,
+    onEmailNewValue: (String) -> Unit,
+    onPasswordNewValue: (String) -> Unit,
+    onConfirmPasswordNewValue: (String) -> Unit,
+    onSignUpClick: () -> Unit,
+    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
+) {
+
+    val token = stringResource(R.string.default_web_client_id)
+    val context = getContext()
     val fieldModifier = Modifier.fieldModifier()
 
     Column(
@@ -63,21 +94,21 @@ fun SignUpScreen(
     ) {
 
         EmailField(
-            value = uiState.email, onNewValue = authViewModel::onEmailChange,
+            value = uiState.email, onNewValue = onEmailNewValue,
             modifier = fieldModifier
         )
         PasswordField(
-            value = uiState.password, onNewValue = authViewModel::onPasswordChange, fieldModifier
+            value = uiState.password, onNewValue = onPasswordNewValue, fieldModifier
         )
         ConfirmPassword(
-            value = uiState.confirmPassword, onNewValue = authViewModel::onConfirmPassword,
+            value = uiState.confirmPassword, onNewValue = onConfirmPasswordNewValue,
             fieldModifier
         )
 
         BasicButton(text = AppText.login_register) {
-            authViewModel.onSignUpClick {
-                Log.d("TAGAuth", "AuthScreen: Success")
-            }
+
+            onSignUpClick()
+
         }
 
         Button(
@@ -88,11 +119,6 @@ fun SignUpScreen(
             Text(text = "Login With Google")
         }
     }
-
-    SignUp(){
-        authViewModel.sendEmailVerification()
-    }
-
 }
 
 @Composable
@@ -143,7 +169,6 @@ private fun handleGoogleSignInResult(
         }
 
     } catch (e: Exception) {
-
         Log.d("AuthTAG", "Failed AuthScreen: ${e.message} ")
         e.printStackTrace()
     }

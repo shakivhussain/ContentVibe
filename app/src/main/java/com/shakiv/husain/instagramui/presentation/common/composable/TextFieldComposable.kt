@@ -108,7 +108,7 @@ fun EmailField(
         },
         onValueChange = onNewValue,
         modifier = modifier.focusRequester(focusRequest),
-        placeholder = { Text(stringResource(AppText.email)) },
+        placeholder = { Text(stringResource(AppText.enter_email)) },
         leadingIcon = {
             ImageUtils.setImage(
                 IconsInstagram.IC_EMAIL, contentDescription = "Email",
@@ -132,7 +132,7 @@ fun PasswordField(
     modifier: Modifier = Modifier,
 ) {
     PasswordField(
-        value = value, onNewValue = onNewValue, placeholder = AppText.password, modifier = modifier
+        value = value, onNewValue = onNewValue, placeholder = AppText.enter_password, modifier = modifier
     )
 }
 

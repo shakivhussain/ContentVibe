@@ -89,9 +89,12 @@ fun InstagramNavHost(
         }
 
         composable(LOGIN_SCREEN) {
-            LoginScreen {
-                appState.navigate(it)
-            }
+            LoginScreen(
+                navigateToNextScreen = {},
+                redirectToSignupScreen = {
+                    appState.navigate(it)
+                }
+            )
         }
 
     }
