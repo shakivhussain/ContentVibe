@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun InstagramApp() {
     InstagramAppContent()
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

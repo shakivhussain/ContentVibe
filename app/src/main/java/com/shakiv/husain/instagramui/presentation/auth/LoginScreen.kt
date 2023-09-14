@@ -1,11 +1,13 @@
 package com.shakiv.husain.instagramui.presentation.auth
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.res.Configuration
 import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +27,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +38,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.google.firebase.auth.GoogleAuthProvider
 import com.shakiv.husain.instagramui.domain.model.Resource
 import com.shakiv.husain.instagramui.presentation.app.HomeDestination
 import com.shakiv.husain.instagramui.presentation.common.composable.EmailField
@@ -40,6 +48,7 @@ import com.shakiv.husain.instagramui.presentation.common.composable.ProgressBar
 import com.shakiv.husain.instagramui.presentation.common.composable.RegularButton
 import com.shakiv.husain.instagramui.presentation.common.composable.RegularSmallButton
 import com.shakiv.husain.instagramui.utils.AppRoutes
+import com.shakiv.husain.instagramui.utils.AppUtils.AUTO_SIGN_IN_TIMER
 import com.shakiv.husain.instagramui.utils.GoogleSignInUtils.handleGoogleSignInResult
 import com.shakiv.husain.instagramui.utils.GoogleSignInUtils.startGoogleSignIn
 import com.shakiv.husain.instagramui.utils.IconsInstagram
@@ -48,6 +57,8 @@ import com.shakiv.husain.instagramui.utils.extentions.fieldModifier
 import com.shakiv.husain.instagramui.utils.extentions.getContext
 import com.shakiv.husain.instagramui.utils.extentions.logd
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 import com.shakiv.husain.instagramui.R.string as AppText
 
 
@@ -65,8 +76,6 @@ fun LoginPreview() {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
-
-
     }
     LoginScreenContent(
         loginUiState = loginUiState,
@@ -89,6 +98,7 @@ fun LoginScreen(
     ) {
 
     val uiState = authViewModel.loginUiState
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
@@ -97,12 +107,32 @@ fun LoginScreen(
         }
     }
 
+    val oneTabLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            try {
+                val credential =
+                    authViewModel.oneTabClient.getSignInCredentialFromIntent(result.data)
+                val googleIdToken = credential.googleIdToken
+                val googleCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
+                authViewModel.signInWithCredential(googleCredential)
+            } catch (it: Exception) {
+                // TODO : Log Error
+            }
+        }
+    }
+
+
     LoginScreenContent(
         uiState,
         onEmailNewValue = authViewModel::onEmailChange,
         onPasswordNewValue = authViewModel::onPasswordChange,
         onLoginClick = { authViewModel.onLoginClick() },
-        sendResetPasswordLink = { authViewModel.sendResetPasswordLink() },
+        sendResetPasswordLink = {
+            authViewModel.sendResetPasswordLink()
+
+        },
         redirectToSignupScreen = redirectToSignupScreen,
         launcher
     )
@@ -116,7 +146,29 @@ fun LoginScreen(
         }
     )
 
-    GoogleSignIn(authViewModel, isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) })
+
+    Timer { count ->
+        if (count == 1) {
+            authViewModel.oneTabSignInWithGoogle()
+        }
+    }
+
+    GoogleSignIn(
+        authViewModel, isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) })
+
+    fun launch(signInResult: BeginSignInResult) {
+        val intent = IntentSenderRequest
+            .Builder(signInResult.pendingIntent.intentSender)
+            .build()
+        oneTabLauncher.launch(intent)
+    }
+
+    OneTabSignInWithGoogle(
+        authViewModel = authViewModel,
+        launch = {
+            launch(it)
+        }
+    )
 
 
 }
@@ -124,7 +176,7 @@ fun LoginScreen(
 @Composable
 fun GoogleSignIn(
     authViewModel: AuthViewModel,
-    isGoogleSignInSuccessfully : () -> Unit
+    isGoogleSignInSuccessfully: () -> Unit
 ) {
     when (val googleSignIn = authViewModel.signInWithGoogle) {
 
@@ -136,7 +188,7 @@ fun GoogleSignIn(
 
             val isGoogleSignInSuccess = googleSignIn.data ?: false
             LaunchedEffect(key1 = isGoogleSignInSuccessfully) {
-                if (isGoogleSignInSuccess){
+                if (isGoogleSignInSuccess) {
                     isGoogleSignInSuccessfully()
                 }
             }
@@ -174,7 +226,6 @@ fun LoginScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
 
             val fieldModifier = Modifier.fieldModifier()
 
@@ -342,6 +393,50 @@ fun LoginUser(
         is Resource.Error -> {
             val errorMessage = loginState.message.orEmpty()
             Log.e("TAGContent", "Login: Error $errorMessage")
+        }
+    }
+}
+
+
+@Composable
+fun OneTabSignInWithGoogle(
+    authViewModel: AuthViewModel,
+    launch: (result: BeginSignInResult) -> Unit
+) {
+
+    when (val oneTabSignInResponse = authViewModel.onTabSignInWithGoogle) {
+        is Resource.Loading -> {
+            Log.d("CurrentTAG", "OneTabSignInWithGoogle: Loading")
+            ProgressBar()
+        }
+
+        is Resource.Success -> {
+            Log.d("CurrentTAG", "OneTabSignInWithGoogle: Success")
+            val signInResult = oneTabSignInResponse.data
+            signInResult?.let {
+                LaunchedEffect(key1 = it) {
+                    launch(it)
+                }
+            }
+        }
+
+        is Resource.Error -> {
+            Log.d("CurrentTAG", "OneTabSignInWithGoogle: Failure ${oneTabSignInResponse.message}")
+        }
+    }
+
+}
+
+@Composable
+fun Timer(tick: (Int) -> Unit) {
+
+    var ticks by remember { mutableStateOf(AUTO_SIGN_IN_TIMER) }
+
+    LaunchedEffect(Unit) {
+        while (ticks > 0) {
+            delay(1.seconds)
+            tick(ticks)
+            ticks--
         }
     }
 }

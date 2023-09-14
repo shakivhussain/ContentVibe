@@ -1,6 +1,5 @@
 package com.shakiv.husain.instagramui.presentation.auth
 
-import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,12 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.GoogleAuthProvider
-import com.shakiv.husain.instagramui.R
 import com.shakiv.husain.instagramui.domain.model.Resource
 import com.shakiv.husain.instagramui.presentation.app.HomeDestination
 import com.shakiv.husain.instagramui.presentation.common.composable.ConfirmPassword
@@ -81,9 +74,9 @@ fun PreviewSignUpScreen() {
 @Composable
 fun SignUpScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
-    navigateToLoginScreen : () -> Unit,
+    navigateToLoginScreen: () -> Unit,
     navigateToHomeScreen: (String) -> Unit,
-    ) {
+) {
 
     val uiState = authViewModel.loginUiState
 
@@ -116,7 +109,8 @@ fun SignUpScreen(
         authViewModel.sendEmailVerification()
     }
 
-    GoogleSignIn(authViewModel, isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) })
+    GoogleSignIn(
+        authViewModel, isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) })
 
 }
 
@@ -128,7 +122,7 @@ fun SignUpScreenContent(
     onPasswordNewValue: (String) -> Unit,
     onConfirmPasswordNewValue: (String) -> Unit,
     onSignUpClick: () -> Unit,
-    navigateToLoginScreen : () -> Unit,
+    navigateToLoginScreen: () -> Unit,
     launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
 ) {
 
@@ -154,7 +148,7 @@ fun SignUpScreenContent(
 
 
             Text(
-                text = "SignUp",
+                text = stringResource(id = AppText.signup),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -225,7 +219,7 @@ fun SignUpScreenContent(
                 RegularSmallButton(
                     modifier = Modifier,
                     icon = IconsInstagram.IcBack,
-                    title = AppText.signup,
+                    title = AppText.login,
                     onButtonClick = navigateToLoginScreen,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -235,11 +229,8 @@ fun SignUpScreenContent(
             }
 
 
-
         }
     }
-
-
 
 
 }

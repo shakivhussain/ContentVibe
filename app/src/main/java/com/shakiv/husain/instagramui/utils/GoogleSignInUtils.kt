@@ -39,9 +39,10 @@ object GoogleSignInUtils {
     ) {
         val token = context.resources.getString(R.string.default_web_client_id)
 
-        val gso =
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(token)
-                .requestEmail().build()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(token)
+                .requestEmail()
+                .build()
 
         val googleSignClient = GoogleSignIn.getClient(context, gso)
         launcher.launch(googleSignClient.signInIntent)

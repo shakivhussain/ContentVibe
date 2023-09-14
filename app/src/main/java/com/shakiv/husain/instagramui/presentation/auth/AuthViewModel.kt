@@ -3,6 +3,8 @@ package com.shakiv.husain.instagramui.presentation.auth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import com.shakiv.husain.instagramui.domain.model.Resource
 import com.shakiv.husain.instagramui.domain.service.AccountService
@@ -18,7 +20,8 @@ import com.shakiv.husain.instagramui.R.string as AppText
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val accountService: AccountService
+    private val accountService: AccountService,
+    val oneTabClient: SignInClient
 ) : ContentVibeViewModel() {
 
 
@@ -40,6 +43,9 @@ class AuthViewModel @Inject constructor(
     var signInWithGoogle by mutableStateOf<Resource<Boolean>>((Resource.Success(null)))
         private set
 
+    var onTabSignInWithGoogle by mutableStateOf<Resource<BeginSignInResult>>((Resource.Success(null)))
+        private set
+
     val hasUser = accountService.hasUser
 
     private val email
@@ -58,6 +64,18 @@ class AuthViewModel @Inject constructor(
             signInWithGoogle = Resource.Success(true)
         }
 
+    }
+
+
+    fun oneTabSignInWithGoogle() {
+        launchCatching(
+            errorBlock = {
+                onTabSignInWithGoogle = Resource.Error(message = it)
+            }
+        ) {
+            onTabSignInWithGoogle = Resource.Loading()
+            onTabSignInWithGoogle = accountService.oneTabSignInWithGoogle()
+        }
     }
 
     fun onEmailChange(newValue: String) {
@@ -141,8 +159,13 @@ class AuthViewModel @Inject constructor(
     }
 
     fun sendResetPasswordLink() {
-        launchCatching(errorBlock = {
 
+        if (!email.isValidEmail()) {
+            SnackBarManager.showMessage(AppText.email_error)
+            return
+        }
+
+        launchCatching(errorBlock = {
             sendResetPasswordState = Resource.Error(message = it)
         }) {
             sendResetPasswordState = Resource.Loading()
