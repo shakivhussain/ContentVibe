@@ -1,6 +1,5 @@
 package com.shakiv.husain.instagramui.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,6 +10,7 @@ import com.shakiv.husain.instagramui.domain.model.Post
 import com.shakiv.husain.instagramui.domain.repository.PostRepository
 import com.shakiv.husain.instagramui.domain.service.AccountService
 import com.shakiv.husain.instagramui.domain.service.StorageService
+import com.shakiv.husain.instagramui.utils.extentions.logd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,7 +90,7 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.d("TAG", " Error refreshPosts: $e ")
+                logd("Error refreshPosts: $e ")
             }
         }
     }

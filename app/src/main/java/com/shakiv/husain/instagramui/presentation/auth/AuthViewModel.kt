@@ -3,7 +3,6 @@ package com.shakiv.husain.instagramui.presentation.auth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthCredential
 import com.shakiv.husain.instagramui.domain.model.Resource
 import com.shakiv.husain.instagramui.domain.service.AccountService
@@ -14,7 +13,6 @@ import com.shakiv.husain.instagramui.utils.extentions.isValidPassword
 import com.shakiv.husain.instagramui.utils.extentions.passwordMatches
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.shakiv.husain.instagramui.R.string as AppText
 
@@ -39,6 +37,8 @@ class AuthViewModel @Inject constructor(
     var loginUiState by mutableStateOf(LoginUiState())
         private set
 
+    var signInWithGoogle by mutableStateOf<Resource<Boolean>>((Resource.Success(null)))
+        private set
 
     val hasUser = accountService.hasUser
 
@@ -49,9 +49,15 @@ class AuthViewModel @Inject constructor(
         get() = loginUiState.password
 
     fun signInWithCredential(authCredential: AuthCredential) {
-        viewModelScope.launch {
+
+        launchCatching(errorBlock = {
+            signInWithGoogle = Resource.Error(message = it)
+        }) {
+            signInWithGoogle = Resource.Loading()
             accountService.signInWithCredential(authCredential)
+            signInWithGoogle = Resource.Success(true)
         }
+
     }
 
     fun onEmailChange(newValue: String) {

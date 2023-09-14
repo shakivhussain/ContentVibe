@@ -28,6 +28,8 @@ object IconsInstagram {
     val IC_GOOGLE = R.drawable.ic_google
     val IC_LOGIN = R.drawable.ic_login
     val IC_FORGOT = R.drawable.ic_forgot
+    val IC_SIGN_UP = R.drawable.ic_sign_up
+    val IC_ARROW_BACK = R.drawable.ic_arrow_back
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

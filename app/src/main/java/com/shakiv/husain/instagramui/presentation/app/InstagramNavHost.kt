@@ -1,6 +1,5 @@
 package com.shakiv.husain.instagramui.presentation.app
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,8 +37,6 @@ fun InstagramNavHost(
         modifier = modifier,
         startDestination = startDestination
     ) {
-
-
 
 
         composable(route = HomeDestination.route) {
@@ -85,15 +82,22 @@ fun InstagramNavHost(
         }
 
         composable(SIGN_UP_SCREEN) {
-            SignUpScreen()
+            SignUpScreen(
+                navigateToLoginScreen = { appState.navController.popBackStack() },
+                navigateToHomeScreen = {
+                    appState.navigateAndClearTopStack(it, LOGIN_SCREEN)
+                }
+            )
         }
 
         composable(LOGIN_SCREEN) {
             LoginScreen(
-                navigateToNextScreen = {},
+                navigateToHomeScreen = {
+                    appState.navigateAndClearTopStack(it, LOGIN_SCREEN)
+                },
                 redirectToSignupScreen = {
                     appState.navigate(it)
-                }
+                },
             )
         }
 
@@ -114,3 +118,4 @@ fun NavHostController.navigateToSingleTopTo(route: String) =
 fun NavHostController.navigateToReelsScreen(type: String) {
     this.navigateToSingleTopTo("${ReelsDestination.route}/$type")
 }
+

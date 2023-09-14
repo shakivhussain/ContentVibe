@@ -35,6 +35,7 @@ import com.shakiv.husain.instagramui.presentation.common.composable.ProfileImage
 import com.shakiv.husain.instagramui.utils.DateUtils
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
+import com.shakiv.husain.instagramui.utils.extentions.logd
 
 @Preview
 @Composable
@@ -64,7 +65,7 @@ fun FeedListItem(
     onItemClick: (Post) -> Unit
 ) {
 
-    Log.d("TAGPostList", "PostList: $post")
+    logd("PostList: $post")
 
     Card(
         modifier = modifier

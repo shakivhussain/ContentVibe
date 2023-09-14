@@ -63,7 +63,7 @@ fun HomeFeed(
         onItemClick = {
         },
         onLiked = {
-            Log.d("TAG", "HomeFeed onLiked Cliked : ${it} ")
+            logd( "HomeFeed onLiked Cliked : ${it} ")
 
 //            return@HomeFeed
             homeViewModel.onPostLiked(it)
@@ -110,7 +110,7 @@ fun PostList(
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        Log.d("TAG", "HomeFeed Data Update")
+        logd("HomeFeed Data Update")
 
         AppHeader()
 

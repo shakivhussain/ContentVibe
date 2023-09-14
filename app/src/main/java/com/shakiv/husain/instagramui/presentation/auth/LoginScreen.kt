@@ -1,7 +1,12 @@
 package com.shakiv.husain.instagramui.presentation.auth
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,9 +40,13 @@ import com.shakiv.husain.instagramui.presentation.common.composable.ProgressBar
 import com.shakiv.husain.instagramui.presentation.common.composable.RegularButton
 import com.shakiv.husain.instagramui.presentation.common.composable.RegularSmallButton
 import com.shakiv.husain.instagramui.utils.AppRoutes
+import com.shakiv.husain.instagramui.utils.GoogleSignInUtils.handleGoogleSignInResult
+import com.shakiv.husain.instagramui.utils.GoogleSignInUtils.startGoogleSignIn
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
 import com.shakiv.husain.instagramui.utils.extentions.fieldModifier
+import com.shakiv.husain.instagramui.utils.extentions.getContext
+import com.shakiv.husain.instagramui.utils.extentions.logd
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
 import com.shakiv.husain.instagramui.R.string as AppText
 
@@ -51,26 +60,42 @@ fun LoginPreview() {
         email = "shakib@gmail.com",
         password = "shakib@gmail.com"
     )
+
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+
+
+    }
     LoginScreenContent(
         loginUiState = loginUiState,
         onEmailNewValue = {},
         onPasswordNewValue = {},
         onLoginClick = { /*TODO*/ },
         redirectToSignupScreen = {},
-        sendResetPasswordLink = {}
+        sendResetPasswordLink = {},
+        launcher = launcher
+
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
-    navigateToNextScreen: (String) -> Unit,
-    redirectToSignupScreen: (String) -> Unit
+    navigateToHomeScreen: (String) -> Unit,
+    redirectToSignupScreen: (String) -> Unit,
 
-) {
+    ) {
 
     val uiState = authViewModel.loginUiState
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        handleGoogleSignInResult(it.data) { credential ->
+            authViewModel.signInWithCredential(credential)
+        }
+    }
 
     LoginScreenContent(
         uiState,
@@ -78,19 +103,47 @@ fun LoginScreen(
         onPasswordNewValue = authViewModel::onPasswordChange,
         onLoginClick = { authViewModel.onLoginClick() },
         sendResetPasswordLink = { authViewModel.sendResetPasswordLink() },
-        redirectToSignupScreen = redirectToSignupScreen
+        redirectToSignupScreen = redirectToSignupScreen,
+        launcher
     )
 
 
-    Login(
-        navigateToNextScreen = navigateToNextScreen
-    )
+    LoginUser(navigateToNextScreen = navigateToHomeScreen)
 
     ForgotPassword(
         showResetPasswordMessage = {
             SnackBarManager.showMessage(AppText.forgot_password_message)
         }
     )
+
+    GoogleSignIn(authViewModel, isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) })
+
+
+}
+
+@Composable
+fun GoogleSignIn(
+    authViewModel: AuthViewModel,
+    isGoogleSignInSuccessfully : () -> Unit
+) {
+    when (val googleSignIn = authViewModel.signInWithGoogle) {
+
+        is Resource.Loading -> {
+            ProgressBar()
+        }
+
+        is Resource.Success -> {
+
+            val isGoogleSignInSuccess = googleSignIn.data ?: false
+            LaunchedEffect(key1 = isGoogleSignInSuccessfully) {
+                if (isGoogleSignInSuccess){
+                    isGoogleSignInSuccessfully()
+                }
+            }
+        }
+
+        is Resource.Error -> {}
+    }
 
 }
 
@@ -103,8 +156,13 @@ fun LoginScreenContent(
     onPasswordNewValue: (String) -> Unit,
     onLoginClick: () -> Unit,
     sendResetPasswordLink: () -> Unit,
-    redirectToSignupScreen: (String) -> Unit
+    redirectToSignupScreen: (String) -> Unit,
+    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
 ) {
+
+    val context = getContext()
+
+
     Scaffold() {
 
         Column(
@@ -133,7 +191,7 @@ fun LoginScreenContent(
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.size(60.dp))
+            Spacer(modifier = Modifier.size(45.dp))
 
             EmailField(
                 value = loginUiState.email,
@@ -178,7 +236,9 @@ fun LoginScreenContent(
                     modifier = Modifier,
                     icon = IconsInstagram.IC_GOOGLE,
                     title = AppText.google,
-                    onButtonClick = sendResetPasswordLink,
+                    onButtonClick = {
+                        startGoogleSignIn(context = context, launcher)
+                    },
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     ),
@@ -259,14 +319,14 @@ fun ForgotPassword(
 }
 
 @Composable
-fun Login(
+fun LoginUser(
     authViewModel: AuthViewModel = hiltViewModel(),
     navigateToNextScreen: (String) -> Unit
 ) {
 
     when (val loginState = authViewModel.loginState) {
         is Resource.Loading -> {
-            Log.d("TAGContent", "Login: Loading")
+            logd("Login: Loading")
             ProgressBar()
         }
 

@@ -60,11 +60,15 @@ class AccountServiceImp @Inject constructor(private val auth: FirebaseAuth) : Ac
     }
 
     override suspend fun signInWithCredential(authCredential: AuthCredential) {
-
         try {
-            auth.signInWithCredential(authCredential).await()
-        } catch (e: Exception) {
+            val authResult = auth.signInWithCredential(authCredential).await()
 
+            val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
+            if (isNewUser) {
+//                addUserToFirestore() TODO : Add in FireStore Data.
+            }
+
+        } catch (e: Exception) {
         }
     }
 

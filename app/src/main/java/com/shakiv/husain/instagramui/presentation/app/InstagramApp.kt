@@ -140,6 +140,14 @@ class ContentVibeAppState(
     }
 
 
+    fun navigateAndClearTopStack(navigateTo : String, clear:String) {
+        navController.navigate(navigateTo) {
+            popUpTo(clear) {
+                inclusive = true
+            }
+        }
+    }
+
 }
 
 
