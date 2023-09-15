@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace 'com.shakiv.husain.instagramui'
+    namespace 'com.shakiv.husain.contentvibe'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.shakiv.husain.instagramui"
+        applicationId "com.shakiv.husain.contentvibe"
         minSdk 24
         targetSdk 34
         versionCode 1
