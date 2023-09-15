@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.shakiv.husain.instagramui.domain.model.UserPreferences
 import com.shakiv.husain.instagramui.domain.repository.DataStoreRepository
+import com.shakiv.husain.instagramui.utils.DataStoreConstant.KEY_NEED_TO_SHOW_ONE_TAB_SIGN_IN
 import com.shakiv.husain.instagramui.utils.DataStoreConstant.KEY_USER_NAME_PREFERENCES
 import com.shakiv.husain.instagramui.utils.extentions.loge
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +41,10 @@ constructor(
 
     private fun mapUserPreferences(preferences: Preferences): UserPreferences {
         val userName = preferences[KEY_USER_NAME_PREFERENCES].orEmpty()
-        return UserPreferences("", userName)
+        val needToShowOneTabSignIn = preferences[KEY_NEED_TO_SHOW_ONE_TAB_SIGN_IN]?:true
+        return UserPreferences(
+            "", userName,
+            needToShowOneTabSignIn = needToShowOneTabSignIn
+        )
     }
 }
