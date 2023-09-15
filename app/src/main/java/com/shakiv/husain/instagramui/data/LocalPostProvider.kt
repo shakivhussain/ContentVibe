@@ -51,13 +51,8 @@ object LocalPostProvider {
 
 
     fun updateLike(postId:String, isLiked:Boolean){
-        Log.d("TAGupdateLike", " 1 updateLike: $postId ")
-
         allUserPost.forEach {
             if (postId==it.id){
-
-                Log.d("TAGupdateLike", " 2 updateLike: $postId == ${it.id} IsLiked ${it.isLiked}")
-
                 it.isLiked=isLiked
             }
         }

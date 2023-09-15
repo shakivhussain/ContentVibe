@@ -3,6 +3,7 @@ package com.shakiv.husain.instagramui.presentation.app
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shakiv.husain.instagramui.utils.extentions.logd
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarManager
 import com.shakiv.husain.instagramui.utils.snackbar.SnackBarMessage.Companion.toSnackBarMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -14,7 +15,7 @@ open class ContentVibeViewModel : ViewModel() {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
                 if (snackBar) {
-                    Log.d("TAG", "launchCatching: ${throwable.printStackTrace()} ")
+                    logd( "launchCatching: ${throwable.printStackTrace()} ")
                     SnackBarManager.showMessage(throwable.toSnackBarMessage())
                     errorBlock(throwable.message.orEmpty())
                 }

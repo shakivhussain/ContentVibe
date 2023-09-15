@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun InstagramApp() {
     InstagramAppContent()
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -139,6 +138,14 @@ class ContentVibeAppState(
         }
     }
 
+
+    fun navigateAndClearTopStack(navigateTo : String, clear:String) {
+        navController.navigate(navigateTo) {
+            popUpTo(clear) {
+                inclusive = true
+            }
+        }
+    }
 
 }
 

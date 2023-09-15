@@ -12,10 +12,13 @@
     <string name="email_error">Please insert a valid email.</string>
     <string name="empty_password_error">Password cannot be empty.</string>
     <string name="email">Email</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_password">Password</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="login_register">Login/Register</string>
     <string name="login">Login</string>
+    <string name="register">Register</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="forgot">Forgot?</string>
     <string name="forgot_password_message">We\'ve sent you an email with a link to reset the password.</string>
@@ -23,6 +26,7 @@
     <string name="google">Google</string>
     <string name="dont_have_account">Don\'t have account?</string>
     <string name="create_now">Create now</string>
+    <string name="signup">SignUp</string>
 
 
 

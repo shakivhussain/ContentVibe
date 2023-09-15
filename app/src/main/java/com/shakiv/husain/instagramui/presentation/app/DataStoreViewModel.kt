@@ -15,7 +15,7 @@ class DataStoreViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : ContentVibeViewModel() {
 
-    val userPreferences: Flow<UserPreferences> = dataStoreRepository.userPreferencesFlow
+    val userPreferencesFlow: Flow<UserPreferences> = dataStoreRepository.userPreferencesFlow
 
     fun <T : Any> updatePreferences(
         key: Preferences.Key<T>,

@@ -27,8 +27,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.sp
 import com.shakiv.husain.instagramui.utils.IconsInstagram
 import com.shakiv.husain.instagramui.utils.ImageUtils
@@ -108,7 +106,7 @@ fun EmailField(
         },
         onValueChange = onNewValue,
         modifier = modifier.focusRequester(focusRequest),
-        placeholder = { Text(stringResource(AppText.email)) },
+        placeholder = { Text(stringResource(AppText.enter_email)) },
         leadingIcon = {
             ImageUtils.setImage(
                 IconsInstagram.IC_EMAIL, contentDescription = "Email",
@@ -132,7 +130,8 @@ fun PasswordField(
     modifier: Modifier = Modifier,
 ) {
     PasswordField(
-        value = value, onNewValue = onNewValue, placeholder = AppText.password, modifier = modifier
+        value = value, onNewValue = onNewValue, placeholder = AppText.enter_password,
+        modifier = modifier
     )
 }
 
@@ -180,7 +179,7 @@ private fun PasswordField(
         },
         label = {
             Text(
-                text = stringResource(id = AppText.password)
+                text = stringResource(id = placeholder)
             )
         },
         trailingIcon = {
