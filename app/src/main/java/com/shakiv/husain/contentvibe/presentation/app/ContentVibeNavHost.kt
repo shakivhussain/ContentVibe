@@ -30,7 +30,6 @@ fun ContentVibeNavHost(
 
     val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
 
-    logd("$startDestination")
 
     NavHost(
         navController = appState.navController,

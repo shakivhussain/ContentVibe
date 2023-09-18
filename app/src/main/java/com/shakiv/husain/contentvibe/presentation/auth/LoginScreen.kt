@@ -117,6 +117,7 @@ fun LoginScreen(
                 val credential =
                     authViewModel.oneTabClient.getSignInCredentialFromIntent(result.data)
                 val googleIdToken = credential.googleIdToken
+
                 val googleCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
                 authViewModel.signInWithCredential(googleCredential)
             } catch (it: Exception) {

@@ -5,13 +5,19 @@ import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.perf.ktx.trace
 import com.google.firebase.perf.metrics.Trace
+import com.shakiv.husain.contentvibe.data.mapper.toUser
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.Resource
 import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.utils.AppUtils.SIGN_IN_REQUEST
 import com.shakiv.husain.contentvibe.utils.AppUtils.SIGN_UP_REQUEST
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.KEY_USERS
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.ONE_TAB_SIGN_IN_TRACE
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SIGNUP_TRACE
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -25,21 +31,25 @@ class AccountServiceImp @Inject constructor(
     private val signInRequest: BeginSignInRequest,
     @Named(SIGN_UP_REQUEST)
     private val signUpRequest: BeginSignInRequest,
-) : AccountService {
+    private val fireStore: FirebaseFirestore,
+    ) : AccountService {
     override val currentUserId: String
         get() = auth.currentUser?.uid.orEmpty()
+
     override val hasUser: Boolean
         get() = auth.currentUser != null
+
     override val currentUser: Flow<UserEntity>
         get() = callbackFlow {
             val listener = FirebaseAuth.AuthStateListener {
                 this.trySend(
                     auth.currentUser?.let {
                         UserEntity(userId = it.uid, isAnonymous = it.isAnonymous)
-                    }
-                        ?: UserEntity()
+                    } ?: UserEntity()
                 )
             }
+            auth.addAuthStateListener(listener)
+            awaitClose { auth.removeAuthStateListener(listener) }
         }
 
 
@@ -75,13 +85,20 @@ class AccountServiceImp @Inject constructor(
     override suspend fun signInWithCredential(authCredential: AuthCredential) {
         try {
             val authResult = auth.signInWithCredential(authCredential).await()
-
             val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
+
             if (isNewUser) {
-//                addUserToFirestore() TODO : Add in FireStore Data.
+                addUserToFireStore()
             }
 
         } catch (e: Exception) {
+        }
+    }
+
+    private suspend fun addUserToFireStore() {
+        auth.currentUser?.apply {
+            val user = this.toUser()
+            fireStore.collection(KEY_USERS).document(uid).set(user).await()
         }
     }
 
@@ -93,7 +110,7 @@ class AccountServiceImp @Inject constructor(
                 return Resource.Success(signInResult)
             } catch (e: Exception) {
                 try {
-                    val signUpResult = oneTabClient.beginSignIn(signInRequest).await()
+                    val signUpResult = oneTabClient.beginSignIn(signUpRequest).await()
                     return Resource.Success(signUpResult)
                 } catch (e: Exception) {
                     return Resource.Error(message = e.message.toString())
@@ -111,10 +128,6 @@ class AccountServiceImp @Inject constructor(
         auth.sendPasswordResetEmail(email).await()
     }
 
-    companion object {
-        const val SIGNUP_TRACE = "signup"
-        const val ONE_TAB_SIGN_IN_TRACE = "trace_one_tab_sign_in"
-    }
 
     inline fun <T> trace(name: String, block: Trace.() -> T): T = Trace.create(name).trace(block)
 

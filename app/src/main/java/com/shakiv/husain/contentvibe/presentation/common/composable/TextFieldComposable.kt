@@ -55,13 +55,14 @@ fun WritePostField(
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 16.sp
         ),
+
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             cursorColor = MaterialTheme.colorScheme.onSurface,
-            textColor = MaterialTheme.colorScheme.onSurface,
-            placeholderColor = MaterialTheme.colorScheme.onSurface,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
         ),
         modifier = modifier
     )

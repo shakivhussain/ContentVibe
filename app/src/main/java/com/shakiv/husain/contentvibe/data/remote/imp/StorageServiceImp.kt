@@ -11,6 +11,13 @@ import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.domain.model.Response
 import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.IMAGES
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.POST_COLLECTION
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_POST_TRACE
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_STORY_TRACE
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STAGE_POST_COLLECTION
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STORY_COLLECTION
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.UPDATE_POST_TRACE
 import com.shakiv.husain.contentvibe.utils.randomId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -62,10 +69,7 @@ class StorageServiceImp @Inject constructor(
 
 
     override suspend fun update(postEntity: PostEntity): Unit {
-
         try {
-
-
             trace(UPDATE_POST_TRACE) {
                 firestore.collection(STAGE_POST_COLLECTION).document(postEntity.id).set(postEntity).await()
             }
@@ -92,15 +96,6 @@ class StorageServiceImp @Inject constructor(
     }
 
     companion object {
-        private const val USER_ID_FIELD = "userId"
-        private const val POST_COLLECTION = "posts"
-        private const val STAGE_POST_COLLECTION = "stage_post"
-        private const val STORY_COLLECTION = "stories"
-        private const val SAVE_STORY_TRACE = "saveStory"
-        private const val SAVE_POST_TRACE = "savePost"
-        private const val UPDATE_POST_TRACE = "updatePost"
-        private const val IMAGES = "images"
-
 
     }
 }
