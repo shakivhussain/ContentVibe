@@ -64,21 +64,20 @@ fun HomeFeed(
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
-    val itemsLists: List<BottomSheetItem> =
-        listOf(BottomSheetItem.HIDE, BottomSheetItem.REPORT, BottomSheetItem.DELETE)
-
 
     HomeFeed(
         uiState = uiState,
         onItemClick = {
             onItemClick(it)
-//            isBottomSheetVisible = !isBottomSheetVisible
         },
         onLiked = {
             homeViewModel.onPostLiked(it)
+        },
+        onMoreOptionIconClick = {
+            homeViewModel.onMoreOptionIconClick(it)
+            isBottomSheetVisible = !isBottomSheetVisible
         }
     )
-
 
     ShowBottomSheet(
         bottomSheetState,
@@ -86,10 +85,12 @@ fun HomeFeed(
         onDismiss = {
             isBottomSheetVisible = false
         },
-        itemsLists = itemsLists
+        itemsLists = homeViewModel.getBottomSheetItems(),
+        onItemClick = {
+            homeViewModel.onItemClickMoreOption(it)
+            isBottomSheetVisible = false
+        }
     )
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,14 +98,13 @@ fun HomeFeed(
 fun ShowBottomSheet(
     bottomSheetState: SheetState,
     isBottomSheetVisible: Boolean = false,
+    itemsLists: List<BottomSheetItem> = emptyList(),
     onDismiss: () -> Unit,
-    itemsLists: List<BottomSheetItem> = emptyList()
+    onItemClick: (BottomSheetItem) -> Unit,
 ) {
     if (isBottomSheetVisible) {
         MoreOptionBottomSheet(
-            onItemClick = {
-                logd("OnItem Click : ${it.name}")
-            },
+            onItemClick = onItemClick,
             sheetState = bottomSheetState,
             onDismissListener = {
                 onDismiss()
@@ -119,10 +119,13 @@ fun ShowBottomSheet(
 
 }
 
+
 @Composable
 fun HomeFeed(
-    uiState: HomeViewModelState, onItemClick: (Post) -> Unit, onLiked: (Post) -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    uiState: HomeViewModelState,
+    onItemClick: (Post) -> Unit,
+    onLiked: (Post) -> Unit,
+    onMoreOptionIconClick: (Post) -> Unit,
 ) {
 
     val postLazyListState = rememberLazyListState()
@@ -139,6 +142,7 @@ fun HomeFeed(
             postLazyListState = postLazyListState,
             storyLazyListState,
             onItemClick = onItemClick,
+            onMoreOptionClick = onMoreOptionIconClick,
             onLiked = { onLiked(it) }
         )
     }
@@ -153,6 +157,7 @@ fun PostList(
     postLazyListState: LazyListState,
     storyLazyListState: LazyListState,
     onItemClick: (Post) -> Unit,
+    onMoreOptionClick: (Post) -> Unit,
     onLiked: (Post) -> Unit
 ) {
 
@@ -171,7 +176,6 @@ fun PostList(
         ) {
             item {
                 StoryList(storyList = storyList, storyLazyListState)
-//                Spacer(modifier = Modifier.height(18.dp))
                 Divider(
                     Modifier.fillMaxWidth(), thickness = .2.dp,
                 )
@@ -179,10 +183,12 @@ fun PostList(
             items(postList) { post ->
 
                 FeedListItem(
-                    onLikeClick = { onLiked(post) }, post = post
-                ) { postItem ->
-                    onItemClick(postItem)
-                }
+                    onLikeClick = { onLiked(post) }, post = post,
+                    onMoreOptionClick = onMoreOptionClick,
+                    onItemClick = {
+                        onItemClick(it)
+                    }
+                )
             }
         }
     }

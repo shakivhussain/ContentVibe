@@ -8,7 +8,8 @@ data class HomeViewModelState(
     val posts: List<Post> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: List<ErrorMessage> = emptyList(),
-    val stories: List<StoryItem> = emptyList()
+    val stories: List<StoryItem> = emptyList(),
+    val clickedPost : Post? = null
 ) {
 //    fun toUiState(): HomeUiState = if (posts == null) {
 //        HomeUiState.NoPosts(
