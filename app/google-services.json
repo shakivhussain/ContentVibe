@@ -7,12 +7,57 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:938397326976:android:b840b0a5e61c7b81f25065",
+        "android_client_info": {
+          "package_name": "com.shakiv.husain.contentvibe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938397326976-2l6uou0fvkhhvb0gb1eo1pq9a0ppjrv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shakiv.husain.contentvibe",
+            "certificate_hash": "e31bd680c99f720c32d5ed68a34cca4773ed8093"
+          }
+        },
+        {
+          "client_id": "938397326976-9oioe609gh4inpba8mhi2p9tds8rti2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANweulXK05y04yCOF_8UfrrI8sTXowTeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938397326976-9oioe609gh4inpba8mhi2p9tds8rti2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:938397326976:android:5bc57ea32a170d2ef25065",
         "android_client_info": {
           "package_name": "com.shakiv.husain.instagramui"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "938397326976-kllp1o5lbjokdguikgkhc8vl9mftr5f4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shakiv.husain.instagramui",
+            "certificate_hash": "e31bd680c99f720c32d5ed68a34cca4773ed8093"
+          }
+        },
         {
           "client_id": "938397326976-9oioe609gh4inpba8mhi2p9tds8rti2i.apps.googleusercontent.com",
           "client_type": 3
