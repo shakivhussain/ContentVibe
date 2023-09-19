@@ -1,15 +1,14 @@
 package com.shakiv.husain.contentvibe.presentation.home
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestore
 import com.shakiv.husain.contentvibe.data.StoryItem
 import com.shakiv.husain.contentvibe.data.mapper.toPost
 import com.shakiv.husain.contentvibe.data.mapper.toPostEntity
 import com.shakiv.husain.contentvibe.domain.model.Post
-import com.shakiv.husain.contentvibe.domain.repository.PostRepository
 import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
+import com.shakiv.husain.contentvibe.presentation.app.ContentVibeViewModel
+import com.shakiv.husain.contentvibe.presentation.common.composable.BottomSheetItem
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,11 +24,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val postRepository: PostRepository,
-    private val accountService: AccountService,
     private val storageService: StorageService,
-    private val firebaseFireStore: FirebaseFirestore
-) : ViewModel() {
+    private val accountService: AccountService
+) : ContentVibeViewModel() {
 
 
     private val viewModelState = MutableStateFlow(
@@ -50,7 +47,7 @@ class HomeViewModel @Inject constructor(
     fun onPostLiked(post: Post) {
         viewModelScope.launch {
             val postEntity = post.toPostEntity()
-            val isLiked = (post.isLiked?:false)
+            val isLiked = (post.isLiked ?: false)
             storageService.update(
                 postEntity.copy(
                     isLiked = !isLiked,
@@ -79,7 +76,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 storageService.posts.collectLatest { posts ->
-
                     viewModelState.update {
                         it.copy(
                             posts = posts
@@ -92,6 +88,60 @@ class HomeViewModel @Inject constructor(
             } catch (e: Exception) {
                 logd("Error refreshPosts: $e ")
             }
+        }
+    }
+
+
+    fun onMoreOptionIconClick(post: Post) {
+        viewModelState.update {
+            it.copy(
+                clickedPost = post
+            )
+        }
+    }
+
+
+    fun getBottomSheetItems(): List<BottomSheetItem> {
+
+        val postUserId = viewModelState.value.clickedPost?.usedId ?: return emptyList()
+
+        return if (postUserId == accountService.currentUserId) {
+            listOf(
+                BottomSheetItem.HIDE,
+                BottomSheetItem.REPORT,
+                BottomSheetItem.DELETE
+            )
+        } else {
+            listOf(
+                BottomSheetItem.HIDE,
+                BottomSheetItem.REPORT,
+            )
+        }
+
+    }
+
+    fun onItemClickMoreOption(bottomSheetItem: BottomSheetItem) {
+        when (bottomSheetItem) {
+            BottomSheetItem.HIDE -> {
+
+            }
+
+            BottomSheetItem.DELETE -> {
+                deletePosts()
+            }
+
+            BottomSheetItem.REPORT -> {}
+        }
+    }
+
+    private fun deletePosts() {
+        val postId = viewModelState.value.clickedPost?.id ?: return
+        launchCatching(
+            errorBlock = {
+                logd(" : DeletePosts : $it ")
+            }
+        ) {
+            storageService.delete(postId = postId)
         }
     }
 

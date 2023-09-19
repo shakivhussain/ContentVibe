@@ -20,11 +20,18 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -40,34 +47,86 @@ import com.shakiv.husain.contentvibe.data.model.PostActions
 import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.Post
+import com.shakiv.husain.contentvibe.presentation.common.composable.BottomSheetItem
+import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeFeed(
     onItemClick: (Post) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    ) {
+) {
 
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+
 
     HomeFeed(
         uiState = uiState,
         onItemClick = {
+            onItemClick(it)
         },
         onLiked = {
-            logd( "HomeFeed onLiked Cliked : ${it} ")
-
-//            return@HomeFeed
             homeViewModel.onPostLiked(it)
+        },
+        onMoreOptionIconClick = {
+            homeViewModel.onMoreOptionIconClick(it)
+            isBottomSheetVisible = !isBottomSheetVisible
         }
     )
 
+    ShowBottomSheet(
+        bottomSheetState,
+        isBottomSheetVisible,
+        onDismiss = {
+            isBottomSheetVisible = false
+        },
+        itemsLists = homeViewModel.getBottomSheetItems(),
+        onItemClick = {
+            homeViewModel.onItemClickMoreOption(it)
+            isBottomSheetVisible = false
+        }
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeFeed(uiState: HomeViewModelState, onItemClick: (Post) -> Unit, onLiked: (Post) -> Unit, homeViewModel: HomeViewModel= hiltViewModel()) {
+fun ShowBottomSheet(
+    bottomSheetState: SheetState,
+    isBottomSheetVisible: Boolean = false,
+    itemsLists: List<BottomSheetItem> = emptyList(),
+    onDismiss: () -> Unit,
+    onItemClick: (BottomSheetItem) -> Unit,
+) {
+    if (isBottomSheetVisible) {
+        MoreOptionBottomSheet(
+            onItemClick = onItemClick,
+            sheetState = bottomSheetState,
+            onDismissListener = {
+                onDismiss()
+            },
+            itemsLists = itemsLists
+        )
+    }
+
+    LaunchedEffect(key1 = isBottomSheetVisible) {
+        if (isBottomSheetVisible) bottomSheetState.show() else bottomSheetState.hide()
+    }
+
+}
+
+
+@Composable
+fun HomeFeed(
+    uiState: HomeViewModelState,
+    onItemClick: (Post) -> Unit,
+    onLiked: (Post) -> Unit,
+    onMoreOptionIconClick: (Post) -> Unit,
+) {
 
     val postLazyListState = rememberLazyListState()
     val storyLazyListState = rememberLazyListState()
@@ -83,6 +142,7 @@ fun HomeFeed(uiState: HomeViewModelState, onItemClick: (Post) -> Unit, onLiked: 
             postLazyListState = postLazyListState,
             storyLazyListState,
             onItemClick = onItemClick,
+            onMoreOptionClick = onMoreOptionIconClick,
             onLiked = { onLiked(it) }
         )
     }
@@ -97,9 +157,9 @@ fun PostList(
     postLazyListState: LazyListState,
     storyLazyListState: LazyListState,
     onItemClick: (Post) -> Unit,
+    onMoreOptionClick: (Post) -> Unit,
     onLiked: (Post) -> Unit
 ) {
-
 
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -116,7 +176,6 @@ fun PostList(
         ) {
             item {
                 StoryList(storyList = storyList, storyLazyListState)
-//                Spacer(modifier = Modifier.height(18.dp))
                 Divider(
                     Modifier.fillMaxWidth(), thickness = .2.dp,
                 )
@@ -124,11 +183,12 @@ fun PostList(
             items(postList) { post ->
 
                 FeedListItem(
-                    onLikeClick = { onLiked(post) }
-                    ,post = post
-                ) { postItem ->
-                    onItemClick(postItem)
-                }
+                    onLikeClick = { onLiked(post) }, post = post,
+                    onMoreOptionClick = onMoreOptionClick,
+                    onItemClick = {
+                        onItemClick(it)
+                    }
+                )
             }
         }
     }
@@ -229,10 +289,4 @@ fun PreviewStoryListItem() {
         postActions = postAction
     )
 
-//    FeedListItem(
-//        post.toPost(),
-////        onLikeClick = {}
-//    ) {
-//
-//    }
 }

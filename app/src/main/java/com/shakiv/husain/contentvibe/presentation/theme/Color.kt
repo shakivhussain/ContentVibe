@@ -2,7 +2,7 @@ package com.shakiv.husain.contentvibe.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF4355B9)
+val md_theme_light_primary = Color(0xFF4355B9) // #4355B9
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFDEE0FF)
 val md_theme_light_onPrimaryContainer = Color(0xFF00105C)

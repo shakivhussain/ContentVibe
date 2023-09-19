@@ -18,7 +18,6 @@ import com.shakiv.husain.contentvibe.presentation.profile.ProfileScreen
 import com.shakiv.husain.contentvibe.presentation.write_post.WritePostScreen
 import com.shakiv.husain.contentvibe.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.SIGN_UP_SCREEN
-import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 @Composable
 fun ContentVibeNavHost(

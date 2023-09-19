@@ -4,9 +4,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.HideSource
+import androidx.compose.material.icons.rounded.Report
 import com.shakiv.husain.contentvibe.R
 
 object IconsContentVibe {
@@ -29,6 +32,9 @@ object IconsContentVibe {
     val IC_FORGOT = R.drawable.ic_forgot
     val IC_SIGN_UP = R.drawable.ic_sign_up
     val IC_ARROW_BACK = R.drawable.ic_arrow_back
+    val IC_DELETE = Icons.Rounded.Delete
+    val IC_HIDE = Icons.Rounded.HideSource
+    val IC_REPORT = Icons.Rounded.Report
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

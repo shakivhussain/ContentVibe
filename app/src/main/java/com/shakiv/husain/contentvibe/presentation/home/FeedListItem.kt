@@ -52,16 +52,18 @@ fun PreviewPostItem(
         images = "https://firebasestorage.googleapis.com/v0/b/contentvibe-f9adc.appspot.com/o/images%2F4e44cc83-9ee7-4d9b-9b81-b3e022adabd1.jpg?alt=media&token=02ddcf9b-e66a-41d2-bdd4-55ad660b6cf9"
     )
     FeedListItem(post = post.toPost(), onItemClick = {},
-        onLikeClick = {}
-        )
+        onLikeClick = {},
+        onMoreOptionClick = {}
+    )
 }
 
 @Composable
 fun FeedListItem(
     post: Post,
     modifier: Modifier = Modifier,
-    onLikeClick : () -> Unit,
-    onItemClick: (Post) -> Unit
+    onLikeClick: () -> Unit,
+    onMoreOptionClick: (Post) -> Unit,
+    onItemClick: (Post) -> Unit,
 ) {
 
     logd("PostList: $post")
@@ -109,7 +111,7 @@ fun FeedListItem(
                 }
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { onMoreOptionClick(post) },
                 ) {
 
                     ImageUtils.setImage(
@@ -126,7 +128,7 @@ fun FeedListItem(
             Text(
                 text = post.post.orEmpty(),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding( 12.dp)
+                modifier = Modifier.padding(12.dp)
             )
 
             if (!post.imageUrl.isNullOrEmpty()) {
