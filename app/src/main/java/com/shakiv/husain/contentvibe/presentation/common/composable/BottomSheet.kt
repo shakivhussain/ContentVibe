@@ -1,7 +1,6 @@
 package com.shakiv.husain.contentvibe.presentation.common.composable
 
 import android.content.res.Configuration
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,14 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shakiv.husain.contentvibe.data.MockService.getBottomSheetItems
-import com.shakiv.husain.contentvibe.utils.IconsContentVibe
+import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.utils.ImageUtils
-import com.shakiv.husain.contentvibe.R.string as AppText
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +38,7 @@ fun PreviewBottomSheet() {
         itemsLists = getBottomSheetItems(),
         onItemClick = {}, onDismissListener = {})
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -133,11 +131,7 @@ fun BottomSheetItem(
 }
 
 
-enum class BottomSheetItem(@StringRes val title: Int, val image: ImageVector) {
-    HIDE(title = AppText.hide, IconsContentVibe.IC_HIDE),
-    REPORT(title = AppText.report, IconsContentVibe.IC_REPORT),
-    DELETE(title = AppText.delete, IconsContentVibe.IC_DELETE),
-}
+
 
 
 
