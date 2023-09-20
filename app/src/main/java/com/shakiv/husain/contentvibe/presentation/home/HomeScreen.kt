@@ -57,10 +57,10 @@ import com.shakiv.husain.contentvibe.utils.extentions.logd
 @Composable
 fun HomeFeed(
     onItemClick: (Post) -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(),
 ) {
 
-    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
@@ -71,10 +71,10 @@ fun HomeFeed(
             onItemClick(it)
         },
         onLiked = {
-            homeViewModel.onPostLiked(it)
+            mainViewModel.onPostLiked(it)
         },
         onMoreOptionIconClick = {
-            homeViewModel.onMoreOptionIconClick(it)
+            mainViewModel.onMoreOptionIconClick(it)
             isBottomSheetVisible = !isBottomSheetVisible
         }
     )
@@ -85,9 +85,9 @@ fun HomeFeed(
         onDismiss = {
             isBottomSheetVisible = false
         },
-        itemsLists = homeViewModel.getBottomSheetItems(),
+        itemsLists = mainViewModel.getBottomSheetItems(),
         onItemClick = {
-            homeViewModel.onItemClickMoreOption(it)
+            mainViewModel.onItemClickMoreOption(it)
             isBottomSheetVisible = false
         }
     )

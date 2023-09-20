@@ -17,7 +17,8 @@ fun PostEntity.toPost(): Post {
         userName = user?.userName ?: "",
         userAbout = user?.userAbout ?: "",
         userProfile = user?.userProfile ?: "",
-        imageUrl = images
+        imageUrl = images,
+        currentUserLike = currentUserLike.toMutableList()
     )
 }
 

@@ -17,11 +17,13 @@ data class PostEntity(
     var isLiked: Boolean = false,
     var likes: Int=0,
     val postActions: PostActions? = null,
-    val images : String = ""
+    val images : String = "",
+    val currentUserLike : List<String> = emptyList()
 )
 
 data class PostActions(
     val isLiked: Boolean = false,
     val isDislike: Boolean = false,
     val likes: Int = 0,
+    val postId : String = "",
 )
