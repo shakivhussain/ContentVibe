@@ -1,6 +1,6 @@
 package com.shakiv.husain.contentvibe.data
 
-import com.shakiv.husain.contentvibe.presentation.common.composable.BottomSheetItem
+import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 
 object MockService {
     fun getBottomSheetItems(): List<BottomSheetItem> {

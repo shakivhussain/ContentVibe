@@ -46,8 +46,8 @@ import com.shakiv.husain.contentvibe.data.StoryItem
 import com.shakiv.husain.contentvibe.data.model.PostActions
 import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
+import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.Post
-import com.shakiv.husain.contentvibe.presentation.common.composable.BottomSheetItem
 import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
