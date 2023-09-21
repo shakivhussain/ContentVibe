@@ -31,10 +31,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,12 +51,35 @@ import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.Post
+import com.shakiv.husain.contentvibe.presentation.common.composable.CommentBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+@Preview
+@Composable
+fun PreviewStoryListItem() {
+    val user = UserEntity(
+        "$1 Shakiv Husain", isAnonymous = true, "Professional",
+        userProfile = "contentvibe.ProfilePic"
+    )
+
+    val postAction = PostActions(
+        isLiked = 1 % 2 == 0,
+        isDislike = 2 % 2 != 0,
+    )
+
+    val post = PostEntity(
+        "Shakiv Husain",
+        user = user,
+        postActions = postAction
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun HomeFeed(
     onItemClick: (Post) -> Unit,
@@ -61,64 +87,60 @@ fun HomeFeed(
 ) {
 
     val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
-
+    val moreOptionBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val commentBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isMoreOptionBottomSheetVisible by remember { mutableStateOf(false) }
+    var isCommentBottomSheetVisible by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     HomeFeed(
         uiState = uiState,
         onItemClick = {
+            return@HomeFeed
             onItemClick(it)
         },
         onLiked = {
+
+
             mainViewModel.onPostLiked(it)
         },
         onMoreOptionIconClick = {
             mainViewModel.onMoreOptionIconClick(it)
-            isBottomSheetVisible = !isBottomSheetVisible
+            isMoreOptionBottomSheetVisible = !isMoreOptionBottomSheetVisible
+        },
+        onCommentClicked = {
+            logd(" 1 Comment Clicked")
+
+            isCommentBottomSheetVisible = !isCommentBottomSheetVisible
+        },
+        onShareClicked = {
+            logd(" 2 Comment Clicked")
+            isCommentBottomSheetVisible = !isCommentBottomSheetVisible
         }
     )
 
-    ShowBottomSheet(
-        bottomSheetState,
-        isBottomSheetVisible,
+    ShowMoreOptionBottomSheet(
+        moreOptionBottomSheetState,
+        isMoreOptionBottomSheetVisible,
         onDismiss = {
-            isBottomSheetVisible = false
+            isMoreOptionBottomSheetVisible = false
         },
         itemsLists = mainViewModel.getBottomSheetItems(),
         onItemClick = {
             mainViewModel.onItemClickMoreOption(it)
-            isBottomSheetVisible = false
+            isMoreOptionBottomSheetVisible = false
         }
     )
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ShowBottomSheet(
-    bottomSheetState: SheetState,
-    isBottomSheetVisible: Boolean = false,
-    itemsLists: List<BottomSheetItem> = emptyList(),
-    onDismiss: () -> Unit,
-    onItemClick: (BottomSheetItem) -> Unit,
-) {
-    if (isBottomSheetVisible) {
-        MoreOptionBottomSheet(
-            onItemClick = onItemClick,
-            sheetState = bottomSheetState,
-            onDismissListener = {
-                onDismiss()
-            },
-            itemsLists = itemsLists
-        )
-    }
-
-    LaunchedEffect(key1 = isBottomSheetVisible) {
-        if (isBottomSheetVisible) bottomSheetState.show() else bottomSheetState.hide()
-    }
+    ShowCommentBottomSheet(
+        bottomSheetState = commentBottomSheetState,
+        onDismiss = {
+            isCommentBottomSheetVisible = false
+        },
+        isBottomSheetVisible = isCommentBottomSheetVisible,
+    )
 
 }
-
 
 @Composable
 fun HomeFeed(
@@ -126,6 +148,8 @@ fun HomeFeed(
     onItemClick: (Post) -> Unit,
     onLiked: (Post) -> Unit,
     onMoreOptionIconClick: (Post) -> Unit,
+    onCommentClicked: (Post) -> Unit,
+    onShareClicked: (Post) -> Unit,
 ) {
 
     val postLazyListState = rememberLazyListState()
@@ -143,7 +167,9 @@ fun HomeFeed(
             storyLazyListState,
             onItemClick = onItemClick,
             onMoreOptionClick = onMoreOptionIconClick,
-            onLiked = { onLiked(it) }
+            onLiked = { onLiked(it) },
+            onCommentClicked = onCommentClicked,
+            onShareClicked = onShareClicked
         )
     }
 
@@ -158,7 +184,9 @@ fun PostList(
     storyLazyListState: LazyListState,
     onItemClick: (Post) -> Unit,
     onMoreOptionClick: (Post) -> Unit,
-    onLiked: (Post) -> Unit
+    onLiked: (Post) -> Unit,
+    onCommentClicked: (Post) -> Unit,
+    onShareClicked: (Post) -> Unit,
 ) {
 
 
@@ -187,6 +215,12 @@ fun PostList(
                     onMoreOptionClick = onMoreOptionClick,
                     onItemClick = {
                         onItemClick(it)
+                    },
+                    onCommentClicked = {
+                        onCommentClicked(post)
+                    },
+                    onShareClicked = {
+                        onShareClicked(post)
                     }
                 )
             }
@@ -270,23 +304,60 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreviewStoryListItem() {
-    val user = UserEntity(
-        "$1 Shakiv Husain", isAnonymous = true, "Professional",
-        userProfile = "contentvibe.ProfilePic"
-    )
+fun ShowCommentBottomSheet(
+    bottomSheetState: SheetState,
+    onDismiss: () -> Unit,
+    isBottomSheetVisible: Boolean = false,
+) {
 
-    val postAction = PostActions(
-        isLiked = 1 % 2 == 0,
-        isDislike = 2 % 2 != 0,
-    )
+    if (isBottomSheetVisible) {
+        CommentBottomSheet(
+            bottomSheetState,
+            onDismiss
+        )
 
-    val post = PostEntity(
-        "Shakiv Husain",
-        user = user,
-        postActions = postAction
-    )
+    }
+
+
+    LaunchedEffect(key1 = isBottomSheetVisible) {
+        if (isBottomSheetVisible)
+            bottomSheetState.expand()
+    }
+
+    LaunchedEffect(key1 = isBottomSheetVisible) {
+        if (isBottomSheetVisible) bottomSheetState.show() else bottomSheetState.hide()
+    }
+
 
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ShowMoreOptionBottomSheet(
+    bottomSheetState: SheetState,
+    isBottomSheetVisible: Boolean = false,
+    itemsLists: List<BottomSheetItem> = emptyList(),
+    onDismiss: () -> Unit,
+    onItemClick: (BottomSheetItem) -> Unit,
+) {
+    if (isBottomSheetVisible) {
+        MoreOptionBottomSheet(
+            onItemClick = onItemClick,
+            sheetState = bottomSheetState,
+            onDismissListener = {
+                onDismiss()
+            },
+            itemsLists = itemsLists
+        )
+    }
+
+    LaunchedEffect(key1 = isBottomSheetVisible) {
+        if (isBottomSheetVisible) bottomSheetState.show() else bottomSheetState.hide()
+    }
+
+}
+
+
+

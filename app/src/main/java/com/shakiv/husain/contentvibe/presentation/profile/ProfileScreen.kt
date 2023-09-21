@@ -258,7 +258,9 @@ fun ProfilePager() {
         }
 
         items(userPosts) {
-            FeedListItem(post = it.toPost(), onItemClick = {}, onLikeClick = {}, onMoreOptionClick = {})
+            FeedListItem(post = it.toPost(), onItemClick = {}, onLikeClick = {}, onMoreOptionClick = {},
+                onCommentClicked = {},
+                onShareClicked = {})
         }
 
 
@@ -290,7 +292,13 @@ fun UserPostScreen() {
 //        }
         items(allUserPost()) {
 
-            FeedListItem(post = it.toPost(), onItemClick = {}, onLikeClick = {}, onMoreOptionClick = {})
+            FeedListItem(post = it.toPost(),
+                onItemClick = {},
+                onLikeClick = {},
+                onMoreOptionClick = {},
+                onCommentClicked = {},
+                onShareClicked = {}
+            )
 
         }
     }
