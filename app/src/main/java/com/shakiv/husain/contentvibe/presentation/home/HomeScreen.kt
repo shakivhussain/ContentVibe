@@ -46,8 +46,8 @@ import com.shakiv.husain.contentvibe.data.StoryItem
 import com.shakiv.husain.contentvibe.data.model.PostActions
 import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
+import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.Post
-import com.shakiv.husain.contentvibe.presentation.common.composable.BottomSheetItem
 import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
@@ -57,10 +57,10 @@ import com.shakiv.husain.contentvibe.utils.extentions.logd
 @Composable
 fun HomeFeed(
     onItemClick: (Post) -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(),
 ) {
 
-    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
@@ -71,10 +71,10 @@ fun HomeFeed(
             onItemClick(it)
         },
         onLiked = {
-            homeViewModel.onPostLiked(it)
+            mainViewModel.onPostLiked(it)
         },
         onMoreOptionIconClick = {
-            homeViewModel.onMoreOptionIconClick(it)
+            mainViewModel.onMoreOptionIconClick(it)
             isBottomSheetVisible = !isBottomSheetVisible
         }
     )
@@ -85,9 +85,9 @@ fun HomeFeed(
         onDismiss = {
             isBottomSheetVisible = false
         },
-        itemsLists = homeViewModel.getBottomSheetItems(),
+        itemsLists = mainViewModel.getBottomSheetItems(),
         onItemClick = {
-            homeViewModel.onItemClickMoreOption(it)
+            mainViewModel.onItemClickMoreOption(it)
             isBottomSheetVisible = false
         }
     )

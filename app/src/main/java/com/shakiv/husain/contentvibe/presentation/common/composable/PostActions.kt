@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,8 +26,12 @@ import com.shakiv.husain.contentvibe.utils.ImageUtils
 @Composable
 fun PrevPostAction() {
 //    PostActions(
-//        modifier = Modifier.padding(), onLikeClicked = { /*TODO*/ },
-//        onCommentClicked = { /*TODO*/ }) {
+//        modifier = Modifier,
+//        onLikeClicked = { /*TODO*/ },
+//        onCommentClicked = { /*TODO*/ },
+//        onShareClicked = {}
+//
+//    ) {
 //    }
 }
 
@@ -52,6 +57,10 @@ fun PostActions(
             val likeIcon = post.isLiked?.let {
                  if (it) IcLikeFilled else IcLikeBorder
             }?: IcLikeBorder
+
+
+            Text(text = "${post.likes}")
+
 
             IconButton(onClick = { onLikeClicked() }) {
                 ImageUtils.setImage(

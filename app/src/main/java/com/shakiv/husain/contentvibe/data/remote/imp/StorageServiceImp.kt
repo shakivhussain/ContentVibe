@@ -64,7 +64,7 @@ class StorageServiceImp @Inject constructor(
                 it.user?.userId = auth.currentUserId
             }
 
-            firestore.collection("stage_post").add(postEntity).await().id
+            firestore.collection(STAGE_POST_COLLECTION).add(postEntity).await().id
         }
 
 
@@ -80,7 +80,7 @@ class StorageServiceImp @Inject constructor(
 
 
     override suspend fun delete(postId: String) {
-        firestore.collection(POST_COLLECTION).document(postId).delete().await()
+        firestore.collection(STAGE_POST_COLLECTION).document(postId).delete().await()
     }
 
     override suspend fun addImageToFirebaseStorage(uri: Uri): Response<Uri> {

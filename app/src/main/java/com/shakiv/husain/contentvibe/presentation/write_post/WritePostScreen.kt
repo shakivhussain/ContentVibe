@@ -177,8 +177,11 @@ fun WritePostScreen(
                 },
                 actions = {
 
-                    val enabledButtonColor = MaterialTheme.colorScheme.background
-                    val disableButtonColor = MaterialTheme.colorScheme.secondary
+                    val enabledContainerColor = MaterialTheme.colorScheme.primaryContainer
+                    val enabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+
+                    val disableContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                    val disableContentColor = MaterialTheme.colorScheme.onSurfaceVariant
 
                     TextButton(
                         onClick = {
@@ -189,10 +192,10 @@ fun WritePostScreen(
                         modifier = Modifier.padding(end = 8.dp),
                         enabled = isEnabled && !writePostState.isImageUploading && !writePostState.post.isEmpty(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = enabledButtonColor,
-                            contentColor = enabledButtonColor,
-                            disabledContainerColor = disableButtonColor,
-                            disabledContentColor = disableButtonColor
+                            containerColor = enabledContainerColor,
+                            contentColor = enabledContentColor,
+                            disabledContainerColor = disableContainerColor,
+                            disabledContentColor = disableContentColor
                         ),
                         shape = RoundedCornerShape(4.dp),
                         border = BorderStroke(.1.dp, MaterialTheme.colorScheme.onBackground)

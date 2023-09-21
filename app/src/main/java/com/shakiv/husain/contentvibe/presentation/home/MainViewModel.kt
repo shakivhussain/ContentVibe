@@ -4,11 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.shakiv.husain.contentvibe.data.StoryItem
 import com.shakiv.husain.contentvibe.data.mapper.toPost
 import com.shakiv.husain.contentvibe.data.mapper.toPostEntity
+import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.Post
 import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.presentation.app.ContentVibeViewModel
-import com.shakiv.husain.contentvibe.presentation.common.composable.BottomSheetItem
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val storageService: StorageService,
     private val accountService: AccountService
 ) : ContentVibeViewModel() {
@@ -47,11 +47,24 @@ class HomeViewModel @Inject constructor(
     fun onPostLiked(post: Post) {
         viewModelScope.launch {
             val postEntity = post.toPostEntity()
-            val isLiked = (post.isLiked ?: false)
+
+            val currentUserId = accountService.currentUserId.orEmpty()
+            val likesUserId: MutableList<String> = post.currentUserLike
+            val isLiked = likesUserId.contains(currentUserId)
+
+            if (likesUserId.contains(currentUserId)) {
+                likesUserId.remove(currentUserId)
+                postEntity.likes = postEntity.likes.minus(1)
+            } else {
+                likesUserId.add(currentUserId)
+                postEntity.likes = postEntity.likes.plus(1)
+            }
+
+
             storageService.update(
                 postEntity.copy(
                     isLiked = !isLiked,
-                    likes = if (isLiked) post.likes.minus(1) else post.likes.plus(1)
+                    currentUserLike = likesUserId
                 )
             )
         }
@@ -71,6 +84,7 @@ class HomeViewModel @Inject constructor(
             }
 
         }
+
 
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -135,10 +149,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun deletePosts() {
+
         val postId = viewModelState.value.clickedPost?.id ?: return
+        logd(" : DeletePosts : $postId ")
+
         launchCatching(
             errorBlock = {
-                logd(" : DeletePosts : $it ")
+                logd(" : DeletePosts Error : $it ")
             }
         ) {
             storageService.delete(postId = postId)

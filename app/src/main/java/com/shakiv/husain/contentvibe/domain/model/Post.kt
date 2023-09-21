@@ -10,5 +10,6 @@ data class Post(
     val usedId: String? = "",
     val userName: String? = "",
     val userAbout: String? = "",
-    val userProfile: String? = ""
+    val userProfile: String? = "",
+    val currentUserLike : MutableList<String> = mutableListOf<String>()
 )
