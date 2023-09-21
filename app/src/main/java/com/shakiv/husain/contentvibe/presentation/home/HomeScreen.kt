@@ -37,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,8 +51,8 @@ import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.Post
 import com.shakiv.husain.contentvibe.presentation.common.composable.CommentBottomSheet
+import com.shakiv.husain.contentvibe.presentation.common.composable.ImageRainbowBorder
 import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
-import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 
@@ -287,7 +286,7 @@ fun StoryList(storyList: List<StoryItem>, storyLazyListState: LazyListState) {
 @Composable
 fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(0.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        ProfileImage(profilePath = storyItem.storyImage, Modifier.size(70.dp))
+        ImageRainbowBorder(modifier= Modifier.size(70.dp))
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = storyItem.userName,
@@ -301,6 +300,10 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
         )
     }
 }
+
+
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
