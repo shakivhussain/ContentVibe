@@ -49,6 +49,7 @@ class MainViewModel @Inject constructor(
             val postEntity = post.toPostEntity()
 
             val currentUserId = accountService.currentUserId.orEmpty()
+
             val likesUserId: MutableList<String> = post.currentUserLike
             val isLiked = likesUserId.contains(currentUserId)
 
@@ -86,6 +87,7 @@ class MainViewModel @Inject constructor(
         }
 
 
+        val currentUserId = accountService.currentUserId.orEmpty()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -94,6 +96,7 @@ class MainViewModel @Inject constructor(
                         it.copy(
                             posts = posts
                                 .map { postEntity ->
+                                    postEntity.isLiked = postEntity.currentUserLike.contains(currentUserId)
                                     postEntity.toPost()
                                 }
                         )

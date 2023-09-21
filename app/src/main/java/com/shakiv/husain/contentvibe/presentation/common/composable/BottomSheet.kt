@@ -2,10 +2,12 @@ package com.shakiv.husain.contentvibe.presentation.common.composable
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +21,11 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -28,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.shakiv.husain.contentvibe.data.MockService.getBottomSheetItems
 import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.utils.ImageUtils
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,6 +45,84 @@ fun PreviewBottomSheet() {
     MoreOptionBottomSheet(
         itemsLists = getBottomSheetItems(),
         onItemClick = {}, onDismissListener = {})
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(name = "Preview CommentBottom Sheet")
+@Composable
+fun PreviewCommentBottomSheet() {
+    CommentBottomSheet(){
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CommentBottomSheet(
+    sheetState: SheetState = rememberModalBottomSheetState(),
+    onDismissListener: () -> Unit,
+) {
+
+
+    ModalBottomSheet(
+        modifier = Modifier,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onBackground,
+        onDismissRequest = {
+            onDismissListener()
+        },
+        shape = RoundedCornerShape(
+            topStart = 18.dp,
+            topEnd = 18.dp
+        ),
+    ) {
+
+        CommentBottomSheetContent(Modifier.padding())
+
+    }
+
+}
+
+@Composable
+fun CommentBottomSheetContent(modifier: Modifier) {
+    Column(
+        modifier = modifier
+            .height(400.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+
+        var isLoading by remember { mutableStateOf(true) }
+
+        LaunchedEffect(true) {
+            delay(1500)
+            isLoading = false
+        }
+
+        if (isLoading) {
+            ProgressBar(modifier.fillMaxWidth())
+        } else {
+            Text(
+                text = "Screen under construction",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "This screen is still under construction.",
+                style = MaterialTheme.typography.labelMedium
+            )
+
+//            CommentTextField()
+
+        }
+
+
+    }
+
 }
 
 

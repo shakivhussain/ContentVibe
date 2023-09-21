@@ -1,6 +1,7 @@
 package com.shakiv.husain.contentvibe.presentation.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,9 +25,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
 import com.shakiv.husain.contentvibe.utils.ImageUtils
@@ -84,6 +88,36 @@ fun BasicField(
         onValueChange = { onNewValue(it) },
         placeholder = { Text(stringResource(id = text)) }
     )
+}
+
+@Preview
+@Composable
+fun PreviewSimpleTF() {
+    CommentTextField()
+}
+
+@Composable
+fun CommentTextField() {
+
+    var text by remember { mutableStateOf(TextFieldValue("")) }
+    val focusRequest = FocusRequester()
+
+    TextField(
+        modifier = Modifier
+            .focusable(),
+        value = text,
+        onValueChange = { newText ->
+            text = newText
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text, imeAction = ImeAction.Go
+        ),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = MaterialTheme.colorScheme.primary
+        ),
+
+        )
+
 }
 
 

@@ -53,7 +53,9 @@ fun PreviewPostItem(
     )
     FeedListItem(post = post.toPost(), onItemClick = {},
         onLikeClick = {},
-        onMoreOptionClick = {}
+        onMoreOptionClick = {},
+        onCommentClicked = {},
+        onShareClicked = {}
     )
 }
 
@@ -64,9 +66,9 @@ fun FeedListItem(
     onLikeClick: () -> Unit,
     onMoreOptionClick: (Post) -> Unit,
     onItemClick: (Post) -> Unit,
+    onCommentClicked: () -> Unit,
+    onShareClicked: () -> Unit,
 ) {
-
-    logd("PostList: $post")
 
     Card(
         modifier = modifier
@@ -170,11 +172,8 @@ fun FeedListItem(
                 overflow = TextOverflow.Ellipsis
             )
 
-            val onCommentClicked = {
-            }
 
-            val onShareClicked = {
-            }
+
 
             PostActions(
                 post = post,

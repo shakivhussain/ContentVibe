@@ -20,6 +20,8 @@ import com.shakiv.husain.contentvibe.utils.IconsContentVibe.IcChat
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe.IcLikeBorder
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe.IcLikeFilled
 import com.shakiv.husain.contentvibe.utils.ImageUtils
+import com.shakiv.husain.contentvibe.utils.MultipleEventsCutterUtils.multipleEventsCutter
+import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 
 @Preview
@@ -62,13 +64,26 @@ fun PostActions(
             Text(text = "${post.likes}")
 
 
-            IconButton(onClick = { onLikeClicked() }) {
-                ImageUtils.setImage(
-                    modifier= Modifier.size(24.dp),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                    imageVector = likeIcon
-                )
+
+            multipleEventsCutter { manager ->
+
+                IconButton(onClick = {
+
+                    manager.processEvent {
+                        onLikeClicked()
+                        logd(" Like Clicked ")
+                    }
+
+                }) {
+                    ImageUtils.setImage(
+                        modifier= Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                        imageVector = likeIcon
+                    )
+                }
+
             }
+
 
             IconButton(onClick = { onCommentClicked() }) {
 
