@@ -70,8 +70,6 @@ fun FeedListItem(
     onShareClicked: () -> Unit,
 ) {
 
-    logd("PostList: $post")
-
     Card(
         modifier = modifier
             .padding(horizontal = 16.dp)

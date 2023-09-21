@@ -192,8 +192,6 @@ fun PostList(
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        logd("HomeFeed Data Update")
-
         AppHeader()
 
         LazyColumn(
