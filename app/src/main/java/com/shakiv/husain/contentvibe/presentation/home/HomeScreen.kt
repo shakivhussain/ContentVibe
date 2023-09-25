@@ -62,7 +62,7 @@ import com.shakiv.husain.contentvibe.utils.extentions.logd
 fun PreviewStoryListItem() {
     val user = UserEntity(
         "$1 Shakiv Husain", isAnonymous = true, "Professional",
-        userProfile = "contentvibe.ProfilePic"
+        profileUrl = "contentvibe.ProfilePic"
     )
 
     val postAction = PostActions(

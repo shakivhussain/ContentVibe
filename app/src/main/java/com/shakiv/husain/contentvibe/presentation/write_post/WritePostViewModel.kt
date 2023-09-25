@@ -14,6 +14,7 @@ import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.Response
 import com.shakiv.husain.contentvibe.domain.repository.PhotoSaverRepository
+import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.utils.DateUtils
 import com.shakiv.husain.contentvibe.utils.randomId
@@ -30,7 +31,8 @@ import javax.inject.Inject
 class WritePostViewModel @Inject constructor(
     private val storageService: StorageService,
     private val context: Application,
-    private val photoSaver: PhotoSaverRepository
+    private val photoSaver: PhotoSaverRepository,
+    private val accountService: AccountService
 ) : ViewModel() {
 
     private val writePostViewModelState = MutableStateFlow(
@@ -46,6 +48,8 @@ class WritePostViewModel @Inject constructor(
         writePostViewModelState.value
     )
 
+
+    val currentUserId = accountService.currentUserId
 
     fun isValid(): Boolean {
         val uiState = writePostUiState.value
@@ -136,13 +140,8 @@ class WritePostViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val user = UserEntity(
-                userId = randomId(),
-                isAnonymous = false,
-                userName = " Shakiv Husain",
-                description = "Professional",
-                userProfile = "contentvibe.ProfilePic"
-            )
+
+            val user = accountService.getUserById(currentUserId)?:UserEntity()
 
 
             val post = PostEntity(
