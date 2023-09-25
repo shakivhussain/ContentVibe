@@ -28,7 +28,7 @@ object LocalPostProvider {
 
     fun allUserPost(): List<PostEntity> {
         for (index in 0 until 500) {
-            val user = UserEntity("$index Shakiv Husain", isAnonymous = false, userAbout = "Professional", userProfile = "contentvibe.ProfilePic")
+            val user = UserEntity("$index Shakiv Husain", isAnonymous = false, description = "Professional", userProfile = "contentvibe.ProfilePic")
 
             val postAction = PostActions(
                 isLiked = index % 2 == 0,

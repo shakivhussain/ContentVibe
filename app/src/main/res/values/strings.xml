@@ -30,6 +30,9 @@
     <string name="hide">Hide</string>
     <string name="delete">Delete</string>
     <string name="report">Report</string>
+    <string name="posts">Posts</string>
+    <string name="follower">Follower</string>
+    <string name="following">Following</string>
 
 
 

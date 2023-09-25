@@ -4,6 +4,7 @@ import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.firebase.auth.AuthCredential
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.Resource
+import com.shakiv.husain.contentvibe.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface AccountService {
@@ -11,6 +12,7 @@ interface AccountService {
     val currentUserId: String
     val hasUser: Boolean
     val currentUser: Flow<UserEntity>
+    suspend fun getUserById(userId : String): UserEntity?
     suspend fun sendEmailVerification()
     suspend fun sendResetPasswordLink(email: String)
     suspend fun authenticate(email: String, password: String)
