@@ -4,9 +4,12 @@ import com.shakiv.husain.contentvibe.data.model.PostActions
 import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.Post
+import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 
 fun PostEntity.toPost(): Post {
+
+    logd("toPost : ${user?.profileUrl}")
     return Post(
         id = id,
         post = post,
@@ -16,7 +19,7 @@ fun PostEntity.toPost(): Post {
         usedId = user?.userId ?: "",
         userName = user?.userName ?: "",
         userAbout = user?.description ?: "",
-        userProfile = user?.userProfile ?: "",
+        userProfile = user?.profileUrl ?: "",
         imageUrl = images,
         currentUserLike = currentUserLike.toMutableList()
     )
@@ -35,7 +38,7 @@ fun Post.toPostEntity(): PostEntity {
             userId = usedId ?: "",
             userName = userName ?: "",
             description = userAbout ?: "",
-            userProfile = userProfile ?: ""
+            profileUrl = userProfile ?: ""
         ),
         postActions = PostActions(
             isLiked = isLiked ?: false,

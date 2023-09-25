@@ -30,7 +30,6 @@ import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.Post
 import com.shakiv.husain.contentvibe.presentation.common.composable.PostActions
-import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.utils.DateUtils
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
 import com.shakiv.husain.contentvibe.utils.ImageUtils
@@ -46,7 +45,7 @@ fun PreviewPostItem(
         isLiked = true,
         user = UserEntity(
             "Shakiv Husain", isAnonymous = true, "Developer",
-            userProfile = "contentvibe.ProfilePic"
+            profileUrl = "contentvibe.ProfilePic"
         ),
         postActions = com.shakiv.husain.contentvibe.data.model.PostActions(false, false),
         images = "https://firebasestorage.googleapis.com/v0/b/contentvibe-f9adc.appspot.com/o/images%2F4e44cc83-9ee7-4d9b-9b81-b3e022adabd1.jpg?alt=media&token=02ddcf9b-e66a-41d2-bdd4-55ad660b6cf9"
@@ -87,7 +86,11 @@ fun FeedListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                ProfileImage(profilePath = 0) // TODO : Change it to the Actual Path
+//                ProfileImage(profilePath = 0) // TODO : Change it to the Actual Path
+
+                logd("Profile Url : ${post.userProfile}")
+
+                ImageUtils.SetProfileImage(post.userProfile.orEmpty(), Modifier.size(40.dp))
 
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -99,14 +102,18 @@ fun FeedListItem(
                     Column(
                         verticalArrangement = Arrangement.Center
                     ) {
+
                         Text(
                             text = post.userName.orEmpty(),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
                             text = post.userAbout.orEmpty(),
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
+
                     }
 
 

@@ -43,12 +43,10 @@ import com.shakiv.husain.contentvibe.data.LocalPostProvider.allUserPost
 import com.shakiv.husain.contentvibe.data.mapper.toPost
 import com.shakiv.husain.contentvibe.domain.model.ProfileUIState
 import com.shakiv.husain.contentvibe.presentation.common.composable.EmptyComingSoon
-import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.presentation.home.FeedListItem
-import com.shakiv.husain.contentvibe.utils.AppUtils
 import com.shakiv.husain.contentvibe.utils.ImageUtils
+import com.shakiv.husain.contentvibe.utils.ImageUtils.SetProfileImage
 import com.shakiv.husain.contentvibe.utils.extentions.logd
-import com.shakiv.husain.contentvibe.utils.extentions.random
 import com.shakiv.husain.contentvibe.R.string as AppText
 
 
@@ -99,8 +97,6 @@ fun ProfileHeader(
     onNotificationClick: () -> Unit,
     onMoreOptionClick: () -> Unit,
 ) {
-
-
     val user  = profileUIState.user
 
     Row(
@@ -108,11 +104,11 @@ fun ProfileHeader(
             .padding(vertical = 10.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ProfileImage(
-            profilePath = R.drawable.profile_pic,
-            modifier = Modifier.size(70.dp)
-        )
 
+        SetProfileImage(
+            modifier = Modifier.size(70.dp),
+            imagePath = profileUIState.user.profileUrl.orEmpty()
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
