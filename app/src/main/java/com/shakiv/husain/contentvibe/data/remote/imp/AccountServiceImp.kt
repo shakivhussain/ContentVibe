@@ -12,17 +12,22 @@ import com.shakiv.husain.contentvibe.data.mapper.toUser
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.Resource
 import com.shakiv.husain.contentvibe.domain.service.AccountService
+import com.shakiv.husain.contentvibe.utils.AppUtils
 import com.shakiv.husain.contentvibe.utils.AppUtils.SIGN_IN_REQUEST
 import com.shakiv.husain.contentvibe.utils.AppUtils.SIGN_UP_REQUEST
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.KEY_USERS
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.KEY_USERS_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.ONE_TAB_SIGN_IN_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SIGNUP_TRACE
+import com.shakiv.husain.contentvibe.utils.extentions.logd
+import com.shakiv.husain.contentvibe.utils.extentions.random
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.random.Random
 
 class AccountServiceImp @Inject constructor(
     private val auth: FirebaseAuth,
@@ -32,7 +37,7 @@ class AccountServiceImp @Inject constructor(
     @Named(SIGN_UP_REQUEST)
     private val signUpRequest: BeginSignInRequest,
     private val fireStore: FirebaseFirestore,
-    ) : AccountService {
+) : AccountService {
     override val currentUserId: String
         get() = auth.currentUser?.uid.orEmpty()
 
@@ -92,6 +97,7 @@ class AccountServiceImp @Inject constructor(
             }
 
         } catch (e: Exception) {
+
         }
     }
 
@@ -101,6 +107,16 @@ class AccountServiceImp @Inject constructor(
             fireStore.collection(KEY_USERS).document(uid).set(user).await()
         }
     }
+
+
+    override suspend fun getUserById(userId: String): UserEntity? =
+        trace(KEY_USERS_TRACE) {
+            fireStore.collection(KEY_USERS)
+                .document(userId)
+                .get()
+                .await()
+                .toObject(UserEntity::class.java)
+        }
 
 
     override suspend fun oneTabSignInWithGoogle(): Resource<BeginSignInResult> {

@@ -36,13 +36,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.contentvibe.R
 import com.shakiv.husain.contentvibe.data.LocalPostProvider.allUserPost
 import com.shakiv.husain.contentvibe.data.mapper.toPost
+import com.shakiv.husain.contentvibe.domain.model.ProfileUIState
 import com.shakiv.husain.contentvibe.presentation.common.composable.EmptyComingSoon
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
 import com.shakiv.husain.contentvibe.presentation.home.FeedListItem
+import com.shakiv.husain.contentvibe.utils.AppUtils
 import com.shakiv.husain.contentvibe.utils.ImageUtils
+import com.shakiv.husain.contentvibe.utils.extentions.logd
+import com.shakiv.husain.contentvibe.utils.extentions.random
+import com.shakiv.husain.contentvibe.R.string as AppText
 
 
 @Preview()
@@ -52,9 +59,15 @@ fun PreviewProfile() {
 }
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
+
+    val profileUIState by profileViewModel.profileUIStateVM.collectAsStateWithLifecycle()
+    logd("ProfileScreen : ${profileUIState}")
+
     ProfileScreen(
-        title = "Shakiv Husain",
+        profileUIState = profileUIState,
         onNotificationClick = {},
         onMoreOptionClick = {},
     )
@@ -63,7 +76,7 @@ fun ProfileScreen() {
 
 @Composable
 fun ProfileScreen(
-    title: String,
+    profileUIState: ProfileUIState,
     onNotificationClick: () -> Unit,
     onMoreOptionClick: () -> Unit,
 ) {
@@ -71,21 +84,24 @@ fun ProfileScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             TopBar(
                 modifier = Modifier,
-                title = title,
+                title = profileUIState.userName,
                 onNotificationClick = onNotificationClick,
                 onMoreOptionClick = onMoreOptionClick
             )
-
-            ProfilePager()
+            ProfilePager(profileUIState)
         }
     }
 }
 
 @Composable
 fun ProfileHeader(
-    onNotificationClick: () -> Unit, onMoreOptionClick: () -> Unit, title: String
+    profileUIState: ProfileUIState,
+    onNotificationClick: () -> Unit,
+    onMoreOptionClick: () -> Unit,
 ) {
 
+
+    val user  = profileUIState.user
 
     Row(
         modifier = Modifier
@@ -102,10 +118,9 @@ fun ProfileHeader(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TitleSubtitle(title = "13.K", subtitle = "Posts")
-            TitleSubtitle(title = "13.K", subtitle = "Posts")
-            TitleSubtitle(title = "13.K", subtitle = "Posts")
-
+            TitleSubtitle(title = "1.1K", subtitle = stringResource(id = AppText.posts))
+            TitleSubtitle(title = "131.K", subtitle = stringResource(id = AppText.follower) )
+            TitleSubtitle(title = "1.2K", subtitle = stringResource(id = AppText.following) )
         }
 
     }
@@ -120,22 +135,25 @@ fun ProfileHeader(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        text = "Shakiv Husain",
+        text = user.userName,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
 
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        text = stringResource(id = R.string.placeholder_desc),
-        maxLines = 6,
-        overflow = TextOverflow.Ellipsis
-    )
+    if (user.userDescription.isNotBlank()){
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            text = user.userDescription.orEmpty(),
+            maxLines = 6,
+            overflow = TextOverflow.Ellipsis
+        )
 
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
+    }
 
 
     val buttonColor = ButtonDefaults.buttonColors(
@@ -185,7 +203,9 @@ fun ProfileHeader(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProfilePager() {
+fun ProfilePager(
+    profileUIState: ProfileUIState
+) {
 
     var selectedIndex by remember {
         mutableStateOf(ProfileTabs.POSTS.ordinal)
@@ -204,7 +224,11 @@ fun ProfilePager() {
 
 
         item {
-            ProfileHeader({}, {}, "Shakiv")
+            ProfileHeader(
+                profileUIState,
+                {},
+                {},
+                )
         }
 
 

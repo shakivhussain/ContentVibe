@@ -16,7 +16,6 @@ import com.shakiv.husain.contentvibe.domain.model.Response
 import com.shakiv.husain.contentvibe.domain.repository.PhotoSaverRepository
 import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.utils.DateUtils
-import com.shakiv.husain.contentvibe.utils.extentions.logd
 import com.shakiv.husain.contentvibe.utils.randomId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -141,7 +140,7 @@ class WritePostViewModel @Inject constructor(
                 userId = randomId(),
                 isAnonymous = false,
                 userName = " Shakiv Husain",
-                userAbout = "Professional",
+                description = "Professional",
                 userProfile = "contentvibe.ProfilePic"
             )
 

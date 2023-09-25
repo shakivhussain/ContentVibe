@@ -12,12 +12,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.Role
 import com.shakiv.husain.contentvibe.utils.MultipleEventsCutterUtils
+import kotlin.random.Random
 
 
 @Composable
 fun getContext(): Context {
     return LocalContext.current
 }
+
+
+fun ClosedRange<Int>.random() = Random.nextInt(start, endInclusive)
+
 
 fun Modifier.clickableSingle(
     enabled: Boolean = true,

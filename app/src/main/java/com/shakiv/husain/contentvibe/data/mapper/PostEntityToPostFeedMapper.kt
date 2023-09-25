@@ -15,7 +15,7 @@ fun PostEntity.toPost(): Post {
         likes = likes ?: 0,
         usedId = user?.userId ?: "",
         userName = user?.userName ?: "",
-        userAbout = user?.userAbout ?: "",
+        userAbout = user?.description ?: "",
         userProfile = user?.userProfile ?: "",
         imageUrl = images,
         currentUserLike = currentUserLike.toMutableList()
@@ -34,7 +34,7 @@ fun Post.toPostEntity(): PostEntity {
         user = UserEntity(
             userId = usedId ?: "",
             userName = userName ?: "",
-            userAbout = userAbout ?: "",
+            description = userAbout ?: "",
             userProfile = userProfile ?: ""
         ),
         postActions = PostActions(
