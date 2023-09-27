@@ -1,5 +1,6 @@
 package com.shakiv.husain.contentvibe.presentation.profile
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.contentvibe.R
 import com.shakiv.husain.contentvibe.data.LocalPostProvider.allUserPost
 import com.shakiv.husain.contentvibe.data.mapper.toPost
+import com.shakiv.husain.contentvibe.domain.model.NavigationArgsState
 import com.shakiv.husain.contentvibe.domain.model.ProfileUIState
 import com.shakiv.husain.contentvibe.presentation.common.composable.EmptyComingSoon
 import com.shakiv.husain.contentvibe.presentation.home.FeedListItem
@@ -53,22 +56,45 @@ import com.shakiv.husain.contentvibe.R.string as AppText
 @Preview()
 @Composable
 fun PreviewProfile() {
-    ProfileScreen()
+    ProfileScreen(onBackPressed = {})
 }
 
 @Composable
 fun ProfileScreen(
-    profileViewModel: ProfileViewModel = hiltViewModel()
+    navigationArgsState: NavigationArgsState? = null,
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    onBackPressed : () -> Unit
 ) {
 
-    val profileUIState by profileViewModel.profileUIStateVM.collectAsStateWithLifecycle()
-    logd("ProfileScreen : ${profileUIState}")
+    val profileUIState by profileViewModel
+        .profileViewModeState
+        .collectAsStateWithLifecycle()
+
+    LaunchedEffect(navigationArgsState){
+
+        val userId = navigationArgsState?.userId.orEmpty()
+        if (userId.isNotBlank()){
+            profileViewModel.fetchUserDetails(userId)
+        }
+    }
+
+
+
+    val user = profileUIState.user
+
+    logd("FetchUser : $user")
+
 
     ProfileScreen(
         profileUIState = profileUIState,
         onNotificationClick = {},
         onMoreOptionClick = {},
     )
+
+    BackHandler(true) {
+        onBackPressed()
+
+    }
 }
 
 

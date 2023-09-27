@@ -2,8 +2,10 @@ package com.shakiv.husain.contentvibe.presentation.app
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,16 +20,20 @@ import com.shakiv.husain.contentvibe.presentation.profile.ProfileScreen
 import com.shakiv.husain.contentvibe.presentation.write_post.WritePostScreen
 import com.shakiv.husain.contentvibe.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.SIGN_UP_SCREEN
+import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 @Composable
 fun ContentVibeNavHost(
     appState: ContentVibeAppState,
     modifier: Modifier = Modifier,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel = hiltViewModel(),
+    hideBottomNavigation: (Boolean) -> Unit
 ) {
 
 
     val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
+    val sharedViewModelState by sharedViewModel.navigationArgsState.collectAsStateWithLifecycle()
 
 
     NavHost(
@@ -37,12 +43,15 @@ fun ContentVibeNavHost(
     ) {
 
 
-        composable(route = HomeDestination.route) {
+        composable(route = HomeDestination.route) { navBackStackEntry ->
             HomeFeed(
                 onItemClick = {
-                    appState.navigate(ProfileDestination.route)
+                    hideBottomNavigation(false)
+                    sharedViewModel.updateUserId(it.usedId.orEmpty())
+                    appState.navController.navigateToSingleTopTo(ProfileDestination.route)
                 },
             )
+            logd("CurrentTag HomeDestination : ${sharedViewModelState.userId}")
         }
 
         composable(route = SearchDestination.route) {
@@ -53,9 +62,16 @@ fun ContentVibeNavHost(
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())
         }
 
-        composable(route = ProfileDestination.route) {
-            ProfileScreen()
+        composable(route = ProfileDestination.route) { navBackStackEntry ->
+            ProfileScreen(
+                sharedViewModelState,
+                onBackPressed = {
+                    sharedViewModel.updateUserId("")
+                    appState.navController.popBackStack()
+                }
+            )
         }
+
 
         composable(route = EmptyComingSoon.route) {
             EmptyComingSoon(modifier = Modifier.fillMaxWidth())

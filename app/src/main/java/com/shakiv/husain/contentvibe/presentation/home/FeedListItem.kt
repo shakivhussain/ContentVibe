@@ -88,7 +88,6 @@ fun FeedListItem(
 
 //                ProfileImage(profilePath = 0) // TODO : Change it to the Actual Path
 
-                logd("Profile Url : ${post.userProfile}")
 
                 ImageUtils.SetProfileImage(post.userProfile.orEmpty(), Modifier.size(40.dp))
 
