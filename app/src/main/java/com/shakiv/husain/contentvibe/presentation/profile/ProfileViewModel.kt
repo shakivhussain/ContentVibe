@@ -23,10 +23,10 @@ class ProfileViewModel @Inject constructor(
 
     ) : ContentVibeViewModel() {
 
-    private val profileViewModeState = MutableStateFlow(ProfileUIState())
+    private val _profileViewModeState = MutableStateFlow(ProfileUIState())
 
-    val profileUIStateVM: StateFlow<ProfileUIState> = profileViewModeState.stateIn(
-        viewModelScope, SharingStarted.Eagerly, profileViewModeState.value
+    val profileViewModeState: StateFlow<ProfileUIState> = _profileViewModeState.stateIn(
+        viewModelScope, SharingStarted.Eagerly, _profileViewModeState.value
     )
 
     init {
@@ -43,7 +43,7 @@ class ProfileViewModel @Inject constructor(
         }) {
             val user = accountService.getUserById(id)
 
-            profileViewModeState.update {
+            _profileViewModeState.update {
                 it.copy(
                     user = user?.toUser() ?: User()
                 )
@@ -52,16 +52,16 @@ class ProfileViewModel @Inject constructor(
         }
 
 
-        viewModelScope.launch {
-            delay(2000)
-            logd("After 2 Sec Changed $userId")
-            profileViewModeState.update {
-                it.copy(
-                    userName = "Shakib Mansoori"
-                )
-            }
-
-        }
+//        viewModelScope.launch {
+//            delay(2000)
+//            logd("After 2 Sec Changed $userId")
+//            _profileViewModeState.update {
+//                it.copy(
+//                    userName = "Shakib Mansoori"
+//                )
+//            }
+//
+//        }
 
 
     }

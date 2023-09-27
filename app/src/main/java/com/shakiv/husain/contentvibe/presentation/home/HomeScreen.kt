@@ -95,7 +95,6 @@ fun HomeFeed(
     HomeFeed(
         uiState = uiState,
         onItemClick = {
-            return@HomeFeed
             onItemClick(it)
         },
         onLiked = {

@@ -21,6 +21,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -49,7 +52,6 @@ fun ContentVibeAppContent() {
     val currentDestination = currentBackStack?.destination
     val currentScreen = screens.find { it.route == currentDestination?.route } ?: HomeDestination
     var bottomBarState by remember { mutableStateOf(true) }
-
     bottomBarState = needToShowBottomNavigation(currentDestination?.route)
 
     Surface {
@@ -76,6 +78,9 @@ fun ContentVibeAppContent() {
             ContentVibeNavHost(
                 appState,
                 modifier = Modifier.padding(innerPadding),
+                hideBottomNavigation = {
+//                    bottomBarState = it
+                }
             )
         }
     }
@@ -157,5 +162,17 @@ fun resource(): Resources {
     return LocalContext.current.resources
 }
 
+
+
+@Composable
+inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
+    navController: NavHostController,
+): T {
+    val navGraphRoute = destination.parent?.route ?: return viewModel()
+    val parentEntry = remember(this) {
+        navController.getBackStackEntry(navGraphRoute)
+    }
+    return viewModel(parentEntry)
+}
 
 

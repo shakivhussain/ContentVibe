@@ -9,7 +9,6 @@ import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 fun PostEntity.toPost(): Post {
 
-    logd("toPost : ${user?.profileUrl}")
     return Post(
         id = id,
         post = post,
