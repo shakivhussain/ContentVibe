@@ -13,6 +13,7 @@ interface StorageService {
 
     suspend fun saveStory(storyItem: StoryItem):String
     suspend fun getPost(postId: String): PostEntity?
+    suspend fun getPostsBy(userId: String): Flow<List<PostEntity>?>
     suspend fun save(postEntity: PostEntity):String
     suspend fun update(postEntity: PostEntity)
     suspend fun delete(postId: String)

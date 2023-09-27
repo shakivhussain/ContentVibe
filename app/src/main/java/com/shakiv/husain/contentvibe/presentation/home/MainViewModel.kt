@@ -106,6 +106,7 @@ class MainViewModel @Inject constructor(
                 logd("Error refreshPosts: $e ")
             }
         }
+
     }
 
 

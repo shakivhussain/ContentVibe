@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +47,7 @@ import com.shakiv.husain.contentvibe.data.mapper.toPost
 import com.shakiv.husain.contentvibe.domain.model.NavigationArgsState
 import com.shakiv.husain.contentvibe.domain.model.ProfileUIState
 import com.shakiv.husain.contentvibe.presentation.common.composable.EmptyComingSoon
+import com.shakiv.husain.contentvibe.presentation.common.composable.ProgressBar
 import com.shakiv.husain.contentvibe.presentation.home.FeedListItem
 import com.shakiv.husain.contentvibe.utils.ImageUtils
 import com.shakiv.husain.contentvibe.utils.ImageUtils.SetProfileImage
@@ -63,21 +65,24 @@ fun PreviewProfile() {
 fun ProfileScreen(
     navigationArgsState: NavigationArgsState? = null,
     profileViewModel: ProfileViewModel = hiltViewModel(),
-    onBackPressed : () -> Unit
+    onBackPressed: () -> Unit
 ) {
 
     val profileUIState by profileViewModel
         .profileViewModeState
         .collectAsStateWithLifecycle()
 
-    LaunchedEffect(navigationArgsState){
+
+    logd("UserPosts : ${profileUIState.posts.size}")
+
+
+    LaunchedEffect(navigationArgsState) {
 
         val userId = navigationArgsState?.userId.orEmpty()
-        if (userId.isNotBlank()){
+        if (userId.isNotBlank()) {
             profileViewModel.fetchUserDetails(userId)
         }
     }
-
 
 
     val user = profileUIState.user
@@ -123,7 +128,7 @@ fun ProfileHeader(
     onNotificationClick: () -> Unit,
     onMoreOptionClick: () -> Unit,
 ) {
-    val user  = profileUIState.user
+    val user = profileUIState.user
 
     Row(
         modifier = Modifier
@@ -141,8 +146,8 @@ fun ProfileHeader(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TitleSubtitle(title = "1.1K", subtitle = stringResource(id = AppText.posts))
-            TitleSubtitle(title = "131.K", subtitle = stringResource(id = AppText.follower) )
-            TitleSubtitle(title = "1.2K", subtitle = stringResource(id = AppText.following) )
+            TitleSubtitle(title = "131.K", subtitle = stringResource(id = AppText.follower))
+            TitleSubtitle(title = "1.2K", subtitle = stringResource(id = AppText.following))
         }
 
     }
@@ -162,7 +167,7 @@ fun ProfileHeader(
         overflow = TextOverflow.Ellipsis
     )
 
-    if (user.userDescription.isNotBlank()){
+    if (user.userDescription.isNotBlank()) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -250,7 +255,7 @@ fun ProfilePager(
                 profileUIState,
                 {},
                 {},
-                )
+            )
         }
 
 
@@ -286,30 +291,39 @@ fun ProfilePager(
         }
 
         val userPosts = when (selectedIndex) {
+
             ProfileTabs.POSTS.ordinal -> {
-                allUserPost()
+                profileUIState.posts
             }
 
             ProfileTabs.REELS.ordinal -> {
-                emptyList()
+//                emptyList()
+                profileUIState.posts
             }
 
             ProfileTabs.PROFILE.ordinal -> {
-                allUserPost()
+                profileUIState.posts
             }
 
             else -> {
-                allUserPost()
+                profileUIState.posts
+//                allUserPost()
             }
         }
 
-        items(userPosts) {
-            FeedListItem(post = it.toPost(), onItemClick = {}, onLikeClick = {}, onMoreOptionClick = {},
-                onCommentClicked = {},
-                onShareClicked = {})
+        if (profileUIState.isPostsLoading) {
+            stickyHeader {
+                Spacer(Modifier.height(50.dp))
+                ProgressBar()
+            }
+        } else {
+            items(userPosts) { post ->
+                FeedListItem(post = post,
+                    onItemClick = {}, onLikeClick = {}, onMoreOptionClick = {},
+                    onCommentClicked = {},
+                    onShareClicked = {})
+            }
         }
-
-
     }
 
 
