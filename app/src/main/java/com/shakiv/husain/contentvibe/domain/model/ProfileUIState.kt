@@ -5,5 +5,8 @@ data class ProfileUIState(
     val userName : String = "",
     val posts : List<Post> = emptyList(),
     val isProfileLoading : Boolean = true,
-    val isPostsLoading : Boolean = true
+    val isPostsLoading : Boolean = true,
+    val errorInPosts : String = "",
+    val errorInProfileDetails : String = ""
+
 )

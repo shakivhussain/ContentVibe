@@ -40,6 +40,13 @@ class ProfileViewModel @Inject constructor(
         val id = userId.ifBlank { accountService.currentUserId }
 
         launchCatching(errorBlock = {
+
+            _profileViewModeState.update { profileUiState ->
+                profileUiState.copy(
+                    errorInProfileDetails = it
+                )
+            }
+
             logd("Profile VM Error : $it")
         }) {
             val user = accountService.getUserById(id)
@@ -66,6 +73,11 @@ class ProfileViewModel @Inject constructor(
         launchCatching(
             errorBlock = {
 
+                _profileViewModeState.update { profileUiState ->
+                    profileUiState.copy(
+                        errorInPosts = it
+                    )
+                }
             }
         ) {
             storageService.getPostsBy(userId).collectLatest { postEntities ->
@@ -73,8 +85,9 @@ class ProfileViewModel @Inject constructor(
                 if (!postEntities.isNullOrEmpty()) {
                     _profileViewModeState.update { profileUiState ->
                         profileUiState.copy(
-                            posts = postEntities.map {postEntity->
-                                postEntity.isLiked = postEntity.currentUserLike.contains(currentUserId)
+                            posts = postEntities.map { postEntity ->
+                                postEntity.isLiked =
+                                    postEntity.currentUserLike.contains(currentUserId)
                                 postEntity.toPost()
                             },
                             isPostsLoading = false

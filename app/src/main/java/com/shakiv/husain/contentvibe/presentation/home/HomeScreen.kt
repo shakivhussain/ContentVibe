@@ -204,7 +204,12 @@ fun PostList(
                     Modifier.fillMaxWidth(), thickness = .2.dp,
                 )
             }
-            items(postList) { post ->
+            items(
+                postList,
+                key = { post ->
+                    post.id.orEmpty()
+                }
+            ) { post ->
 
                 FeedListItem(
                     onLikeClick = { onLiked(post) }, post = post,
@@ -269,14 +274,20 @@ fun AppHeader() {
 
 
 @Composable
-fun StoryList(storyList: List<StoryItem>, storyLazyListState: LazyListState) {
+fun StoryList(
+    storyList: List<StoryItem>,
+    storyLazyListState: LazyListState
+) {
     LazyRow(
         modifier = Modifier,
         contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         state = storyLazyListState
     ) {
-        items(storyList) { story ->
+        items(
+            storyList,
+            key = null // TODO : Add Unique Key Here
+        ) { story ->
             StoryListItem(storyItem = story)
         }
     }
@@ -285,7 +296,7 @@ fun StoryList(storyList: List<StoryItem>, storyLazyListState: LazyListState) {
 @Composable
 fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(0.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        ImageRainbowBorder(modifier= Modifier.size(70.dp))
+        ImageRainbowBorder(modifier = Modifier.size(70.dp))
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = storyItem.userName,
@@ -299,9 +310,6 @@ fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
         )
     }
 }
-
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
