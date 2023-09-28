@@ -12,6 +12,7 @@ import com.shakiv.husain.contentvibe.domain.model.Response
 import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.IMAGES
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.KEY_FETCH_POSTS_BY_USER_ID
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.POST_COLLECTION
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_POST_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_STORY_TRACE
@@ -57,6 +58,14 @@ class StorageServiceImp @Inject constructor(
         firestore.collection(POST_COLLECTION).document(postId).get().await()
             .toObject(PostEntity::class.java)
 
+    override suspend fun getPostsBy(userId: String): Flow<List<PostEntity>?> =
+
+        trace(KEY_FETCH_POSTS_BY_USER_ID) {
+            firestore.collection(STAGE_POST_COLLECTION)
+                .whereEqualTo("user.userId", userId)
+                .dataObjects()
+        }
+
 
     override suspend fun save(postEntity: PostEntity): String =
         trace(SAVE_POST_TRACE) {
@@ -71,9 +80,10 @@ class StorageServiceImp @Inject constructor(
     override suspend fun update(postEntity: PostEntity): Unit {
         try {
             trace(UPDATE_POST_TRACE) {
-                firestore.collection(STAGE_POST_COLLECTION).document(postEntity.id).set(postEntity).await()
+                firestore.collection(STAGE_POST_COLLECTION).document(postEntity.id).set(postEntity)
+                    .await()
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
