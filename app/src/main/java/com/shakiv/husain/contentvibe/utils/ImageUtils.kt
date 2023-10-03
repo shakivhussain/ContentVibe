@@ -2,11 +2,13 @@ package com.shakiv.husain.contentvibe.utils
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -74,42 +77,62 @@ object ImageUtils {
         )
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SetProfileImage(
         imagePath: Any,
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        onProfileClick: () -> Unit
     ) {
-
         var isLoading by remember { mutableStateOf(true) }
 
-        Box(
+        Card(
             modifier = modifier,
-            contentAlignment = Alignment.Center
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent
+            ),
+            elevation = CardDefaults.cardElevation(
+                pressedElevation = 0.dp,
+                defaultElevation = 0.dp
+            ),
+            onClick = onProfileClick
         ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
 
-            if (isLoading) {
-                ProgressBar()
+                if (isLoading) {
+                    ProgressBar()
+                }
+
+                AsyncImage(
+                    model = ImageRequest.Builder(getContext())
+                        .data(imagePath)
+                        .crossfade(true)
+                        .build(),
+                    onLoading = {
+                        isLoading = true
+                    },
+                    onSuccess = {
+                        isLoading = false
+                    },
+
+                    onError = {
+                        isLoading = false
+                    },
+                    error = painterResource(id = R.drawable.ic_media),
+                    contentDescription = stringResource(R.string.image),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape)
+                )
+
             }
-
-            AsyncImage(
-                model = ImageRequest.Builder(getContext())
-                    .data(imagePath)
-                    .crossfade(true)
-                    .build(),
-                onLoading = {
-                    isLoading = true
-                },
-                onSuccess = {
-                    isLoading = false
-                },
-                contentDescription = stringResource(R.string.image),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape)
-            )
-
         }
+
 
     }
 

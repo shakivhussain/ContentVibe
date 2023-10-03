@@ -138,7 +138,8 @@ fun ProfileHeader(
 
         SetProfileImage(
             modifier = Modifier.size(70.dp),
-            imagePath = profileUIState.user.profileUrl.orEmpty()
+            imagePath = profileUIState.user.profileUrl.orEmpty(),
+            onProfileClick = {}
         )
 
         Row(
@@ -321,6 +322,7 @@ fun ProfilePager(
                 FeedListItem(post = post,
                     onItemClick = {}, onLikeClick = {}, onMoreOptionClick = {},
                     onCommentClicked = {},
+                    onProfileClick = {},
                     onShareClicked = {})
             }
         }
@@ -357,6 +359,7 @@ fun UserPostScreen() {
                 onLikeClick = {},
                 onMoreOptionClick = {},
                 onCommentClicked = {},
+                onProfileClick = {},
                 onShareClicked = {}
             )
 

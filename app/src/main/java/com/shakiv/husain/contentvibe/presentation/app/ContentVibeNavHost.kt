@@ -47,9 +47,13 @@ fun ContentVibeNavHost(
             HomeFeed(
                 onItemClick = {
                     hideBottomNavigation(false)
+//                    sharedViewModel.updateUserId(it.usedId.orEmpty())
+//                    appState.navController.navigateToSingleTopTo(ProfileDestination.route)
+                },
+                onProfileClick = {
                     sharedViewModel.updateUserId(it.usedId.orEmpty())
                     appState.navController.navigateToSingleTopTo(ProfileDestination.route)
-                },
+                }
             )
             logd("CurrentTag HomeDestination : ${sharedViewModelState.userId}")
         }

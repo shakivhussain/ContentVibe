@@ -82,6 +82,7 @@ fun PreviewStoryListItem() {
 @Composable
 fun HomeFeed(
     onItemClick: (Post) -> Unit,
+    onProfileClick : (Post) -> Unit,
     mainViewModel: MainViewModel = hiltViewModel(),
 ) {
 
@@ -111,6 +112,7 @@ fun HomeFeed(
 
             isCommentBottomSheetVisible = !isCommentBottomSheetVisible
         },
+        onProfileClick = onProfileClick,
         onShareClicked = {
             logd(" 2 Comment Clicked")
             isCommentBottomSheetVisible = !isCommentBottomSheetVisible
@@ -147,6 +149,7 @@ fun HomeFeed(
     onLiked: (Post) -> Unit,
     onMoreOptionIconClick: (Post) -> Unit,
     onCommentClicked: (Post) -> Unit,
+    onProfileClick : (Post) -> Unit,
     onShareClicked: (Post) -> Unit,
 ) {
 
@@ -167,6 +170,7 @@ fun HomeFeed(
             onMoreOptionClick = onMoreOptionIconClick,
             onLiked = { onLiked(it) },
             onCommentClicked = onCommentClicked,
+            onProfileClick = onProfileClick,
             onShareClicked = onShareClicked
         )
     }
@@ -184,6 +188,7 @@ fun PostList(
     onMoreOptionClick: (Post) -> Unit,
     onLiked: (Post) -> Unit,
     onCommentClicked: (Post) -> Unit,
+    onProfileClick : (Post) -> Unit,
     onShareClicked: (Post) -> Unit,
 ) {
 
@@ -220,6 +225,7 @@ fun PostList(
                     onCommentClicked = {
                         onCommentClicked(post)
                     },
+                    onProfileClick = onProfileClick ,
                     onShareClicked = {
                         onShareClicked(post)
                     }
