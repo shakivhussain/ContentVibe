@@ -54,6 +54,7 @@ fun PreviewPostItem(
         onLikeClick = {},
         onMoreOptionClick = {},
         onCommentClicked = {},
+        onProfileClick = {},
         onShareClicked = {}
     )
 }
@@ -66,6 +67,7 @@ fun FeedListItem(
     onMoreOptionClick: (Post) -> Unit,
     onItemClick: (Post) -> Unit,
     onCommentClicked: () -> Unit,
+    onProfileClick : (Post) -> Unit,
     onShareClicked: () -> Unit,
 ) {
 
@@ -89,7 +91,11 @@ fun FeedListItem(
 //                ProfileImage(profilePath = 0) // TODO : Change it to the Actual Path
 
 
-                ImageUtils.SetProfileImage(post.userProfile.orEmpty(), Modifier.size(40.dp))
+                ImageUtils.SetProfileImage(
+                    post.userProfile.orEmpty(),
+                    modifier= Modifier.size(40.dp),
+                    onProfileClick = { onProfileClick(post) }
+                    )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
