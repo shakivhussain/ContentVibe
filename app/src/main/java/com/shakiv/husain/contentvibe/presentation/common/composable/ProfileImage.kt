@@ -37,20 +37,23 @@ fun ProfileImage(profilePath: Int, modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun ImageRainbowBorder(imageUrl : String = "",modifier: Modifier = Modifier) {
+fun ImageRainbowBorder(
+    imageUrl : String = "",
+    modifier: Modifier = Modifier,
+    isMyStory : Boolean=false,
+    isStoryViewed : Boolean=false
+                       ) {
 
     val rainbowColorsBrush = remember {
         Brush.sweepGradient(
-            AppUtils.rainbowColors
+            if (isStoryViewed) AppUtils.rainbowColorsViewed else AppUtils.rainbowColors
         )
     }
     val borderWidth = 2.dp
 
 
-    ImageUtils.setImage(
-        imageId = R.drawable.profile_pic,
-        contentDescription = stringResource(id = R.string.app_name),
-        contentScale = ContentScale.Crop,
+    ImageUtils.SetImage(
+        imagePath = imageUrl,
         modifier = modifier
             .size(40.dp)
             .border(
@@ -59,6 +62,7 @@ fun ImageRainbowBorder(imageUrl : String = "",modifier: Modifier = Modifier) {
             )
             .padding(borderWidth)
             .clip(CircleShape),
+
     )
 
 }

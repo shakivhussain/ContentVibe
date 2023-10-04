@@ -28,6 +28,7 @@ object FirebaseConstants {
     const val POST_COLLECTION = "posts"
     const val STAGE_POST_COLLECTION = "stage_post"
     const val STORY_COLLECTION = "stories"
+    const val STAGE_STORY_COLLECTION = "stage_stories"
 
 
 

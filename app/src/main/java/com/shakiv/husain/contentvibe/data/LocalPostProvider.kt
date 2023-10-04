@@ -61,7 +61,7 @@ object LocalPostProvider {
     fun allStory(): List<StoryItem> {
         val allStory = mutableListOf<StoryItem>()
         for (index in 0 until 100) {
-            allStory.add(StoryItem(id = "New$index","${index}ShakivHusain", storyImage = IconsContentVibe.ProfilePic))
+//            allStory.add(StoryItem(id = "New$index","${index}ShakivHusain", storyImage = "sjdhjhsf"))
         }
         return allStory
     }

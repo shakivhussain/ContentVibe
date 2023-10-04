@@ -50,10 +50,15 @@ fun ContentVibeNavHost(
 //                    sharedViewModel.updateUserId(it.usedId.orEmpty())
 //                    appState.navController.navigateToSingleTopTo(ProfileDestination.route)
                 },
+                onStoryCreate = {
+                    sharedViewModel.setStoryState(true)
+                    appState.navController.navigateToSingleTopTo(AddPostDestination.route)
+                },
                 onProfileClick = {
                     sharedViewModel.updateUserId(it.usedId.orEmpty())
                     appState.navController.navigateToSingleTopTo(ProfileDestination.route)
-                }
+                },
+
             )
             logd("CurrentTag HomeDestination : ${sharedViewModelState.userId}")
         }
@@ -84,7 +89,9 @@ fun ContentVibeNavHost(
 
         composable(route = AddPostDestination.route) {
             WritePostScreen(
+                sharedViewModelState,
                 popBackStack = {
+                    sharedViewModel.setStoryState(false)
                     appState.navController.popBackStack()
                 },
                 onCameraClick = {

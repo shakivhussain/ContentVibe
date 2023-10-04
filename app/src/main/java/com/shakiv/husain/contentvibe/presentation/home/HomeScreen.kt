@@ -19,6 +19,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AddCircleOutline
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -36,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,7 +58,9 @@ import com.shakiv.husain.contentvibe.domain.model.Post
 import com.shakiv.husain.contentvibe.presentation.common.composable.CommentBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.ImageRainbowBorder
 import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
+import com.shakiv.husain.contentvibe.utils.AppUtils
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
+import com.shakiv.husain.contentvibe.utils.ImageUtils
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 
@@ -84,7 +91,8 @@ fun HomeFeed(
     onItemClick: (Post) -> Unit,
     onProfileClick : (Post) -> Unit,
     mainViewModel: MainViewModel = hiltViewModel(),
-) {
+    onStoryCreate : (StoryItem) -> Unit,
+    ) {
 
     val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     val moreOptionBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -113,6 +121,7 @@ fun HomeFeed(
             isCommentBottomSheetVisible = !isCommentBottomSheetVisible
         },
         onProfileClick = onProfileClick,
+        onStoryCreate = onStoryCreate,
         onShareClicked = {
             logd(" 2 Comment Clicked")
             isCommentBottomSheetVisible = !isCommentBottomSheetVisible
@@ -150,6 +159,7 @@ fun HomeFeed(
     onMoreOptionIconClick: (Post) -> Unit,
     onCommentClicked: (Post) -> Unit,
     onProfileClick : (Post) -> Unit,
+    onStoryCreate : (StoryItem) -> Unit,
     onShareClicked: (Post) -> Unit,
 ) {
 
@@ -171,6 +181,7 @@ fun HomeFeed(
             onLiked = { onLiked(it) },
             onCommentClicked = onCommentClicked,
             onProfileClick = onProfileClick,
+            onStoryCreate = onStoryCreate,
             onShareClicked = onShareClicked
         )
     }
@@ -189,6 +200,7 @@ fun PostList(
     onLiked: (Post) -> Unit,
     onCommentClicked: (Post) -> Unit,
     onProfileClick : (Post) -> Unit,
+    onStoryCreate : (StoryItem) -> Unit,
     onShareClicked: (Post) -> Unit,
 ) {
 
@@ -204,7 +216,9 @@ fun PostList(
             state = postLazyListState
         ) {
             item {
-                StoryList(storyList = storyList, storyLazyListState)
+                StoryList(storyList = storyList, storyLazyListState,
+                    onStoryCreate = onStoryCreate
+                )
                 Divider(
                     Modifier.fillMaxWidth(), thickness = .2.dp,
                 )
@@ -282,39 +296,102 @@ fun AppHeader() {
 @Composable
 fun StoryList(
     storyList: List<StoryItem>,
-    storyLazyListState: LazyListState
+    storyLazyListState: LazyListState,
+    onStoryCreate : (StoryItem) -> Unit
 ) {
+
+    val storyItem = StoryItem()
     LazyRow(
         modifier = Modifier,
         contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         state = storyLazyListState
     ) {
+
+        item {
+            MyStoryItem(
+                storyItem = storyItem,
+                onStoryCreate = onStoryCreate
+            )
+        }
+
         items(
             storyList,
             key = null // TODO : Add Unique Key Here
         ) { story ->
             StoryListItem(storyItem = story)
         }
+
     }
 }
 
 @Composable
 fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(0.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        ImageRainbowBorder(modifier = Modifier.size(70.dp))
+
+    logd("Story Item : $storyItem")
+    Column(modifier = modifier.padding(0.dp),
+
+
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        ImageRainbowBorder(modifier = Modifier.size(70.dp),
+            imageUrl = storyItem.storyImage.ifEmpty { storyItem.user?.profileUrl.orEmpty() })
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = storyItem.userName,
+            text = storyItem.user?.userName.orEmpty(),
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
                 .padding(2.dp)
-                .width(70.dp),
+                .width(80.dp)
+            ,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyStoryItem(
+    storyItem: StoryItem,
+    modifier: Modifier = Modifier,
+    onStoryCreate : (StoryItem) -> Unit
+) {
+
+    Card(
+        modifier = modifier,
+        onClick = {onStoryCreate(storyItem)},
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent,
+            contentColor = Color.Transparent
+        )
+    ) {
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            ImageRainbowBorder(modifier = Modifier.size(70.dp), imageUrl = AppUtils.PROFILE_URL)
+
+//            ImageUtils.setImage(
+//                IconsContentVibe.ADD_POST,
+//                modifier = Modifier.size(12.dp)
+//            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = storyItem.user?.userName.orEmpty(),
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier
+                    .padding(2.dp)
+                    .width(70.dp),
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        }
+    }
+
 }
 
 

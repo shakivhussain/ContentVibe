@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shakiv.husain.contentvibe.data.StoryItem
 import com.shakiv.husain.contentvibe.data.model.PostActions
 import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
@@ -17,7 +18,6 @@ import com.shakiv.husain.contentvibe.domain.repository.PhotoSaverRepository
 import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.utils.DateUtils
-import com.shakiv.husain.contentvibe.utils.randomId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -88,6 +88,17 @@ class WritePostViewModel @Inject constructor(
         }
     }
 
+
+    fun isCurrentScreenIsStory(isStoryScreen: Boolean? = false) {
+        viewModelScope.launch {
+            writePostViewModelState.update {
+                it.copy(
+                    isCurrentScreenIsStoryScreen = isStoryScreen ?: false
+                )
+            }
+        }
+    }
+
     fun onLocalPhotoPickerSelect(photo: Uri) {
         viewModelScope.launch {
             photoSaver.cacheFromURI(photo)
@@ -119,8 +130,7 @@ class WritePostViewModel @Inject constructor(
     }
 
 
-
-    fun uploadCameraImage(){
+    fun uploadCameraImage() {
         uploadImagesToStorage()
         refreshSavedPhotos()
     }
@@ -141,18 +151,37 @@ class WritePostViewModel @Inject constructor(
         viewModelScope.launch {
 
 
-            val user = accountService.getUserById(currentUserId)?:UserEntity()
+            val user = accountService.getUserById(currentUserId) ?: UserEntity()
 
 
-            val post = PostEntity(
-                post = writePostUiState.value.post,
-                date = DateUtils.getCurrentUTCTime(),
-                user = user,
-                images = writePostUiState.value.imageUrl,
-                postActions = PostActions()
-            )
 
-            storageService.save(post)
+            if (writePostUiState.value.isCurrentScreenIsStoryScreen) {
+
+                val expirationTime = System.currentTimeMillis() + 24 * 60 * 60 * 1000
+                val storyItem = StoryItem(
+                    user = user,
+                    storyImage = writePostUiState.value.imageUrl,
+                    publishAt = System.currentTimeMillis(),
+                    expireAt = expirationTime
+                )
+
+                storageService.saveStory(storyItem)
+
+            } else {
+
+                val post = PostEntity(
+                    post = writePostUiState.value.post,
+                    date = DateUtils.getCurrentUTCTime(),
+                    user = user,
+                    images = writePostUiState.value.imageUrl,
+                    postActions = PostActions()
+                )
+
+                storageService.savePost(post)
+
+
+            }
+
 
             writePostViewModelState.update {
                 it.copy(isSaved = true)
@@ -189,7 +218,7 @@ class WritePostViewModel @Inject constructor(
 
     }
 
-    fun clearImages(){
+    fun clearImages() {
         viewModelScope.launch {
             photoSaver.clear()
         }
