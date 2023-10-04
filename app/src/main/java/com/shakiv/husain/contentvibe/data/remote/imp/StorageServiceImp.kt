@@ -17,7 +17,7 @@ import com.shakiv.husain.contentvibe.utils.FirebaseConstants.POST_COLLECTION
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_POST_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_STORY_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STAGE_POST_COLLECTION
-import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STORY_COLLECTION
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STAGE_STORY_COLLECTION
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.UPDATE_POST_TRACE
 import com.shakiv.husain.contentvibe.utils.randomId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,14 +43,16 @@ class StorageServiceImp @Inject constructor(
 
 
     override val stories: Flow<List<StoryItem>>
-        get() = firestore.collection(STORY_COLLECTION).dataObjects()
+        get() = firestore.collection(STAGE_STORY_COLLECTION)
+            .whereGreaterThan("expireAt", System.currentTimeMillis())
+            .dataObjects()
 
     override suspend fun saveStory(storyItem: StoryItem): String =
         trace(SAVE_STORY_TRACE) {
-            storyItem.also {
-                it.userId = auth.currentUserId
-            }
-            firestore.collection(STORY_COLLECTION).add(storyItem).await().id
+//            storyItem.also {
+//                it.userId = auth.currentUserId
+//            }
+            firestore.collection(STAGE_STORY_COLLECTION).add(storyItem).await().id
         }
 
 
@@ -67,7 +69,7 @@ class StorageServiceImp @Inject constructor(
         }
 
 
-    override suspend fun save(postEntity: PostEntity): String =
+    override suspend fun savePost(postEntity: PostEntity): String =
         trace(SAVE_POST_TRACE) {
             postEntity.also {
                 it.user?.userId = auth.currentUserId

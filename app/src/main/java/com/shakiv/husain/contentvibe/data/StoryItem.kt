@@ -1,8 +1,13 @@
 package com.shakiv.husain.contentvibe.data
 
+import com.google.firebase.firestore.DocumentId
+import com.shakiv.husain.contentvibe.data.model.UserEntity
+
 data class StoryItem(
-    val id : String ="",
-    var userId : String="",
-    val userName: String = "",
-    val storyImage: Int = 0
+    @DocumentId val id: String = "",
+    val user: UserEntity? = null,
+    val storyImage: String = "",
+    val publishAt: Long = 0,
+    val expireAt: Long = 0,
+    val viewedUsers: List<String> = emptyList()
 )

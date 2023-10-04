@@ -26,7 +26,14 @@ class SharedViewModel : ContentVibeViewModel() {
                 userId = userId
             )
         }
+    }
 
+    fun setStoryState(isStoryClicked : Boolean){
+        _navigationArgsState.update {
+            it.copy(
+                isStoryClicked = isStoryClicked
+            )
+        }
     }
 
 

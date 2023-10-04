@@ -57,6 +57,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.shakiv.husain.contentvibe.data.repository.PhotoSaverRepositoryImp.Companion.MAX_LOG_PHOTOS_LIMIT
+import com.shakiv.husain.contentvibe.domain.model.NavigationArgsState
 import com.shakiv.husain.contentvibe.domain.model.Response
 import com.shakiv.husain.contentvibe.presentation.common.composable.PhotoGrid
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProgressBar
@@ -64,6 +65,7 @@ import com.shakiv.husain.contentvibe.presentation.common.composable.TopAppBar
 import com.shakiv.husain.contentvibe.presentation.common.composable.WritePostField
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
 import com.shakiv.husain.contentvibe.utils.ImageUtils
+import com.shakiv.husain.contentvibe.utils.extentions.logd
 import com.shakiv.husain.contentvibe.utils.getActivity
 import kotlinx.coroutines.launch
 import com.shakiv.husain.contentvibe.R.string as AppText
@@ -72,12 +74,19 @@ import com.shakiv.husain.contentvibe.R.string as AppText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WritePostScreen(
+    navigationArgsState: NavigationArgsState? = null,
     writePostViewModel: WritePostViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     onCameraClick: () -> Unit
 ) {
-
     val writePostState by writePostViewModel.writePostUiState.collectAsStateWithLifecycle()
+
+
+    logd("StoryItemClicked : 1")
+
+    logd("StoryItemClicked : ${navigationArgsState?.isStoryClicked}")
+
+
 
     var isEnabled by remember { mutableStateOf(true) }
     val focusRequest = remember { FocusRequester() }
@@ -94,6 +103,10 @@ fun WritePostScreen(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
+
+    LaunchedEffect(key1 = navigationArgsState?.isStoryClicked){
+        writePostViewModel.isCurrentScreenIsStory(navigationArgsState?.isStoryClicked)
+    }
 
     LaunchedEffect(writePostState.savedPhotos){
         if (!writePostState.savedPhotos.isNullOrEmpty()){
@@ -117,8 +130,6 @@ fun WritePostScreen(
         writePostViewModel.clearImages()
         popBackStack()
     }
-
-
 
 
     fun canAddPhoto(callback: () -> Unit) {
@@ -275,7 +286,9 @@ fun WritePostScreen(
                         .focusRequester(focusRequest)
                 )
                 PhotoGrid(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     photos = writePostState.savedPhotos,
                     onRemove = { photo, index ->
                         writePostViewModel.onPhotoRemoved(photo, index)

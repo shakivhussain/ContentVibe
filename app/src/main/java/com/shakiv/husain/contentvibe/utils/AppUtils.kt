@@ -9,6 +9,7 @@ object AppUtils {
     const val SIGN_UP_REQUEST = "sign_up_request"
     const val AUTO_SIGN_IN_TIMER = 5
 
+    const val PROFILE_URL = "https://lh3.googleusercontent.com/a/ACg8ocLMO5NvCcQ1kdFEtXnVEMCawT_nM-ZmxtJNSMvPbVG2ICA=s96-c"
 
     val motivationalQuotes = listOf(
         "Success is not final, failure is not fatal: It is the courage to continue that counts.",

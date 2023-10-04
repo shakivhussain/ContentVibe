@@ -139,7 +139,8 @@ object ImageUtils {
     @Composable
     fun SetImage(
         imagePath: Any,
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        showLoading : Boolean = true
     ) {
 
         var isLoading by remember { mutableStateOf(true) }
@@ -149,7 +150,7 @@ object ImageUtils {
             contentAlignment = Alignment.Center
         ) {
 
-            if (isLoading) {
+            if (isLoading && showLoading) {
                 ProgressBar()
             }
 
