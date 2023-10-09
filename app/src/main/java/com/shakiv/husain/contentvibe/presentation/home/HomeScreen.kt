@@ -347,12 +347,6 @@ fun StoryListItem(
     onStoryView: (StoryItem) -> Unit
     ) {
 
-
-
-
-    logd("Home Story Item : $storyItem")
-
-
     Card(
         modifier = modifier,
         onClick = {onStoryView(storyItem)},
