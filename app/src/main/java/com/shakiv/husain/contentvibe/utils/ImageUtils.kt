@@ -138,9 +138,12 @@ object ImageUtils {
 
     @Composable
     fun SetImage(
-        imagePath: Any,
         modifier: Modifier = Modifier,
-        showLoading : Boolean = true
+        imagePath: Any,
+        contentScale: ContentScale = ContentScale.Crop,
+        showLoading : Boolean = true,
+        onLoading : () -> Unit = {},
+        onSuccess : () -> Unit = {},
     ) {
 
         var isLoading by remember { mutableStateOf(true) }
@@ -164,9 +167,10 @@ object ImageUtils {
                 },
                 onSuccess = {
                     isLoading = false
+                    onSuccess()
                 },
                 contentDescription = stringResource(R.string.image),
-                contentScale = ContentScale.Crop,
+                contentScale = contentScale,
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(4.dp))

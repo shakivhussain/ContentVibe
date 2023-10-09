@@ -11,6 +11,7 @@ object FirebaseConstants {
     const val SAVE_STORY_TRACE = "saveStory"
     const val SAVE_POST_TRACE = "savePost"
     const val UPDATE_POST_TRACE = "updatePost"
+    const val UPDATE_STORY_TRACE = "updateStory"
     const val KEY_USERS_TRACE = "users"
     const val KEY_FETCH_POSTS_BY_USER_ID ="fetch_posts_by_user_id"
 

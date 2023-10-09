@@ -19,6 +19,7 @@ import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_STORY_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STAGE_POST_COLLECTION
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STAGE_STORY_COLLECTION
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.UPDATE_POST_TRACE
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.UPDATE_STORY_TRACE
 import com.shakiv.husain.contentvibe.utils.randomId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -90,6 +91,10 @@ class StorageServiceImp @Inject constructor(
         }
     }
 
+    override suspend fun updateStory(storyItem: StoryItem): Unit =
+        trace(UPDATE_STORY_TRACE){
+            firestore.collection(STAGE_STORY_COLLECTION).document(storyItem.id).set(storyItem).await()
+        }
 
     override suspend fun delete(postId: String) {
         firestore.collection(STAGE_POST_COLLECTION).document(postId).delete().await()
