@@ -75,11 +75,22 @@ class MainViewModel @Inject constructor(
     private fun refreshPosts() {
         viewModelScope.launch(Dispatchers.IO) {
 
+            val currentUserId = accountService.currentUserId
+
+
             storageService.stories.collectLatest { stories: List<StoryItem> ->
 
-                viewModelState.update {
-                    it.copy(
-                        stories = stories
+                viewModelState.update { homeViewModel ->
+                    homeViewModel.copy(
+
+                        stories = stories.map { storyItem ->
+                            val isViewed = storyItem.viewedUsers.any { userEntity ->
+                                userEntity.userId.contentEquals(currentUserId)
+                            }
+
+                            storyItem.copy(isViewed = isViewed)
+
+                        }
                     )
                 }
             }
@@ -96,7 +107,8 @@ class MainViewModel @Inject constructor(
                         it.copy(
                             posts = posts
                                 .map { postEntity ->
-                                    postEntity.isLiked = postEntity.currentUserLike.contains(currentUserId)
+                                    postEntity.isLiked =
+                                        postEntity.currentUserLike.contains(currentUserId)
                                     postEntity.toPost()
                                 }
                         )

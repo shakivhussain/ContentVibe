@@ -16,6 +16,7 @@ interface StorageService {
     suspend fun getPostsBy(userId: String): Flow<List<PostEntity>?>
     suspend fun savePost(postEntity: PostEntity):String
     suspend fun update(postEntity: PostEntity)
+    suspend fun updateStory(storyItem: StoryItem)
     suspend fun delete(postId: String)
 
     suspend fun addImageToFirebaseStorage(uri: Uri) : Response<Uri>

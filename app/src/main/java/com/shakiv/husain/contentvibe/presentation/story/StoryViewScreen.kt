@@ -9,13 +9,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.contentvibe.domain.model.NavigationArgsState
 import com.shakiv.husain.contentvibe.utils.ImageUtils
+import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 
 @Composable
@@ -31,13 +32,20 @@ fun StoryViewScreen(
     val storyItem by remember() { mutableStateOf(navigationArgsState.storyItem) }
 
 
-    LaunchedEffect(key1 = storyItem){
+    LaunchedEffect(key1 = storyItem) {
         storyItem?.let {
             storyViewModel.setStoryItem(storyItem = it)
+
         }
     }
 
-    StoryViewContent(storyUIState )
+    StoryViewContent(
+        storyUIState,
+        onSuccess = {
+            logd("OnImageSuccess : Triggered")
+            storyViewModel.storyViewed(storyUIState.storyItem ?: return@StoryViewContent)
+        }
+    )
 
 
 }
@@ -52,7 +60,8 @@ fun PreviewStoryViewContent() {
 @Composable
 fun StoryViewContent(
     viewStoryUIState: ViewStoryUIState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSuccess: () -> Unit = {},
 ) {
 
     Scaffold(
@@ -72,7 +81,9 @@ fun StoryViewContent(
             ImageUtils.SetImage(
                 modifier = Modifier.fillMaxSize(),
                 imagePath = viewStoryUIState.storyItem?.storyImage.orEmpty(),
-                showLoading = viewStoryUIState.isLoading
+                showLoading = viewStoryUIState.isLoading,
+                onSuccess = onSuccess,
+                contentScale = ContentScale.Inside
             )
         }
     }

@@ -9,5 +9,6 @@ data class StoryItem(
     val storyImage: String = "",
     val publishAt: Long = 0,
     val expireAt: Long = 0,
-    val viewedUsers: List<String> = emptyList()
+    val viewedUsers: MutableList<UserEntity> = mutableListOf(),
+    var isViewed : Boolean = false
 )

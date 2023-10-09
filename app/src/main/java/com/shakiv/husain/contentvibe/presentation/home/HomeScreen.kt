@@ -347,7 +347,10 @@ fun StoryListItem(
     onStoryView: (StoryItem) -> Unit
     ) {
 
-    logd("Story Item : $storyItem")
+
+
+
+    logd("Home Story Item : $storyItem")
 
 
     Card(
@@ -361,8 +364,11 @@ fun StoryListItem(
         Column(
             modifier = Modifier.padding(),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            ImageRainbowBorder(modifier = Modifier.size(70.dp),
-                imageUrl = storyItem.storyImage.ifEmpty { storyItem.user?.profileUrl.orEmpty() })
+            ImageRainbowBorder(
+                modifier = Modifier.size(70.dp),
+                imageUrl = storyItem.storyImage.ifEmpty { storyItem.user?.profileUrl.orEmpty() },
+                isStoryViewed = storyItem.isViewed
+            )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = storyItem.user?.userName.orEmpty(),
