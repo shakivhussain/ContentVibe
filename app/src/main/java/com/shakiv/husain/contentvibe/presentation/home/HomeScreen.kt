@@ -92,6 +92,8 @@ fun HomeFeed(
     onProfileClick : (Post) -> Unit,
     mainViewModel: MainViewModel = hiltViewModel(),
     onStoryCreate : (StoryItem) -> Unit,
+    onStoryView: (StoryItem) -> Unit,
+
     ) {
 
     val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
@@ -122,6 +124,7 @@ fun HomeFeed(
         },
         onProfileClick = onProfileClick,
         onStoryCreate = onStoryCreate,
+        onStoryView = onStoryView,
         onShareClicked = {
             logd(" 2 Comment Clicked")
             isCommentBottomSheetVisible = !isCommentBottomSheetVisible
@@ -160,6 +163,7 @@ fun HomeFeed(
     onCommentClicked: (Post) -> Unit,
     onProfileClick : (Post) -> Unit,
     onStoryCreate : (StoryItem) -> Unit,
+    onStoryView: (StoryItem) -> Unit,
     onShareClicked: (Post) -> Unit,
 ) {
 
@@ -182,7 +186,8 @@ fun HomeFeed(
             onCommentClicked = onCommentClicked,
             onProfileClick = onProfileClick,
             onStoryCreate = onStoryCreate,
-            onShareClicked = onShareClicked
+            onStoryView = onStoryView ,
+        onShareClicked = onShareClicked
         )
     }
 
@@ -201,6 +206,7 @@ fun PostList(
     onCommentClicked: (Post) -> Unit,
     onProfileClick : (Post) -> Unit,
     onStoryCreate : (StoryItem) -> Unit,
+    onStoryView: (StoryItem) -> Unit,
     onShareClicked: (Post) -> Unit,
 ) {
 
@@ -216,8 +222,11 @@ fun PostList(
             state = postLazyListState
         ) {
             item {
-                StoryList(storyList = storyList, storyLazyListState,
-                    onStoryCreate = onStoryCreate
+                StoryList(
+                    storyList = storyList,
+                    storyLazyListState,
+                    onStoryCreate = onStoryCreate,
+                    onStoryView = onStoryView
                 )
                 Divider(
                     Modifier.fillMaxWidth(), thickness = .2.dp,
@@ -297,8 +306,11 @@ fun AppHeader() {
 fun StoryList(
     storyList: List<StoryItem>,
     storyLazyListState: LazyListState,
-    onStoryCreate : (StoryItem) -> Unit
+    onStoryCreate : (StoryItem) -> Unit,
+    onStoryView: (StoryItem) -> Unit
+
 ) {
+
 
     val storyItem = StoryItem()
     LazyRow(
@@ -317,37 +329,55 @@ fun StoryList(
 
         items(
             storyList,
-            key = null // TODO : Add Unique Key Here
+            key = {
+                it.id
+            } // TODO : Add Unique Key Here
         ) { story ->
-            StoryListItem(storyItem = story)
+            StoryListItem(storyItem = story, onStoryView = onStoryView)
         }
 
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StoryListItem(storyItem: StoryItem, modifier: Modifier = Modifier) {
+fun StoryListItem(
+    storyItem: StoryItem,
+    modifier: Modifier = Modifier,
+    onStoryView: (StoryItem) -> Unit
+    ) {
 
     logd("Story Item : $storyItem")
-    Column(modifier = modifier.padding(0.dp),
 
 
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        ImageRainbowBorder(modifier = Modifier.size(70.dp),
-            imageUrl = storyItem.storyImage.ifEmpty { storyItem.user?.profileUrl.orEmpty() })
-        Spacer(modifier = Modifier.height(6.dp))
-        Text(
-            text = storyItem.user?.userName.orEmpty(),
-            style = MaterialTheme.typography.labelSmall,
-            modifier = Modifier
-                .padding(2.dp)
-                .width(80.dp)
-            ,
-            textAlign = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+    Card(
+        modifier = modifier,
+        onClick = {onStoryView(storyItem)},
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent,
+            contentColor = Color.Transparent
         )
+    ) {
+        Column(
+            modifier = Modifier.padding(),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            ImageRainbowBorder(modifier = Modifier.size(70.dp),
+                imageUrl = storyItem.storyImage.ifEmpty { storyItem.user?.profileUrl.orEmpty() })
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = storyItem.user?.userName.orEmpty(),
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier
+                    .padding(2.dp)
+                    .width(80.dp)
+                ,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        }
     }
+
 }
 
 

@@ -138,8 +138,8 @@ object ImageUtils {
 
     @Composable
     fun SetImage(
-        imagePath: Any,
         modifier: Modifier = Modifier,
+        imagePath: Any,
         showLoading : Boolean = true
     ) {
 

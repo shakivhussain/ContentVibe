@@ -17,9 +17,11 @@ import com.shakiv.husain.contentvibe.presentation.camera.CameraScreen
 import com.shakiv.husain.contentvibe.presentation.common.composable.EmptyComingSoon
 import com.shakiv.husain.contentvibe.presentation.home.HomeFeed
 import com.shakiv.husain.contentvibe.presentation.profile.ProfileScreen
+import com.shakiv.husain.contentvibe.presentation.story.StoryViewScreen
 import com.shakiv.husain.contentvibe.presentation.write_post.WritePostScreen
 import com.shakiv.husain.contentvibe.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.SIGN_UP_SCREEN
+import com.shakiv.husain.contentvibe.utils.AppRoutes.STORY_VIEW_SCREEN
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 @Composable
@@ -50,9 +52,16 @@ fun ContentVibeNavHost(
 //                    sharedViewModel.updateUserId(it.usedId.orEmpty())
 //                    appState.navController.navigateToSingleTopTo(ProfileDestination.route)
                 },
-                onStoryCreate = {
-                    sharedViewModel.setStoryState(true)
+                onStoryCreate = {storyItem->
+                    sharedViewModel.setStoryState(true,storyItem)
                     appState.navController.navigateToSingleTopTo(AddPostDestination.route)
+                },
+
+                onStoryView = {storyItem->
+
+                    sharedViewModel.setStoryState(storyItem = storyItem)
+                    appState.navController.navigateToSingleTopTo(STORY_VIEW_SCREEN)
+
                 },
                 onProfileClick = {
                     sharedViewModel.updateUserId(it.usedId.orEmpty())
@@ -91,7 +100,7 @@ fun ContentVibeNavHost(
             WritePostScreen(
                 sharedViewModelState,
                 popBackStack = {
-                    sharedViewModel.setStoryState(false)
+                    sharedViewModel.setStoryState(false, storyItem = null)
                     appState.navController.popBackStack()
                 },
                 onCameraClick = {
@@ -124,6 +133,11 @@ fun ContentVibeNavHost(
                     appState.navigate(it)
                 },
             )
+        }
+
+
+        composable(STORY_VIEW_SCREEN){
+            StoryViewScreen(navigationArgsState = sharedViewModelState)
         }
 
     }

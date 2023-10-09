@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.shakiv.husain.contentvibe.presentation.common.composable.BottomNavigationTabRow
 import com.shakiv.husain.contentvibe.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.SIGN_UP_SCREEN
+import com.shakiv.husain.contentvibe.utils.AppRoutes.STORY_VIEW_SCREEN
 import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarManager
 import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarMessage.Companion.toMessage
 import kotlinx.coroutines.CoroutineScope
@@ -97,7 +98,9 @@ fun needToShowBottomNavigation(route: String?): Boolean {
         AddPostDestination.route,
         CameraDestination.route,
         LOGIN_SCREEN,
-        SIGN_UP_SCREEN -> {
+        SIGN_UP_SCREEN,
+        STORY_VIEW_SCREEN
+        -> {
             false
         }
 
