@@ -77,7 +77,6 @@ class MainViewModel @Inject constructor(
 
             val currentUserId = accountService.currentUserId
 
-
             storageService.stories.collectLatest { stories: List<StoryItem> ->
 
                 viewModelState.update { homeViewModel ->

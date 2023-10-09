@@ -169,6 +169,7 @@ object ImageUtils {
                     isLoading = false
                     onSuccess()
                 },
+//                placeholder = painterResource(id = IconsContentVibe.IC_MEDIA) ,
                 contentDescription = stringResource(R.string.image),
                 contentScale = contentScale,
                 modifier = Modifier
