@@ -87,8 +87,13 @@ class MainViewModel @Inject constructor(
                                 userEntity.userId.contentEquals(currentUserId)
                             }
 
-                            storyItem.copy(isViewed = isViewed)
+                            storyItem.copy(
+                                isViewed = isViewed,
 
+                            )
+
+                        }.sortedByDescending {
+                            it.publishAt
                         }
                     )
                 }

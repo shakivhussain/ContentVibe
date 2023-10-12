@@ -1,0 +1,14 @@
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">*.firebase.com</domain>
+        <domain includeSubdomains="true">*.firebasedatabase.app</domain>
+        <domain includeSubdomains="true">*.firebaseio.com</domain>
+        <domain includeSubdomains="true">*.google.com</domain>
+    </domain-config>
+</network-security-config>

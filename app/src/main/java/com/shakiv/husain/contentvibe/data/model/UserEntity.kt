@@ -1,5 +1,9 @@
 package com.shakiv.husain.contentvibe.data.model
 
+import androidx.annotation.Keep
+
+@Keep
+
 data class UserEntity(
     var userId: String = "",
     val isAnonymous: Boolean = true,

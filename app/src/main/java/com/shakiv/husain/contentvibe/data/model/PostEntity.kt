@@ -1,14 +1,16 @@
 package com.shakiv.husain.contentvibe.data.model
 
+import androidx.annotation.Keep
 import com.google.firebase.firestore.DocumentId
 import com.shakiv.husain.contentvibe.data.StoryItem
 
-
+@Keep
 data class PostFeed(
     var postEntityList: List<PostEntity>,
     var storyList: List<StoryItem>
 )
 
+@Keep
 data class PostEntity(
     @DocumentId val id: String = "",
     val post: String = "",
@@ -21,6 +23,7 @@ data class PostEntity(
     val currentUserLike : List<String> = emptyList()
 )
 
+@Keep
 data class PostActions(
     val isLiked: Boolean = false,
     val isDislike: Boolean = false,

@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "938397326976-l4m9ps9f2jhv6dsveaginshhn0n2t1mj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shakiv.husain.contentvibe",
+            "certificate_hash": "e732a8732fcef8c516020592c6e5a71ff14ffc27"
+          }
+        },
+        {
           "client_id": "938397326976-9oioe609gh4inpba8mhi2p9tds8rti2i.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -50,6 +58,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "938397326976-5svc0afun6eqvq074hhu5h82m1ff02s0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shakiv.husain.instagramui",
+            "certificate_hash": "e732a8732fcef8c516020592c6e5a71ff14ffc27"
+          }
+        },
         {
           "client_id": "938397326976-kllp1o5lbjokdguikgkhc8vl9mftr5f4.apps.googleusercontent.com",
           "client_type": 1,

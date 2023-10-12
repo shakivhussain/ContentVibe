@@ -45,6 +45,7 @@ class StorageServiceImp @Inject constructor(
 
     override val stories: Flow<List<StoryItem>>
         get() = firestore.collection(STAGE_STORY_COLLECTION)
+//            .orderBy("expireAt", Query.Direction.DESCENDING)
             .whereGreaterThan("expireAt", System.currentTimeMillis())
             .dataObjects()
 

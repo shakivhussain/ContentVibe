@@ -72,6 +72,8 @@ import com.shakiv.husain.contentvibe.utils.extentions.logd
     onSuccess: () -> Unit = {},
 ) {
 
+    val storyImage = viewStoryUIState.storyItem?.storyImage.orEmpty()
+
     Scaffold(
         topBar = {
 
@@ -154,12 +156,18 @@ import com.shakiv.husain.contentvibe.utils.extentions.logd
         ) {
 
 
-            Spacer(modifier = Modifier.height(16.dp).fillMaxWidth())
+
+            Spacer(modifier = Modifier
+                .height(16.dp)
+                .fillMaxWidth())
 
             ImageUtils.SetImage(
-                modifier = Modifier.fillMaxSize().padding(bottom = 24.dp),
-                imagePath = viewStoryUIState.storyItem?.storyImage.orEmpty(),
-                showLoading = viewStoryUIState.isLoading, onSuccess = onSuccess,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 24.dp),
+                imagePath = storyImage,
+                showLoading = viewStoryUIState.isLoading,
+                onSuccess = onSuccess,
                 contentScale = ContentScale.Fit
             )
 
