@@ -11,7 +11,16 @@ plugins {
 
 }
 
+def keystorePropertiesFile = rootProject.file("local.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
 android {
+    signingConfigs {
+        release {
+        }
+    }
     namespace 'com.shakiv.husain.contentvibe'
     compileSdk 34
 
@@ -34,10 +43,37 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled true
+//            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
         }
     }
+
+
+    signingConfigs {
+        debug {
+            storeFile file("/Users/shakibmansoori/keystore/contnt_vibe_keystore.jks")
+            storePassword '123_content'
+            keyAlias 'content_vibe'
+            keyPassword '123_content'
+        }
+        stg {
+            storeFile file("/Users/shakibmansoori/keystore/contnt_vibe_keystore.jks")
+            storePassword '123_content'
+            keyAlias 'content_vibe'
+            keyPassword '123_content'
+        }
+        release {
+            storeFile file("/Users/shakibmansoori/keystore/contnt_vibe_keystore.jks")
+            storePassword '123_content'
+            keyAlias 'content_vibe'
+            keyPassword '123_content'
+        }
+    }
+
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
