@@ -94,6 +94,7 @@ fun ProfileScreen(
         profileUIState = profileUIState,
         onNotificationClick = {},
         onMoreOptionClick = {},
+        onBackPressed = onBackPressed
     )
 
     BackHandler(true) {
@@ -108,6 +109,7 @@ fun ProfileScreen(
     profileUIState: ProfileUIState,
     onNotificationClick: () -> Unit,
     onMoreOptionClick: () -> Unit,
+    onBackPressed : () -> Unit
 ) {
     Surface() {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -115,7 +117,8 @@ fun ProfileScreen(
                 modifier = Modifier,
                 title = profileUIState.userName,
                 onNotificationClick = onNotificationClick,
-                onMoreOptionClick = onMoreOptionClick
+                onMoreOptionClick = onMoreOptionClick,
+                onBackPressed = onBackPressed
             )
             ProfilePager(profileUIState)
         }
@@ -398,6 +401,7 @@ fun TopBar(
     title: String,
     onNotificationClick: () -> Unit,
     onMoreOptionClick: () -> Unit,
+    onBackPressed : () -> Unit
 ) {
 
     TopAppBar(
@@ -405,7 +409,7 @@ fun TopBar(
         title = { Text(text = title) },
         navigationIcon = {
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onBackPressed() }) {
                 ImageUtils.setImage(
                     imageId = R.drawable.ic_arrow_back, modifier = Modifier.padding(start = 0.dp),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface)
