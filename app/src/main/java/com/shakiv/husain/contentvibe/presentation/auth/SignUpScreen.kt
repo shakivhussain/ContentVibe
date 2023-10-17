@@ -97,7 +97,6 @@ fun SignUpScreen(
         onConfirmPasswordNewValue = authViewModel::onConfirmPassword,
         onSignUpClick = {
             authViewModel.onSignUpClick {
-                logd("AuthScreen: Success")
             }
         },
         navigateToLoginScreen = navigateToLoginScreen,
@@ -108,6 +107,13 @@ fun SignUpScreen(
     SignUp() {
         authViewModel.sendEmailVerification()
     }
+
+
+    SignUpEmailVerification {
+        navigateToHomeScreen(HomeDestination.route)
+        logd("AuthScreen: Success")
+    }
+
 
     GoogleSignIn(
         authViewModel, isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) })
@@ -179,7 +185,7 @@ fun SignUpScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                title = AppText.login,
+                title = AppText.register,
                 onButtonClick = onSignUpClick,
                 cardColors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -257,6 +263,29 @@ fun SignUp(
     }
 }
 
+
+
+@Composable
+fun SignUpEmailVerification(
+    authViewModel: AuthViewModel = hiltViewModel(),
+    sendVerificationLink: () -> Unit
+) {
+    when (val signUpState = authViewModel.sendVerificationState) {
+        is Resource.Loading -> ProgressBar()
+        is Resource.Success -> {
+            val isUserSignerUp = signUpState.data ?: false
+            LaunchedEffect(key1 = isUserSignerUp) {
+                if (isUserSignerUp) {
+                    sendVerificationLink()
+                }
+            }
+        }
+
+        is Resource.Error -> {
+
+        }
+    }
+}
 
 
 
