@@ -16,8 +16,7 @@ import com.shakiv.husain.contentvibe.utils.FirebaseConstants.KEY_FETCH_POSTS_BY_
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.POST_COLLECTION
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_POST_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SAVE_STORY_TRACE
-import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STAGE_POST_COLLECTION
-import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STAGE_STORY_COLLECTION
+import com.shakiv.husain.contentvibe.utils.FirebaseConstants.STORY_COLLECTION
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.UPDATE_POST_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.UPDATE_STORY_TRACE
 import com.shakiv.husain.contentvibe.utils.randomId
@@ -36,7 +35,7 @@ class StorageServiceImp @Inject constructor(
             posts: Flow<List<PostEntity>>
         get() =
 //            auth.currentUser.flatMapLatest { user ->
-            firestore.collection(STAGE_POST_COLLECTION)
+            firestore.collection(POST_COLLECTION)
                 .orderBy("date", Query.Direction.DESCENDING)
 //                .limit(5)
                 .dataObjects()
@@ -44,7 +43,8 @@ class StorageServiceImp @Inject constructor(
 
 
     override val stories: Flow<List<StoryItem>>
-        get() = firestore.collection(STAGE_STORY_COLLECTION)
+        get() = firestore.collection(STORY_COLLECTION)
+//            .orderBy("expireAt", Query.Direction.DESCENDING)
             .whereGreaterThan("expireAt", System.currentTimeMillis())
             .dataObjects()
 
@@ -53,7 +53,7 @@ class StorageServiceImp @Inject constructor(
 //            storyItem.also {
 //                it.userId = auth.currentUserId
 //            }
-            firestore.collection(STAGE_STORY_COLLECTION).add(storyItem).await().id
+            firestore.collection(STORY_COLLECTION).add(storyItem).await().id
         }
 
 
@@ -64,7 +64,7 @@ class StorageServiceImp @Inject constructor(
     override suspend fun getPostsBy(userId: String): Flow<List<PostEntity>?> =
 
         trace(KEY_FETCH_POSTS_BY_USER_ID) {
-            firestore.collection(STAGE_POST_COLLECTION)
+            firestore.collection(POST_COLLECTION)
                 .whereEqualTo("user.userId", userId)
                 .dataObjects()
         }
@@ -76,14 +76,14 @@ class StorageServiceImp @Inject constructor(
                 it.user?.userId = auth.currentUserId
             }
 
-            firestore.collection(STAGE_POST_COLLECTION).add(postEntity).await().id
+            firestore.collection(POST_COLLECTION).add(postEntity).await().id
         }
 
 
     override suspend fun update(postEntity: PostEntity): Unit {
         try {
             trace(UPDATE_POST_TRACE) {
-                firestore.collection(STAGE_POST_COLLECTION).document(postEntity.id).set(postEntity)
+                firestore.collection(POST_COLLECTION).document(postEntity.id).set(postEntity)
                     .await()
             }
         } catch (e: Exception) {
@@ -93,11 +93,11 @@ class StorageServiceImp @Inject constructor(
 
     override suspend fun updateStory(storyItem: StoryItem): Unit =
         trace(UPDATE_STORY_TRACE){
-            firestore.collection(STAGE_STORY_COLLECTION).document(storyItem.id).set(storyItem).await()
+            firestore.collection(STORY_COLLECTION).document(storyItem.id).set(storyItem).await()
         }
 
     override suspend fun delete(postId: String) {
-        firestore.collection(STAGE_POST_COLLECTION).document(postId).delete().await()
+        firestore.collection(POST_COLLECTION).document(postId).delete().await()
     }
 
     override suspend fun addImageToFirebaseStorage(uri: Uri): Response<Uri> {

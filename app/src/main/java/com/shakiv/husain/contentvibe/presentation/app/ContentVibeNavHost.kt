@@ -34,7 +34,12 @@ fun ContentVibeNavHost(
 ) {
 
 
-    val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
+    val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle(initialValue = null)
+
+
+
+//    val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
+    val startDestination =  LOGIN_SCREEN
     val sharedViewModelState by sharedViewModel.navigationArgsState.collectAsStateWithLifecycle()
 
 

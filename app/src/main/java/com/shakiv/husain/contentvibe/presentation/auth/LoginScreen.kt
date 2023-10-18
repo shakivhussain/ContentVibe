@@ -101,6 +101,11 @@ fun LoginScreen(
         initialValue = null
     )
 
+    if (uiState.isUserLogIn)
+        navigateToHomeScreen(HomeDestination.route)
+
+
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {

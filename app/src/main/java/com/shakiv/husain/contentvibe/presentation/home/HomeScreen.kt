@@ -19,8 +19,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AddCircleOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -55,12 +53,12 @@ import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
 import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.Post
+import com.shakiv.husain.contentvibe.presentation.auth.AuthViewModel
 import com.shakiv.husain.contentvibe.presentation.common.composable.CommentBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.ImageRainbowBorder
 import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
 import com.shakiv.husain.contentvibe.utils.AppUtils
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
-import com.shakiv.husain.contentvibe.utils.ImageUtils
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 
 
@@ -93,6 +91,7 @@ fun HomeFeed(
     mainViewModel: MainViewModel = hiltViewModel(),
     onStoryCreate : (StoryItem) -> Unit,
     onStoryView: (StoryItem) -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel()
 
     ) {
 
@@ -102,6 +101,9 @@ fun HomeFeed(
     var isMoreOptionBottomSheetVisible by remember { mutableStateOf(false) }
     var isCommentBottomSheetVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+
+
+
 
     HomeFeed(
         uiState = uiState,

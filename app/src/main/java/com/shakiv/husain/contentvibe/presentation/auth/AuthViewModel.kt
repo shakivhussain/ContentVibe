@@ -3,6 +3,7 @@ package com.shakiv.husain.contentvibe.presentation.auth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
@@ -15,6 +16,8 @@ import com.shakiv.husain.contentvibe.utils.extentions.isValidPassword
 import com.shakiv.husain.contentvibe.utils.extentions.passwordMatches
 import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.shakiv.husain.contentvibe.R.string as AppText
 
@@ -43,10 +46,12 @@ class AuthViewModel @Inject constructor(
     var signInWithGoogle by mutableStateOf<Resource<Boolean>>((Resource.Success(null)))
         private set
 
-    var onTabSignInWithGoogle by mutableStateOf<Resource<BeginSignInResult>>((Resource.Success(null)))
+    var onTabSignInWithGoogle by mutableStateOf<Resource<BeginSignInResult>>(
+        (Resource.Success(null))
+    )
         private set
 
-    val hasUser = accountService.hasUser
+    val currentUser = accountService.currentUser
 
     private val email
         get() = loginUiState.email
@@ -66,6 +71,20 @@ class AuthViewModel @Inject constructor(
 
     }
 
+    init {
+
+        viewModelScope.launch {
+            currentUser.collectLatest {
+
+                loginUiState = loginUiState.copy(
+                    isUserLogIn = it.userId.isNotBlank(),
+
+                )
+
+            }
+        }
+
+    }
 
     fun oneTabSignInWithGoogle() {
         launchCatching(
@@ -115,6 +134,7 @@ class AuthViewModel @Inject constructor(
 
         launchCatching(
             errorBlock = {
+
                 signUpState = Resource.Error(message = it)
             }
         ) {
@@ -153,8 +173,7 @@ class AuthViewModel @Inject constructor(
             sendVerificationState = Resource.Error(message = it)
         }) {
             sendVerificationState = Resource.Loading()
-            accountService.sendEmailVerification()
-            sendVerificationState = Resource.Success(true)
+            sendVerificationState = accountService.sendEmailVerification()
         }
     }
 

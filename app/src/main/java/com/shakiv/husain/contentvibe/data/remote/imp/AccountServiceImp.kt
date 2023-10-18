@@ -18,6 +18,7 @@ import com.shakiv.husain.contentvibe.utils.FirebaseConstants.KEY_USERS
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.KEY_USERS_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.ONE_TAB_SIGN_IN_TRACE
 import com.shakiv.husain.contentvibe.utils.FirebaseConstants.SIGNUP_TRACE
+import com.shakiv.husain.contentvibe.utils.extentions.logd
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -40,12 +41,18 @@ class AccountServiceImp @Inject constructor(
     override val hasUser: Boolean
         get() = auth.currentUser != null
 
+    override val isEmailVerified: Boolean
+        get() = auth.currentUser?.isEmailVerified ?:false
+
     override val currentUser: Flow<UserEntity>
         get() = callbackFlow {
             val listener = FirebaseAuth.AuthStateListener {
                 this.trySend(
                     auth.currentUser?.let {
-                        UserEntity(userId = it.uid, isAnonymous = it.isAnonymous)
+                        UserEntity(userId = it.uid,
+                            isAnonymous = it.isAnonymous,
+                            isEmailVerified = it.isEmailVerified
+                            )
                     } ?: UserEntity()
                 )
             }
@@ -63,7 +70,9 @@ class AccountServiceImp @Inject constructor(
         trace(SIGNUP_TRACE) {
 //            val credential = EmailAuthProvider.getCredential(email, password)
 //            auth.currentUser!!.linkWithCredential(credential).await()!!
-            auth.createUserWithEmailAndPassword(email, password)
+            auth.createUserWithEmailAndPassword(email, password).await()
+            addUserToFireStore()
+
         }
 
 
@@ -132,8 +141,12 @@ class AccountServiceImp @Inject constructor(
     }
 
 
-    override suspend fun sendEmailVerification() {
-        auth.currentUser?.sendEmailVerification()
+    override suspend fun sendEmailVerification() = try {
+        auth.currentUser?.sendEmailVerification()?.await()
+        Resource.Success(true)
+    }catch (e:Exception){
+        e.printStackTrace()
+        Resource.Error(message = e.message.toString())
     }
 
     override suspend fun sendResetPasswordLink(email: String) {

@@ -11,7 +11,16 @@ plugins {
 
 }
 
+def keystorePropertiesFile = rootProject.file("local.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
 android {
+    signingConfigs {
+        release {
+        }
+    }
     namespace 'com.shakiv.husain.contentvibe'
     compileSdk 34
 
@@ -19,13 +28,15 @@ android {
         applicationId "com.shakiv.husain.contentvibe"
         minSdk 24
         targetSdk 34
-        versionCode 1
+        versionCode 4
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
+        signingConfig signingConfigs.debug
+
     }
 
     buildTypes {
@@ -34,10 +45,38 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled true
+//            minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
         }
     }
+
+
+    signingConfigs {
+        debug {
+            storeFile file("/Users/shakibmansoori/keystore/contnt_vibe_keystore.jks")
+            storePassword '123_content'
+            keyAlias 'content_vibe'
+            keyPassword '123_content'
+        }
+        stg {
+            storeFile file("/Users/shakibmansoori/keystore/contnt_vibe_keystore.jks")
+            storePassword '123_content'
+            keyAlias 'content_vibe'
+            keyPassword '123_content'
+        }
+        release {
+            storeFile file("/Users/shakibmansoori/keystore/contnt_vibe_keystore.jks")
+            storePassword '123_content'
+            keyAlias 'content_vibe'
+            keyPassword '123_content'
+        }
+    }
+
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -130,7 +169,9 @@ dependencies {
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx"){
+        exclude module: "play-services-safetynet"
+    }
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-perf-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
@@ -152,6 +193,10 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     implementation  "com.google.protobuf:protobuf-javalite:3.18.0"
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+    implementation 'com.google.android.play:integrity:1.2.0'
+
 
 }
 protobuf {

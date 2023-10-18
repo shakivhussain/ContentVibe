@@ -21,6 +21,7 @@ object FirebaseConstants {
     const val KEY_USER_ID = "userId"
     const val KEY_USER_NAME = "userName"
     const val KEY_EMAIL = "email"
+    const val KEY_IS_EMAIL_VERIFIED = "is_email_verified"
     const val KEY_PROFILE_URL = "profileUrl"
     const val KEY_CREATED_AT = "createdAt"
     const val KEY_IS_ANONYMOUS = "isAnonymous"
