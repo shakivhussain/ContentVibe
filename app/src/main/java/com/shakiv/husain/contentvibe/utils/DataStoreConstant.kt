@@ -12,5 +12,6 @@ object DataStoreConstant {
     /** Data Store Constants*/
     val KEY_USER_NAME_PREFERENCES = stringPreferencesKey("username")
     val KEY_NEED_TO_SHOW_ONE_TAB_SIGN_IN = booleanPreferencesKey("need_to_show_one_tab_signin")
+    val KEY_EMAIL_VERIFICATION_SEND = booleanPreferencesKey("key_email_verification_send")
 
 }

@@ -47,7 +47,7 @@ class ProfileViewModel @Inject constructor(
                 )
             }
 
-            logd("Profile VM Error : $it")
+
         }) {
             val user = accountService.getUserById(id)
 
@@ -90,10 +90,14 @@ class ProfileViewModel @Inject constructor(
                                     postEntity.currentUserLike.contains(currentUserId)
                                 postEntity.toPost()
                             },
-                            isPostsLoading = false
                         )
                     }
+                }
 
+                _profileViewModeState.update { profileUiState ->
+                    profileUiState.copy(
+                        isPostsLoading = false
+                    )
                 }
 
             }

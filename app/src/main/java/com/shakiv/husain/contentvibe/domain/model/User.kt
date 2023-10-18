@@ -5,6 +5,7 @@ data class User(
     var userName: String = "",
     val userProfile: String = "",
     val email: String = "",
+    val isEmailVerified : Boolean = false,
     val profileUrl: String = "",
     val createdAt: String = "",
     val userDescription: String = "",

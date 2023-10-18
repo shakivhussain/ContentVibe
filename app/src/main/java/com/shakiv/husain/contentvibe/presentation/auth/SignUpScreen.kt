@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +30,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.contentvibe.domain.model.Resource
+import com.shakiv.husain.contentvibe.presentation.app.DataStoreViewModel
 import com.shakiv.husain.contentvibe.presentation.app.HomeDestination
 import com.shakiv.husain.contentvibe.presentation.common.composable.ConfirmPassword
 import com.shakiv.husain.contentvibe.presentation.common.composable.EmailField
@@ -37,6 +40,7 @@ import com.shakiv.husain.contentvibe.presentation.common.composable.PasswordFiel
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProgressBar
 import com.shakiv.husain.contentvibe.presentation.common.composable.RegularButton
 import com.shakiv.husain.contentvibe.presentation.common.composable.RegularSmallButton
+import com.shakiv.husain.contentvibe.utils.DataStoreConstant
 import com.shakiv.husain.contentvibe.utils.GoogleSignInUtils.handleGoogleSignInResult
 import com.shakiv.husain.contentvibe.utils.GoogleSignInUtils.startGoogleSignIn
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
@@ -44,6 +48,8 @@ import com.shakiv.husain.contentvibe.utils.ImageUtils
 import com.shakiv.husain.contentvibe.utils.extentions.fieldModifier
 import com.shakiv.husain.contentvibe.utils.extentions.getContext
 import com.shakiv.husain.contentvibe.utils.extentions.logd
+import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarManager
+import kotlinx.coroutines.delay
 import com.shakiv.husain.contentvibe.R.string as AppText
 
 @Preview
@@ -66,7 +72,10 @@ fun PreviewSignUpScreen() {
         onConfirmPasswordNewValue = {},
         onSignUpClick = { /*TODO*/ },
         navigateToLoginScreen = {},
-        launcher = launcher
+        launcher = launcher,
+        reloadData = {
+
+        }
     )
 
 }
@@ -74,11 +83,33 @@ fun PreviewSignUpScreen() {
 @Composable
 fun SignUpScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
+    dataStoreViewModel: DataStoreViewModel = hiltViewModel(),
     navigateToLoginScreen: () -> Unit,
     navigateToHomeScreen: (String) -> Unit,
-) {
+
+    ) {
 
     val uiState = authViewModel.loginUiState
+    val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle(null)
+    val userPreferences by dataStoreViewModel
+        .userPreferencesFlow
+        .collectAsStateWithLifecycle(initialValue = null)
+
+    LaunchedEffect(key1 = currentUser?.userId) {
+
+        val isEmailVerified = currentUser?.isEmailVerified ?: false
+        logd("isEmailVerified : $isEmailVerified")
+
+        userPreferences?.emailVerificationSend?.let { emailVerificationSend ->
+            if (!currentUser?.userId.isNullOrEmpty() && !emailVerificationSend) {
+                authViewModel.sendEmailVerification()
+                dataStoreViewModel.updatePreferences(DataStoreConstant.KEY_EMAIL_VERIFICATION_SEND, true)
+                SnackBarManager.showMessage(AppText.email_verification_message)
+                delay(1500)
+                navigateToHomeScreen(HomeDestination.route)
+            }
+        }
+    }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -87,8 +118,6 @@ fun SignUpScreen(
             authViewModel.signInWithCredential(credential)
         }
     }
-
-
 
     SignUpScreenContent(
         uiState = uiState,
@@ -100,23 +129,34 @@ fun SignUpScreen(
             }
         },
         navigateToLoginScreen = navigateToLoginScreen,
-        launcher
+        launcher,
+        reloadData = {
+        }
     )
 
 
     SignUp() {
-        authViewModel.sendEmailVerification()
+//        authViewModel.sendEmailVerification()
     }
 
 
-    SignUpEmailVerification {
-        navigateToHomeScreen(HomeDestination.route)
-        logd("AuthScreen: Success")
-    }
+    SignUpEmailVerification(
+        sendVerificationLink = {
+//            authViewModel.sendEmailVerification()
+//
+//            isNeedToSentEmailVerification = true
+            // navigateToHomeScreen(HomeDestination.route)
+        }
+    )
+
+
+
 
 
     GoogleSignIn(
-        authViewModel, isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) })
+        authViewModel,
+        isGoogleSignInSuccessfully = { navigateToHomeScreen(HomeDestination.route) }
+    )
 
 }
 
@@ -129,7 +169,8 @@ fun SignUpScreenContent(
     onConfirmPasswordNewValue: (String) -> Unit,
     onSignUpClick: () -> Unit,
     navigateToLoginScreen: () -> Unit,
-    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
+    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+    reloadData: () -> Unit
 ) {
 
     val context = getContext()
@@ -146,7 +187,8 @@ fun SignUpScreenContent(
         ) {
 
             ImageUtils.setImage(
-                modifier = Modifier.fillMaxWidth(.5F),
+                modifier = Modifier
+                    .fillMaxWidth(.5F),
                 imageId = IconsContentVibe.IC_SIGN_UP
             )
 
@@ -249,20 +291,22 @@ fun SignUp(
     when (val signUpState = authViewModel.signUpState) {
         is Resource.Loading -> ProgressBar()
         is Resource.Success -> {
+
             val isUserSignerUp = signUpState.data ?: false
             LaunchedEffect(key1 = isUserSignerUp) {
                 if (isUserSignerUp) {
                     sendVerificationLink()
+
                 }
             }
         }
 
         is Resource.Error -> {
 
+
         }
     }
 }
-
 
 
 @Composable
@@ -271,7 +315,10 @@ fun SignUpEmailVerification(
     sendVerificationLink: () -> Unit
 ) {
     when (val signUpState = authViewModel.sendVerificationState) {
-        is Resource.Loading -> ProgressBar()
+        is Resource.Loading -> {
+            ProgressBar()
+        }
+
         is Resource.Success -> {
             val isUserSignerUp = signUpState.data ?: false
             LaunchedEffect(key1 = isUserSignerUp) {

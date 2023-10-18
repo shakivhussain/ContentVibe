@@ -315,6 +315,7 @@ fun ProfilePager(
             }
         }
 
+
         if (profileUIState.isPostsLoading) {
             stickyHeader {
                 Spacer(Modifier.height(50.dp))

@@ -12,8 +12,10 @@ interface AccountService {
     val currentUserId: String
     val hasUser: Boolean
     val currentUser: Flow<UserEntity>
+    val isEmailVerified : Boolean
+
     suspend fun getUserById(userId : String): UserEntity?
-    suspend fun sendEmailVerification()
+    suspend fun sendEmailVerification() : Resource<Boolean>
     suspend fun sendResetPasswordLink(email: String)
     suspend fun authenticate(email: String, password: String)
     suspend fun signUpWithEmail(email: String, password: String)

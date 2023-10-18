@@ -34,6 +34,7 @@ object AppUtils {
         "Dream big and dare to fail."
     )
 
+    const val PLACEHOLDER_PROFILE = "https://picsum.photos/200"
 
 
 
