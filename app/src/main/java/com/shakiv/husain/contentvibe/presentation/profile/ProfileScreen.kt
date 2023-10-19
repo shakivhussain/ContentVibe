@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,16 +24,17 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,14 +44,17 @@ import com.shakiv.husain.contentvibe.R
 import com.shakiv.husain.contentvibe.data.LocalPostProvider.allUserPost
 import com.shakiv.husain.contentvibe.data.mapper.toPost
 import com.shakiv.husain.contentvibe.domain.model.NavigationArgsState
+import com.shakiv.husain.contentvibe.domain.model.Post
 import com.shakiv.husain.contentvibe.domain.model.ProfileUIState
 import com.shakiv.husain.contentvibe.presentation.common.composable.EmptyComingSoon
+import com.shakiv.husain.contentvibe.presentation.common.composable.EmptyPosts
 import com.shakiv.husain.contentvibe.presentation.common.composable.ProgressBar
+import com.shakiv.husain.contentvibe.presentation.common.composable.ShowMoreOptionBottomSheet
 import com.shakiv.husain.contentvibe.presentation.home.FeedListItem
+import com.shakiv.husain.contentvibe.presentation.home.MainViewModel
 import com.shakiv.husain.contentvibe.utils.ImageUtils
 import com.shakiv.husain.contentvibe.utils.ImageUtils.SetProfileImage
 import com.shakiv.husain.contentvibe.utils.extentions.logd
-import com.shakiv.husain.contentvibe.R.string as AppText
 
 
 @Preview()
@@ -61,16 +63,19 @@ fun PreviewProfile() {
     ProfileScreen(onBackPressed = {})
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navigationArgsState: NavigationArgsState? = null,
     profileViewModel: ProfileViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(),
     onBackPressed: () -> Unit
 ) {
 
-    val profileUIState by profileViewModel
-        .profileViewModeState
-        .collectAsStateWithLifecycle()
+    val profileUIState by profileViewModel.profileViewModeState.collectAsStateWithLifecycle()
+    val moreOptionBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isMoreOptionBottomSheetVisible by remember { mutableStateOf(false) }
+
 
 
     logd("UserPosts : ${profileUIState.posts.size}")
@@ -94,7 +99,28 @@ fun ProfileScreen(
         profileUIState = profileUIState,
         onNotificationClick = {},
         onMoreOptionClick = {},
-        onBackPressed = onBackPressed
+        onBackPressed = onBackPressed,
+        onLikeClick = {
+            mainViewModel.onPostLiked(it)
+        },
+        onPostShowMoreOptionClick = {
+            mainViewModel.onMoreOptionIconClick(it)
+            isMoreOptionBottomSheetVisible = !isMoreOptionBottomSheetVisible
+        }
+    )
+
+
+    ShowMoreOptionBottomSheet(
+        moreOptionBottomSheetState,
+        isMoreOptionBottomSheetVisible,
+        onDismiss = {
+            isMoreOptionBottomSheetVisible = false
+        },
+        itemsLists = mainViewModel.getBottomSheetItems(),
+        onItemClick = {
+            mainViewModel.onItemClickMoreOption(it)
+            isMoreOptionBottomSheetVisible = false
+        }
     )
 
     BackHandler(true) {
@@ -109,8 +135,11 @@ fun ProfileScreen(
     profileUIState: ProfileUIState,
     onNotificationClick: () -> Unit,
     onMoreOptionClick: () -> Unit,
-    onBackPressed : () -> Unit
-) {
+    onBackPressed : () -> Unit,
+    onLikeClick: (Post) -> Unit,
+    onPostShowMoreOptionClick: (Post) -> Unit,
+
+    ) {
     Surface() {
         Column(modifier = Modifier.fillMaxSize()) {
             TopBar(
@@ -120,7 +149,10 @@ fun ProfileScreen(
                 onMoreOptionClick = onMoreOptionClick,
                 onBackPressed = onBackPressed
             )
-            ProfilePager(profileUIState)
+            ProfilePager(profileUIState,
+                onLikeClick = onLikeClick,
+                onMoreOptionClick = onPostShowMoreOptionClick
+            )
         }
     }
 }
@@ -145,14 +177,14 @@ fun ProfileHeader(
             onProfileClick = {}
         )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            TitleSubtitle(title = "1.1K", subtitle = stringResource(id = AppText.posts))
-            TitleSubtitle(title = "131.K", subtitle = stringResource(id = AppText.follower))
-            TitleSubtitle(title = "1.2K", subtitle = stringResource(id = AppText.following))
-        }
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceEvenly
+//        ) {
+//            TitleSubtitle(title = "1.1K", subtitle = stringResource(id = AppText.posts))
+//            TitleSubtitle(title = "131.K", subtitle = stringResource(id = AppText.follower))
+//            TitleSubtitle(title = "1.2K", subtitle = stringResource(id = AppText.following))
+//        }
 
     }
 
@@ -191,43 +223,43 @@ fun ProfileHeader(
         containerColor = MaterialTheme.colorScheme.outline
     )
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-
-        Button(modifier = Modifier.weight(1f), onClick = { /*TODO*/ }) {
-            Text(text = "Follow")
-        }
-
-        Button(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp), onClick = { /*TODO*/ },
-            colors = buttonColor
-        ) {
-            Text(text = "Message")
-        }
-
-        Button(
-            modifier = Modifier
-                .weight(.5f)
-                .padding(start = 8.dp),
-            colors = buttonColor,
-            onClick = { /*TODO*/ }) {
-            ImageUtils.setImage(imageId = R.drawable.ic_add_person)
-        }
-
-    }
-
-    Spacer(
-        modifier = Modifier
-            .height(8.dp)
-            .fillMaxWidth()
-    )
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 16.dp),
+//        verticalAlignment = Alignment.CenterVertically,
+//        horizontalArrangement = Arrangement.SpaceBetween
+//    ) {
+//
+//        Button(modifier = Modifier.weight(1f), onClick = { /*TODO*/ }) {
+//            Text(text = "Follow")
+//        }
+//
+//        Button(
+//            modifier = Modifier
+//                .weight(1f)
+//                .padding(start = 8.dp), onClick = { /*TODO*/ },
+//            colors = buttonColor
+//        ) {
+//            Text(text = "Message")
+//        }
+//
+//        Button(
+//            modifier = Modifier
+//                .weight(.5f)
+//                .padding(start = 8.dp),
+//            colors = buttonColor,
+//            onClick = { /*TODO*/ }) {
+//            ImageUtils.setImage(imageId = R.drawable.ic_add_person)
+//        }
+//
+//    }
+//
+//    Spacer(
+//        modifier = Modifier
+//            .height(8.dp)
+//            .fillMaxWidth()
+//    )
 
 
 }
@@ -235,8 +267,10 @@ fun ProfileHeader(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfilePager(
-    profileUIState: ProfileUIState
-) {
+    profileUIState: ProfileUIState,
+    onLikeClick: (Post) -> Unit,
+    onMoreOptionClick: (Post) -> Unit,
+    ) {
 
     var selectedIndex by remember {
         mutableStateOf(ProfileTabs.POSTS.ordinal)
@@ -277,13 +311,13 @@ fun ProfilePager(
                                     selectedIndex = ProfileTabs.POSTS.ordinal
                                 }
 
-                                ProfileTabs.REELS.tabName -> {
-                                    selectedIndex = ProfileTabs.REELS.ordinal
-                                }
-
-                                ProfileTabs.PROFILE.tabName -> {
-                                    selectedIndex = ProfileTabs.PROFILE.ordinal
-                                }
+//                                ProfileTabs.REELS.tabName -> {
+//                                    selectedIndex = ProfileTabs.REELS.ordinal
+//                                }
+//
+//                                ProfileTabs.PROFILE.tabName -> {
+//                                    selectedIndex = ProfileTabs.PROFILE.ordinal
+//                                }
                             }
                         },
                         text = {
@@ -300,14 +334,14 @@ fun ProfilePager(
                 profileUIState.posts
             }
 
-            ProfileTabs.REELS.ordinal -> {
-//                emptyList()
-                profileUIState.posts
-            }
-
-            ProfileTabs.PROFILE.ordinal -> {
-                profileUIState.posts
-            }
+//            ProfileTabs.REELS.ordinal -> {
+////                emptyList()
+//                profileUIState.posts
+//            }
+//
+//            ProfileTabs.PROFILE.ordinal -> {
+//                profileUIState.posts
+//            }
 
             else -> {
                 profileUIState.posts
@@ -321,15 +355,28 @@ fun ProfilePager(
                 Spacer(Modifier.height(50.dp))
                 ProgressBar()
             }
+        } else if (profileUIState.isPostsEmpty){
+            stickyHeader {
+                Spacer(Modifier.height(200.dp))
+                EmptyPosts(modifier = Modifier)
+            }
         } else {
             items(userPosts) { post ->
                 FeedListItem(post = post,
-                    onItemClick = {}, onLikeClick = {}, onMoreOptionClick = {},
+                    onItemClick = {},
+                    onLikeClick = {
+                        onLikeClick(post)
+                    },
+                    onMoreOptionClick = {
+                        onMoreOptionClick(post)
+                    },
                     onCommentClicked = {},
                     onProfileClick = {},
                     onShareClicked = {})
             }
         }
+
+
     }
 
 
@@ -375,8 +422,8 @@ fun UserPostScreen() {
 
 private enum class ProfileTabs(val tabName: String) {
     POSTS("Posts"),
-    REELS("Reels"),
-    PROFILE("Profile"),
+//    REELS("Reels"),
+//    PROFILE("Profile"),
 
 }
 
@@ -425,20 +472,20 @@ fun TopBar(
             titleContentColor = MaterialTheme.colorScheme.inverseSurface
         ),
         actions = {
-            IconButton(onClick = onNotificationClick) {
-                ImageUtils.setImage(
-                    imageId = R.drawable.ic_notifications,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface)
-                )
-            }
-
-            IconButton(onClick = onMoreOptionClick) {
-                ImageUtils.setImage(
-                    imageId = R.drawable.ic_more,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface)
-
-                )
-            }
+//            IconButton(onClick = onNotificationClick) {
+//                ImageUtils.setImage(
+//                    imageId = R.drawable.ic_notifications,
+//                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface)
+//                )
+//            }
+//
+//            IconButton(onClick = onMoreOptionClick) {
+//                ImageUtils.setImage(
+//                    imageId = R.drawable.ic_more,
+//                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface)
+//
+//                )
+//            }
         }
     )
 

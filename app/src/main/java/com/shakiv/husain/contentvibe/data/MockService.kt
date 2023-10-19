@@ -6,7 +6,7 @@ import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 object MockService {
     fun getBottomSheetItems(): List<BottomSheetItem> {
         return listOf(
-            BottomSheetItem.HIDE,
+//            BottomSheetItem.HIDE,
             BottomSheetItem.REPORT,
             BottomSheetItem.DELETE
         )

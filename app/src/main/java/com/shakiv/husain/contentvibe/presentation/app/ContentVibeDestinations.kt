@@ -89,5 +89,6 @@ object CameraDestination:BaseDestination{
 
 val bottomTabRowScreens: List<BaseDestination> =
     listOf(
-        HomeDestination, SearchDestination, AddPostDestination, ReelsDestination, ProfileDestination
+//        HomeDestination, SearchDestination, AddPostDestination, ReelsDestination, ProfileDestination
+        HomeDestination, AddPostDestination, ProfileDestination
     )

@@ -35,6 +35,7 @@ object IconsContentVibe {
     val IC_DELETE = Icons.Rounded.Delete
     val IC_HIDE = Icons.Rounded.HideSource
     val IC_REPORT = Icons.Rounded.Report
+    val IC_CREATE_IMAGE = R.drawable.ic_create_image
 
     val HOME = R.drawable.ic_home
     val SEARCH = R.drawable.ic_search

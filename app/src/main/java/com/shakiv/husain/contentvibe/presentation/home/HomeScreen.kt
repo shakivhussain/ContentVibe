@@ -51,12 +51,12 @@ import com.shakiv.husain.contentvibe.data.StoryItem
 import com.shakiv.husain.contentvibe.data.model.PostActions
 import com.shakiv.husain.contentvibe.data.model.PostEntity
 import com.shakiv.husain.contentvibe.data.model.UserEntity
-import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.Post
 import com.shakiv.husain.contentvibe.presentation.auth.AuthViewModel
 import com.shakiv.husain.contentvibe.presentation.common.composable.CommentBottomSheet
 import com.shakiv.husain.contentvibe.presentation.common.composable.ImageRainbowBorder
-import com.shakiv.husain.contentvibe.presentation.common.composable.MoreOptionBottomSheet
+import com.shakiv.husain.contentvibe.presentation.common.composable.ProfileImage
+import com.shakiv.husain.contentvibe.presentation.common.composable.ShowMoreOptionBottomSheet
 import com.shakiv.husain.contentvibe.utils.AppUtils
 import com.shakiv.husain.contentvibe.utils.IconsContentVibe
 import com.shakiv.husain.contentvibe.utils.extentions.logd
@@ -280,25 +280,25 @@ fun AppHeader() {
 
         Spacer(modifier = Modifier.weight(1F))
 
-        IconButton(onClick = { /*TODO*/ }) {
-            Image(
-                modifier = Modifier,
-                painter = painterResource(id = IconsContentVibe.LIKE),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
-            )
-        }
-
-
-        IconButton(onClick = { /*TODO*/ }) {
-            Image(
-
-                painter = painterResource(id = IconsContentVibe.CHAT),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
-            )
-
-        }
+//        IconButton(onClick = { /*TODO*/ }) {
+//            Image(
+//                modifier = Modifier,
+//                painter = painterResource(id = IconsContentVibe.LIKE),
+//                contentDescription = null,
+//                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
+//            )
+//        }
+//
+//
+//        IconButton(onClick = { /*TODO*/ }) {
+//            Image(
+//
+//                painter = painterResource(id = IconsContentVibe.CHAT),
+//                contentDescription = null,
+//                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
+//            )
+//
+//        }
 
     }
 }
@@ -309,12 +309,13 @@ fun StoryList(
     storyList: List<StoryItem>,
     storyLazyListState: LazyListState,
     onStoryCreate : (StoryItem) -> Unit,
-    onStoryView: (StoryItem) -> Unit
-
+    onStoryView: (StoryItem) -> Unit,
 ) {
 
 
+
     val storyItem = StoryItem()
+
     LazyRow(
         modifier = Modifier,
         contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp),
@@ -388,7 +389,7 @@ fun StoryListItem(
 fun MyStoryItem(
     storyItem: StoryItem,
     modifier: Modifier = Modifier,
-    onStoryCreate : (StoryItem) -> Unit
+    onStoryCreate : (StoryItem) -> Unit,
 ) {
 
     Card(
@@ -403,7 +404,7 @@ fun MyStoryItem(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            ImageRainbowBorder(modifier = Modifier.size(70.dp), imageUrl = AppUtils.PROFILE_URL)
+            ProfileImage(modifier = Modifier.size(70.dp), profilePath = IconsContentVibe.IC_CREATE_IMAGE)
 
 //            ImageUtils.setImage(
 //                IconsContentVibe.ADD_POST,
@@ -456,31 +457,7 @@ fun ShowCommentBottomSheet(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ShowMoreOptionBottomSheet(
-    bottomSheetState: SheetState,
-    isBottomSheetVisible: Boolean = false,
-    itemsLists: List<BottomSheetItem> = emptyList(),
-    onDismiss: () -> Unit,
-    onItemClick: (BottomSheetItem) -> Unit,
-) {
-    if (isBottomSheetVisible) {
-        MoreOptionBottomSheet(
-            onItemClick = onItemClick,
-            sheetState = bottomSheetState,
-            onDismissListener = {
-                onDismiss()
-            },
-            itemsLists = itemsLists
-        )
-    }
 
-    LaunchedEffect(key1 = isBottomSheetVisible) {
-        if (isBottomSheetVisible) bottomSheetState.show() else bottomSheetState.hide()
-    }
-
-}
 
 
 

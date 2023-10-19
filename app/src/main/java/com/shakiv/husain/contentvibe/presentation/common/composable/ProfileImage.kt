@@ -6,11 +6,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,12 +27,13 @@ import com.shakiv.husain.contentvibe.utils.ImageUtils
 @Composable
 fun ProfileImage(profilePath: Int, modifier: Modifier = Modifier) {
     Image(
-        painter = painterResource(id = IconsContentVibe.ProfilePic),
+        painter = painterResource(id = profilePath),
         contentDescription = null,
         modifier = modifier
             .size(40.dp)
             .clip(CircleShape),
-        contentScale = ContentScale.FillWidth
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+        contentScale = ContentScale.None
     )
 }
 

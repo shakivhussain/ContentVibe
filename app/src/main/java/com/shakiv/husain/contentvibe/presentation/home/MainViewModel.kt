@@ -10,6 +10,8 @@ import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.presentation.app.ContentVibeViewModel
 import com.shakiv.husain.contentvibe.utils.extentions.logd
+import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarManager
+import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarMessage.Companion.toSnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -141,13 +143,13 @@ class MainViewModel @Inject constructor(
 
         return if (postUserId == accountService.currentUserId) {
             listOf(
-                BottomSheetItem.HIDE,
+//                BottomSheetItem.HIDE,
                 BottomSheetItem.REPORT,
                 BottomSheetItem.DELETE
             )
         } else {
             listOf(
-                BottomSheetItem.HIDE,
+//                BottomSheetItem.HIDE,
                 BottomSheetItem.REPORT,
             )
         }
@@ -156,15 +158,18 @@ class MainViewModel @Inject constructor(
 
     fun onItemClickMoreOption(bottomSheetItem: BottomSheetItem) {
         when (bottomSheetItem) {
-            BottomSheetItem.HIDE -> {
-
-            }
+//            BottomSheetItem.HIDE -> {
+//
+//            }
 
             BottomSheetItem.DELETE -> {
                 deletePosts()
             }
 
-            BottomSheetItem.REPORT -> {}
+            BottomSheetItem.REPORT -> {
+                SnackBarManager.showMessage("Thanks for letting us know!")
+
+            }
         }
     }
 

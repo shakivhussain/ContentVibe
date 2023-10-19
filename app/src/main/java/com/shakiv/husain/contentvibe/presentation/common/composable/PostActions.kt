@@ -85,28 +85,28 @@ fun PostActions(
             }
 
 
-            IconButton(onClick = { onCommentClicked() }) {
-
-                ImageUtils.setImage(
-                    modifier= Modifier.size(24.dp),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                    imageId = IcChat
-                )
-            }
-
-            IconButton(onClick = { onShareClicked() }) {
-                ImageUtils.setImage(
-                    modifier= Modifier.size(24.dp),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                    imageId = IconsContentVibe.IcSharePost
-                )
-            }
+//            IconButton(onClick = { onCommentClicked() }) {
+//
+//                ImageUtils.setImage(
+//                    modifier= Modifier.size(24.dp),
+//                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+//                    imageId = IcChat
+//                )
+//            }
+//
+//            IconButton(onClick = { onShareClicked() }) {
+//                ImageUtils.setImage(
+//                    modifier= Modifier.size(24.dp),
+//                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+//                    imageId = IconsContentVibe.IcSharePost
+//                )
+//            }
         }
 
-        IconButton(onClick = { onCommentClicked() }) {
-
-            ImageUtils.setImage(imageId = IcBookmark)
-        }
+//        IconButton(onClick = { onCommentClicked() }) {
+//
+//            ImageUtils.setImage(imageId = IcBookmark)
+//        }
 
     }
 

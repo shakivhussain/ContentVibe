@@ -90,13 +90,15 @@ class ProfileViewModel @Inject constructor(
                                     postEntity.currentUserLike.contains(currentUserId)
                                 postEntity.toPost()
                             },
+
                         )
                     }
                 }
 
                 _profileViewModeState.update { profileUiState ->
                     profileUiState.copy(
-                        isPostsLoading = false
+                        isPostsLoading = false,
+                        isPostsEmpty = postEntities.isNullOrEmpty()
                     )
                 }
 
