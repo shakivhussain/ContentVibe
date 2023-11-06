@@ -196,6 +196,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     implementation 'com.google.android.play:integrity:1.2.0'
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 
 }
