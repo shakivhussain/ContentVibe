@@ -152,7 +152,7 @@ fun EmailField(
 
     LaunchedEffect(key1 = Unit) {
         coroutineContext.job.invokeOnCompletion {
-            focusRequest.requestFocus()
+//            focusRequest.requestFocus() // TODO : To Open Keyboard
         }
     }
 }
