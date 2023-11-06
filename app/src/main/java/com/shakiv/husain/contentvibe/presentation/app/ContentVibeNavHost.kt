@@ -2,6 +2,7 @@ package com.shakiv.husain.contentvibe.presentation.app
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,7 +23,9 @@ import com.shakiv.husain.contentvibe.presentation.write_post.WritePostScreen
 import com.shakiv.husain.contentvibe.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.SIGN_UP_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.STORY_VIEW_SCREEN
+import com.shakiv.husain.contentvibe.utils.DataStoreConstant
 import com.shakiv.husain.contentvibe.utils.extentions.logd
+import kotlinx.coroutines.flow.first
 
 @Composable
 fun ContentVibeNavHost(
@@ -32,11 +35,6 @@ fun ContentVibeNavHost(
     sharedViewModel: SharedViewModel = hiltViewModel(),
     hideBottomNavigation: (Boolean) -> Unit
 ) {
-
-
-    val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle(initialValue = null)
-
-
 
 //    val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
     val startDestination =  LOGIN_SCREEN

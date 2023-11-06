@@ -4,5 +4,6 @@ data class UserPreferences(
     val userId: String,
     val userName : String,
     val needToShowOneTabSignIn : Boolean,
-    val emailVerificationSend : Boolean
+    val emailVerificationSend : Boolean,
+    val isUserLogin : Boolean
 )

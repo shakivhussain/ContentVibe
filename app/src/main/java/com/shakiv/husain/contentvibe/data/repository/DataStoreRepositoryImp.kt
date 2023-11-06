@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import com.shakiv.husain.contentvibe.domain.model.UserPreferences
 import com.shakiv.husain.contentvibe.domain.repository.DataStoreRepository
 import com.shakiv.husain.contentvibe.utils.DataStoreConstant.KEY_EMAIL_VERIFICATION_SEND
+import com.shakiv.husain.contentvibe.utils.DataStoreConstant.KEY_IS_USER_LOGIN
 import com.shakiv.husain.contentvibe.utils.DataStoreConstant.KEY_NEED_TO_SHOW_ONE_TAB_SIGN_IN
 import com.shakiv.husain.contentvibe.utils.DataStoreConstant.KEY_USER_NAME_PREFERENCES
 import com.shakiv.husain.contentvibe.utils.extentions.loge
@@ -18,8 +19,10 @@ import javax.inject.Inject
 
 class DataStoreRepositoryImp @Inject
 constructor(
-    private val preferences: DataStore<Preferences>
+    private val preferences: DataStore<Preferences>,
 ) : DataStoreRepository {
+
+
     override val userPreferencesFlow: Flow<UserPreferences>
         get() = preferences.data
             .catch { exeption ->
@@ -44,10 +47,13 @@ constructor(
         val userName = preferences[KEY_USER_NAME_PREFERENCES].orEmpty()
         val needToShowOneTabSignIn = preferences[KEY_NEED_TO_SHOW_ONE_TAB_SIGN_IN]?:true
         val emailVerificationSend = preferences[KEY_EMAIL_VERIFICATION_SEND]?:false
+        val isUserLogin = preferences[KEY_IS_USER_LOGIN]?:false
+
         return UserPreferences(
             "", userName,
             needToShowOneTabSignIn = needToShowOneTabSignIn,
-            emailVerificationSend = emailVerificationSend
+            emailVerificationSend = emailVerificationSend,
+            isUserLogin = isUserLogin
         )
     }
 }
