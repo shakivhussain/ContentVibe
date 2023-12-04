@@ -94,7 +94,37 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938397326976:android:3773ccfc0984269af25065",
+        "android_client_info": {
+          "package_name": "com.shakiv.husain.contentvibe.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938397326976-9oioe609gh4inpba8mhi2p9tds8rti2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANweulXK05y04yCOF_8UfrrI8sTXowTeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938397326976-9oioe609gh4inpba8mhi2p9tds8rti2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
 }
+

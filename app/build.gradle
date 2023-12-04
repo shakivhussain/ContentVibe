@@ -42,10 +42,13 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
+            resValue "string", "app_name", "Content-debug"
+            applicationIdSuffix ".debug"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
 //            minifyEnabled false
+            resValue "string", "app_name", "Content Vibe"
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
