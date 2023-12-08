@@ -8,6 +8,7 @@ data class ProfileUIState(
     val isPostsLoading : Boolean = true,
     val errorInPosts : String = "",
     val errorInProfileDetails : String = "",
-    val isPostsEmpty : Boolean = false
+    val isPostsEmpty : Boolean = false,
+    val isUserLogout : Boolean = false,
 
-)
+    )

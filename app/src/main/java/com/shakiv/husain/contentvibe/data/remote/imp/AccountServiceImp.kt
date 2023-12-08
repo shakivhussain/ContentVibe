@@ -89,7 +89,7 @@ class AccountServiceImp @Inject constructor(
             auth.currentUser!!.delete()
         }
         auth.signOut()
-        createAnonymousAccount()
+//        createAnonymousAccount()
     }
 
     override suspend fun signInWithCredential(authCredential: AuthCredential) {

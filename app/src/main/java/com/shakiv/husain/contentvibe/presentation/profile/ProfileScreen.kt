@@ -30,7 +30,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shakiv.husain.contentvibe.R
 import com.shakiv.husain.contentvibe.data.LocalPostProvider.allUserPost
 import com.shakiv.husain.contentvibe.data.mapper.toPost
+import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.NavigationArgsState
 import com.shakiv.husain.contentvibe.domain.model.Post
 import com.shakiv.husain.contentvibe.domain.model.ProfileUIState
@@ -60,7 +60,7 @@ import com.shakiv.husain.contentvibe.utils.extentions.logd
 @Preview()
 @Composable
 fun PreviewProfile() {
-    ProfileScreen(onBackPressed = {})
+    ProfileScreen(onBackPressed = {}, navigateToLoginScreen = {})
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,14 +69,15 @@ fun ProfileScreen(
     navigationArgsState: NavigationArgsState? = null,
     profileViewModel: ProfileViewModel = hiltViewModel(),
     mainViewModel: MainViewModel = hiltViewModel(),
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    navigateToLoginScreen : () -> Unit
 ) {
 
     val profileUIState by profileViewModel.profileViewModeState.collectAsStateWithLifecycle()
     val moreOptionBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isMoreOptionBottomSheetVisible by remember { mutableStateOf(false) }
-
-
+    var itemsLists by remember { mutableStateOf(profileViewModel.getBottomSheetItems()) }
+    var isPostMoreOptionVisible by remember { mutableStateOf(false) }
 
     logd("UserPosts : ${profileUIState.posts.size}")
 
@@ -90,22 +91,33 @@ fun ProfileScreen(
     }
 
 
-    val user = profileUIState.user
+//    val user = profileUIState.user
+//
+//    logd("FetchUser : $user")
 
-    logd("FetchUser : $user")
+    logd("User Logout : ${profileUIState.isUserLogout}")
 
+//    if (profileUIState.isUserLogout){
+//        navigateToLoginScreen()
+//    }
 
     ProfileScreen(
         profileUIState = profileUIState,
         onNotificationClick = {},
-        onMoreOptionClick = {},
+        onMoreOptionClick = {
+            itemsLists = profileViewModel.getBottomSheetItems()
+            isMoreOptionBottomSheetVisible = !isMoreOptionBottomSheetVisible
+            isPostMoreOptionVisible = false
+        },
         onBackPressed = onBackPressed,
         onLikeClick = {
             mainViewModel.onPostLiked(it)
         },
         onPostShowMoreOptionClick = {
             mainViewModel.onMoreOptionIconClick(it)
+            itemsLists = mainViewModel.getBottomSheetItems()
             isMoreOptionBottomSheetVisible = !isMoreOptionBottomSheetVisible
+            isPostMoreOptionVisible = true
         }
     )
 
@@ -116,9 +128,19 @@ fun ProfileScreen(
         onDismiss = {
             isMoreOptionBottomSheetVisible = false
         },
-        itemsLists = mainViewModel.getBottomSheetItems(),
+        itemsLists = itemsLists,
         onItemClick = {
-            mainViewModel.onItemClickMoreOption(it)
+
+            if (isPostMoreOptionVisible){
+                mainViewModel.onItemClickMoreOption(it)
+            }else{
+                profileViewModel.onItemClickListener(
+                    it,
+                    onUserLogout = {
+                        navigateToLoginScreen()
+                    }
+                )
+            }
             isMoreOptionBottomSheetVisible = false
         }
     )
@@ -128,6 +150,7 @@ fun ProfileScreen(
 
     }
 }
+
 
 
 @Composable
@@ -479,13 +502,13 @@ fun TopBar(
 //                )
 //            }
 //
-//            IconButton(onClick = onMoreOptionClick) {
-//                ImageUtils.setImage(
-//                    imageId = R.drawable.ic_more,
-//                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface)
-//
-//                )
-//            }
+            IconButton(onClick = onMoreOptionClick) {
+                ImageUtils.setImage(
+                    imageId = R.drawable.ic_more,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface)
+
+                )
+            }
         }
     )
 

@@ -36,6 +36,8 @@
     <string name="follower">Follower</string>
     <string name="following">Following</string>
     <string name="image">Image</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="logout">Logout</string>
 
 
 

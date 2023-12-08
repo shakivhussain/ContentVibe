@@ -3,12 +3,13 @@ package com.shakiv.husain.contentvibe.presentation.profile
 import androidx.lifecycle.viewModelScope
 import com.shakiv.husain.contentvibe.data.mapper.toPost
 import com.shakiv.husain.contentvibe.data.mapper.toUser
+import com.shakiv.husain.contentvibe.domain.model.BottomSheetItem
 import com.shakiv.husain.contentvibe.domain.model.ProfileUIState
 import com.shakiv.husain.contentvibe.domain.model.User
 import com.shakiv.husain.contentvibe.domain.service.AccountService
 import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.presentation.app.ContentVibeViewModel
-import com.shakiv.husain.contentvibe.utils.extentions.logd
+import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -64,6 +65,47 @@ class ProfileViewModel @Inject constructor(
     }
 
 
+    fun getBottomSheetItems(): List<BottomSheetItem> {
+        return listOf(
+            BottomSheetItem.LOGOUT,
+            BottomSheetItem.DISMISS,
+        )
+
+    }
+
+
+    fun onItemClickListener(bottomSheetItem: BottomSheetItem, onUserLogout : () -> Unit) {
+
+        when (bottomSheetItem) {
+            BottomSheetItem.LOGOUT -> {
+                logoutUser()
+                onUserLogout()
+            }
+
+            BottomSheetItem.DISMISS -> {
+                SnackBarManager.showMessage("Dismissed Bottom Sheet")
+            }
+
+            else -> {
+
+            }
+        }
+    }
+
+    private fun logoutUser() {
+
+        launchCatching(errorBlock = {}) {
+            accountService.signOut()
+            _profileViewModeState.update { profileUIState: ProfileUIState ->
+                profileUIState.copy(
+                    isUserLogout = true
+                )
+            }
+        }
+
+    }
+
+
     fun fetchPostsByUserId() {
 
         val userId = _profileViewModeState.value.user.userId
@@ -91,7 +133,7 @@ class ProfileViewModel @Inject constructor(
                                 postEntity.toPost()
                             },
 
-                        )
+                            )
                     }
                 }
 

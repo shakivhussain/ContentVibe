@@ -2,7 +2,6 @@ package com.shakiv.husain.contentvibe.presentation.app
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,9 +22,7 @@ import com.shakiv.husain.contentvibe.presentation.write_post.WritePostScreen
 import com.shakiv.husain.contentvibe.utils.AppRoutes.LOGIN_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.SIGN_UP_SCREEN
 import com.shakiv.husain.contentvibe.utils.AppRoutes.STORY_VIEW_SCREEN
-import com.shakiv.husain.contentvibe.utils.DataStoreConstant
 import com.shakiv.husain.contentvibe.utils.extentions.logd
-import kotlinx.coroutines.flow.first
 
 @Composable
 fun ContentVibeNavHost(
@@ -37,7 +34,7 @@ fun ContentVibeNavHost(
 ) {
 
 //    val startDestination = if (!authViewModel.hasUser) LOGIN_SCREEN else HomeDestination.route
-    val startDestination =  LOGIN_SCREEN
+    val startDestination = LOGIN_SCREEN
     val sharedViewModelState by sharedViewModel.navigationArgsState.collectAsStateWithLifecycle()
 
 
@@ -55,12 +52,12 @@ fun ContentVibeNavHost(
 //                    sharedViewModel.updateUserId(it.usedId.orEmpty())
 //                    appState.navController.navigateToSingleTopTo(ProfileDestination.route)
                 },
-                onStoryCreate = {storyItem->
-                    sharedViewModel.setStoryState(true,storyItem)
+                onStoryCreate = { storyItem ->
+                    sharedViewModel.setStoryState(true, storyItem)
                     appState.navController.navigateToSingleTopTo(AddPostDestination.route)
                 },
 
-                onStoryView = {storyItem->
+                onStoryView = { storyItem ->
 
                     sharedViewModel.setStoryState(storyItem = storyItem)
                     appState.navController.navigateToSingleTopTo(STORY_VIEW_SCREEN)
@@ -71,7 +68,7 @@ fun ContentVibeNavHost(
                     appState.navController.navigateToSingleTopTo(ProfileDestination.route)
                 },
 
-            )
+                )
             logd("CurrentTag HomeDestination : ${sharedViewModelState.userId}")
         }
 
@@ -89,6 +86,9 @@ fun ContentVibeNavHost(
                 onBackPressed = {
                     sharedViewModel.updateUserId("")
                     appState.navController.popBackStack()
+                },
+                navigateToLoginScreen = {
+                    appState.navController.navigateAndClearBackStack(LOGIN_SCREEN)
                 }
             )
         }
@@ -139,7 +139,7 @@ fun ContentVibeNavHost(
         }
 
 
-        composable(STORY_VIEW_SCREEN){
+        composable(STORY_VIEW_SCREEN) {
             StoryViewScreen(navigationArgsState = sharedViewModelState)
         }
 
@@ -157,6 +157,20 @@ fun NavHostController.navigateToSingleTopTo(route: String) =
     }
 
 
+
+fun NavHostController.navigateAndClearBackStack(screen : String = LOGIN_SCREEN) =
+    this.navigate(screen) {
+        popUpTo(graph.id) {
+            inclusive = true
+        }
+    }
+
+fun NavHostController.navigateAndClean(route: String) {
+    navigate(route = route) {
+        popUpTo(graph.startDestinationId) { inclusive = true }
+    }
+    graph.setStartDestination(route)
+}
 fun NavHostController.navigateToReelsScreen(type: String) {
     this.navigateToSingleTopTo("${ReelsDestination.route}/$type")
 }

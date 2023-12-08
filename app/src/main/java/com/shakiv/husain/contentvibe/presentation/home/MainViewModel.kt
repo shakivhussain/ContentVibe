@@ -11,7 +11,6 @@ import com.shakiv.husain.contentvibe.domain.service.StorageService
 import com.shakiv.husain.contentvibe.presentation.app.ContentVibeViewModel
 import com.shakiv.husain.contentvibe.utils.extentions.logd
 import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarManager
-import com.shakiv.husain.contentvibe.utils.snackbar.SnackBarMessage.Companion.toSnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -92,7 +91,7 @@ class MainViewModel @Inject constructor(
                             storyItem.copy(
                                 isViewed = isViewed,
 
-                            )
+                                )
 
                         }.sortedByDescending {
                             it.publishAt
@@ -169,6 +168,10 @@ class MainViewModel @Inject constructor(
             BottomSheetItem.REPORT -> {
                 SnackBarManager.showMessage("Thanks for letting us know!")
 
+            }
+
+            else -> {
+                
             }
         }
     }
