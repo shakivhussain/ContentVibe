@@ -83,7 +83,7 @@ class ProfileViewModel @Inject constructor(
             }
 
             BottomSheetItem.DISMISS -> {
-                SnackBarManager.showMessage("Dismissed Bottom Sheet")
+//                SnackBarManager.showMessage("Dismissed Bottom Sheet")
             }
 
             else -> {

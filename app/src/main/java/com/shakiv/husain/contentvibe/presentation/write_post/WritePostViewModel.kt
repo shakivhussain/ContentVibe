@@ -53,7 +53,7 @@ class WritePostViewModel @Inject constructor(
 
     fun isValid(): Boolean {
         val uiState = writePostUiState.value
-        return !uiState.isSaving && !uiState.post.isEmpty()
+        return !uiState.isSaving && !uiState.post.isEmpty() || !uiState.imageUrl.isNullOrEmpty()
     }
 
 

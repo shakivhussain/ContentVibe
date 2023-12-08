@@ -201,7 +201,7 @@ fun WritePostScreen(
                             EmptyDestinationsNavigator.popBackStack()
                         },
                         modifier = Modifier.padding(end = 8.dp),
-                        enabled = isEnabled && !writePostState.isImageUploading && !writePostState.post.isEmpty(),
+                        enabled = isEnabled && !writePostState.isImageUploading && !writePostState.post.isEmpty() || !writePostState.imageUrl.isNullOrEmpty(),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = enabledContainerColor,
                             contentColor = enabledContentColor,
