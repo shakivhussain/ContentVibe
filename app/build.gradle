@@ -8,6 +8,7 @@ plugins {
     id 'com.google.gms.google-services'
 //    id "com.google.protobuf" version "0.8.17"
     id "com.google.protobuf" version "0.9.1"
+    id("com.google.firebase.crashlytics")
 
 }
 
@@ -200,6 +201,10 @@ dependencies {
 
     implementation 'com.google.android.play:integrity:1.2.0'
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // Crashlytics
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
 
 }

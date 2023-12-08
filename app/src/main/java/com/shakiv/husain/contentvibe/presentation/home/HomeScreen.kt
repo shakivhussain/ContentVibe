@@ -111,6 +111,7 @@ fun HomeFeed(
             onItemClick(it)
         },
         onLiked = {
+//            throw RuntimeException("Test Crash") // Force a crash
 
 
             mainViewModel.onPostLiked(it)
