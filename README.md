@@ -2,7 +2,7 @@
 
 <a href="https://play.google.com/store/apps/details?id=com.shakiv.husain.contentvibe"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
-Content Vibe App
+Content Vibe App 🚀
 ==================
 
 Welcome to **Content Vibe**, where creativity knows no bounds! Our app serves as your ultimate playground for expressing your unique style, sharing your stories, and discovering a vibrant community of diverse creatives.
