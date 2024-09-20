@@ -33,7 +33,6 @@ Feel free to explore and contribute as we continue to enhance this project!
 
 ### Additional Technologies
 
-- **Java** ☕
 - **Android Jetpack Components** 📦
 - **Flow** 🌊
 - **Paging 3** 📄
