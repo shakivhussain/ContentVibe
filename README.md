@@ -60,7 +60,7 @@ And more! ✨
 - 👥 **Discover Creatives:** Immerse yourself in a vibrant community of diverse creators. Explore user profiles, forge new connections, and find fellow creatives who resonate with your vibe.
 
 ## Download 📥
-- Download latest APK from [Click Here]([https://www.dl.dropboxusercontent.com/s/7e46wqlzpc7t5l2/DisneyWatch.apk](https://drive.google.com/file/d/1aBTZeAOG2MzuNwVPwTT1_hlKLxClx_W3/view))
+- Download latest APK from [Click Here](https://drive.google.com/file/d/1aBTZeAOG2MzuNwVPwTT1_hlKLxClx_W3/view)
 
 
 ## Architecture 🗼
