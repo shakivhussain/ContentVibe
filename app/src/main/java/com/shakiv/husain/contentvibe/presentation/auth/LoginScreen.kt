@@ -289,32 +289,32 @@ fun LoginScreenContent(
 
 
             Spacer(modifier = Modifier.size(42.dp))
-
-            Text(
-                text = stringResource(id = AppText.continue_with),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.secondary
-            )
-
-            Spacer(modifier = Modifier.size(16.dp))
+//
+//            Text(
+//                text = stringResource(id = AppText.continue_with),
+//                style = MaterialTheme.typography.labelLarge,
+//                color = MaterialTheme.colorScheme.secondary
+//            )
+//
+//            Spacer(modifier = Modifier.size(16.dp))
 
             Row {
 
-                RegularSmallButton(
-                    modifier = Modifier,
-                    icon = IconsContentVibe.IC_GOOGLE,
-                    title = AppText.google,
-                    onButtonClick = {
-                        startGoogleSignIn(context = context, launcher)
-                    },
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ),
-                    highlightColor = MaterialTheme.colorScheme.secondary,
-                    applyTintOnIcon = false
-                )
-
-                Spacer(modifier = Modifier.size(16.dp))
+//                RegularSmallButton(
+//                    modifier = Modifier,
+//                    icon = IconsContentVibe.IC_GOOGLE,
+//                    title = AppText.google,
+//                    onButtonClick = {
+//                        startGoogleSignIn(context = context, launcher)
+//                    },
+//                    colors = CardDefaults.cardColors(
+//                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+//                    ),
+//                    highlightColor = MaterialTheme.colorScheme.secondary,
+//                    applyTintOnIcon = false
+//                )
+//
+//                Spacer(modifier = Modifier.size(16.dp))
 
                 RegularSmallButton(
                     modifier = Modifier,

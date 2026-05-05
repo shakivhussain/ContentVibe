@@ -248,21 +248,21 @@ fun SignUpScreenContent(
 
             Row {
 
-                RegularSmallButton(
-                    modifier = Modifier,
-                    icon = IconsContentVibe.IC_GOOGLE,
-                    title = AppText.google,
-                    onButtonClick = {
-                        startGoogleSignIn(context, launcher)
-                    },
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ),
-                    highlightColor = MaterialTheme.colorScheme.secondary,
-                    applyTintOnIcon = false
-                )
-
-                Spacer(modifier = Modifier.size(16.dp))
+//                RegularSmallButton(
+//                    modifier = Modifier,
+//                    icon = IconsContentVibe.IC_GOOGLE,
+//                    title = AppText.google,
+//                    onButtonClick = {
+//                        startGoogleSignIn(context, launcher)
+//                    },
+//                    colors = CardDefaults.cardColors(
+//                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+//                    ),
+//                    highlightColor = MaterialTheme.colorScheme.secondary,
+//                    applyTintOnIcon = false
+//                )
+//
+//                Spacer(modifier = Modifier.size(16.dp))
 
                 RegularSmallButton(
                     modifier = Modifier,
