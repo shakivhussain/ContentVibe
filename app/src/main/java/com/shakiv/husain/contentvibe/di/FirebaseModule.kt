@@ -57,7 +57,7 @@ object FirebaseModule {
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId(app.resources.getString(R.string.default_web_client_id))
+                .setServerClientId(app.resources.getString(com.shakiv.husain.contentvibe.R.string.default_web_client_id))
                 .setFilterByAuthorizedAccounts(true)
                 .build()
         )
@@ -72,7 +72,7 @@ object FirebaseModule {
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId(app.resources.getString(R.string.default_web_client_id))
+                .setServerClientId(app.resources.getString(com.shakiv.husain.contentvibe.R.string.default_web_client_id))
                 .setFilterByAuthorizedAccounts(false)
                 .build()
         )
